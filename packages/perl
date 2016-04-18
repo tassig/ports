@@ -1,0 +1,20 @@
+package_name=perl
+package_version=5.22.1
+tarball_suffix=xz
+url=http://www.cpan.org/src/5.0/perl-5.22.1.tar.xz
+build_dependencies=
+iscustombuild=1
+
+
+custombuild(){
+        package_fullname=$package_name-$package_version
+        wget $url
+        tar xvf $package_fullname.tar.$tarball_suffix
+        cd $package_fullname/
+        sh Configure -Dprefix=/opt/$package_fullname/ -d
+        make
+        make install
+        ln -sf /opt/$package_fullname /opt/$package_name
+        ln -sf /opt/$package_name/bin/* /bin/
+        cd ..
+}

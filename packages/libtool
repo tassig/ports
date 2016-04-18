@@ -1,0 +1,10 @@
+package_name=libtool
+package_version=2.4.6
+tarball_suffix=gz
+url=http://ftpmirror.gnu.org/libtool/libtool-2.4.6.tar.gz
+build_dependencies=
+haspostinstall=1
+
+postinstall(){
+        ln -s /opt/libtool/share/aclocal/* `aclocal --print-ac-dir`/
+}
