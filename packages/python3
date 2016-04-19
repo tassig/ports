@@ -1,0 +1,36 @@
+package_name=Python
+package_version=3.5.1
+tarball_suffix=xz
+url=https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tar.xz
+build_dependencies=
+iscustombuild=1
+
+
+
+
+# TODO: some manual tasks are needed: uncomment the two lines at "Socket module helper for SSL support" in Modules/Setup, they look like this:
+#SSL=/opt/libressl
+#_ssl _ssl.c \                
+#       -DUSE_SSL -I$(SSL)/include -I$(SSL)/include/openssl \
+#       -L$(SSL)/lib -lssl -lcrypto
+
+
+
+custombuild(){
+        package_fullname=$package_name-$package_version
+        wget $url
+        tar xvf $package_fullname.tar.$tarball_suffix
+        cd $package_fullname/
+        sh Configure -Dprefix=/opt/$package_fullname/ -d
+        
+        echo 'Error: you need to do a manual operation during the Python build, see file packages/python3'
+        exit 1
+        
+        make
+        make install
+        ln -sf /opt/$package_fullname /opt/$package_name
+        ln -sf /opt/$package_name/bin/* /bin/
+	# make python3 the default python, some software expect "python" to exist
+	ln -s /bin/python3 /bin/python
+        cd ..
+}

@@ -1,0 +1,10 @@
+package_name=freetype
+package_version=2.6.2
+tarball_suffix=bz2
+url=http://downloads.sourceforge.net/project/freetype/freetype2/2.6.2/freetype-2.6.2.tar.bz2
+build_dependencies=pkgconf
+haspostinstall=1
+
+postinstall(){
+	ln -s /opt/freetype/lib/pkgconfig/* /usr/lib/pkgconfig/
+}

@@ -1,0 +1,11 @@
+build_dependencies=python
+iscustombuild=1
+
+
+custombuild(){
+	wget https://pypi.python.org/packages/source/M/Mako/Mako-1.0.4.tar.gz
+	tar xvf Mako-1.0.4.tar.gz
+	cd Mako-1.0.4/
+	python setup.py install
+        cd ..
+}

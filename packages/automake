@@ -2,4 +2,4 @@ package_name=automake
 package_version=1.15
 tarball_suffix=xz
 url=http://ftp.gnu.org/gnu/automake/automake-1.15.tar.xz
-build_dependencies=m4 perl
+build_dependencies=autoconf

@@ -1,0 +1,5 @@
+package_name=gettext
+package_version=0.19
+tarball_suffix=gz
+url=http://ftp.gnu.org/pub/gnu/gettext/gettext-0.19.tar.gz
+build_dependencies=

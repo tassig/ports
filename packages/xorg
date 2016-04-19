@@ -1,0 +1,29 @@
+
+# the list of dependencies is taken from http://www.x.org/wiki/Building_the_X_Window_System/
+# however more dependencies are actually needed, for example python, and some dependencies can be replaced by other software
+build_dependencies=autoconf automake libtool pkgconf python gettext flex bison freetype fontconfig python-mako eudev
+iscustombuild=1
+
+
+##########################
+#
+# X.org
+#
+# NOTE: slightly different way to build than other software
+#
+# Issues to fix manually:
+# * libxcb: many syntax errors. files c_client.py, xcbgen/xtypes.py , xcbgen/align.py
+# * mesa/drm/libkms/kms-symbol-check (and intel, nouveau, etc.) scripts are /bin/bash, change to sh
+# * mesa/drm/tests/nouveau/threaded.c : non posix signature for ioctl()
+#
+##########################
+
+custombuild(){
+	mkdir $HOME/src
+	cd $HOME/src
+	git clone git://anongit.freedesktop.org/git/xorg/util/modular util/modular
+	mkdir $HOME/build
+	cd $HOME/src
+	export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check
+	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check --autoresume resumefile
+}

@@ -6,6 +6,6 @@ build_dependencies=
 haspostinstall=1
 
 postinstall(){
-        ln -s /opt/pkgconf/share/aclocal/* `aclocal --print-ac-dir`/
+	ln -s /opt/pkgconf/share/aclocal/* `aclocal --print-ac-dir`/
 	ln -s /bin/pkgconf /bin/pkg-config
 }

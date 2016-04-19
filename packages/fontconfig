@@ -1,0 +1,10 @@
+package_name=fontconfig
+package_version=2.11.95
+tarball_suffix=bz2
+url=https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.11.95.tar.bz22
+build_dependencies=expat
+haspostinstall=1
+
+postinstall(){
+	ln -s /opt/fontconfig/lib/pkgconfig/* /usr/lib/pkgconfig/
+}
