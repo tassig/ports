@@ -1,4 +1,5 @@
-# usage: ./packageinstall.sh package_name
+# usage: ./packageinstall.sh package_identifier
+# example: ./packageinstall.sh autoconf
 # the script is assuming you're running it in the ports directory (which is a bit stupid, need to be changed later)
 
 packagedirectory=packages
