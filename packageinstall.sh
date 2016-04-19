@@ -31,13 +31,13 @@ installpackage(){
 	done
 	
 	# do a custom build if the package defines custombuild(), otherwise do a default build
-	if test iscustombuild
+	if test $iscustombuild
 	then custombuild
 	else defaultbuild
 	fi
 	
 	# call its postinstall() function if the package defines postinstall(), otherwise do nothing
-	if test haspostinstall
+	if test $haspostinstall
 	then postinstall
 	fi
 	
