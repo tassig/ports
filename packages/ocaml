@@ -1,0 +1,21 @@
+package_name=ocaml
+package_version=4.02.3.
+tarball_suffix=xz
+url=http://caml.inria.fr/pub/distrib/ocaml-4.02/ocaml-4.02.3.tar.xz
+build_dependencies=
+iscustombuild=1
+
+
+custombuild(){
+	wget http://caml.inria.fr/pub/distrib/ocaml-4.02/ocaml-4.02.3.tar.xz
+	tar xvf ocaml-4.02.3.tar.xz
+	cd ocaml-4.02.3
+	./configure --prefix /opt/ocaml-4.02.3/
+	
+	# this world.opt prevents the build from being a default build
+	make world.opt
+	make install
+	ln -s /opt/ocaml-4.02.3 /opt/ocaml
+	ln -s /opt/ocaml/bin/* /bin/
+	cd ..
+}
