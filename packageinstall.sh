@@ -6,8 +6,10 @@ packagedirectory=packages
 # the function called by default to build a package, works for most packages
 defaultbuild(){
 	package_fullname=$package_name-$package_version
+	package_tarball_name=$package_fullname.tar.$tarball_suffix
+	rm $package_tarball_name
 	wget $url
-	tar xvf $package_fullname.tar.$tarball_suffix
+	tar xvf $package_tarball_name
 	cd $package_fullname/
 	./configure --prefix=/opt/$package_fullname/
 	make
