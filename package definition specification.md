@@ -28,6 +28,9 @@ These variables are defined to be used internally within the package functions (
 
 These variables are mandatory and can be used by without restrictions, by internal or external scripts.
 
-`build_dependencies`: a list of packages unique identifiers separated by spaces, representing the packages needed by this package at build time. Empty if there are no build build_dependencies
+`build_dependencies`: a list of packages unique identifiers separated by spaces and quoted, representing the packages needed by this package at build time. Empty if there are no build build_dependencies
 `runtime_dependencies`: same as above, but representing the packages needed at runtime
+
+example:
+build_dependencies="m4 perl"
 

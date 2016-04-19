@@ -1,4 +1,7 @@
 # usage: ./packageinstall.sh package_name
+# the script is assuming you're running it in the ports directory (which is a bit stupid, need to be changed later)
+
+packagedirectory=packages
 
 # the function called by default to build a package, works for most packages
 defaultbuild(){
@@ -18,7 +21,7 @@ defaultbuild(){
 installpackage(){
 	echo "installing package $1"
 	
-	source $1
+	source $packagedirectory/$1
 	echo "dependencies of $1: $build_dependencies"
 	
 	# installing the dependencies recursively
