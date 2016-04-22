@@ -15,13 +15,18 @@ iscustombuild=1
 #       -L$(SSL)/lib -lssl -lcrypto
 
 
+# hashlib and zlib extensions fail to build, because of
+# ld: /opt/libressl/lib/libcrypto.a(libcrypto_la-err.o): relocation R_X86_64_32 against `.rodata' can not be used when making a shared object; recompile with -fPIC
+# TODO: fix libressl and zlib to include shared libraries
 
 custombuild(){
         package_fullname=$package_name-$package_version
         wget $url
         tar xvf $package_fullname.tar.$tarball_suffix
         cd $package_fullname/
-        sh Configure -Dprefix=/opt/$package_fullname/ -d
+        # WTF: Configure seems to be missing
+        #sh Configure -Dprefix=/opt/$package_fullname/ -d
+        sh configure --prefix=/opt/$package_fullname/
         
         echo 'Error: you need to do a manual operation during the Python build, see file packages/python3'
         exit 1
