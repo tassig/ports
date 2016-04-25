@@ -1,0 +1,5 @@
+package_name=gdb
+package_version=7.11
+tarball_suffix=xz
+url=http://ftp.gnu.org/gnu/gdb/gdb-7.11.tar.xz
+build_dependencies=texinfo
