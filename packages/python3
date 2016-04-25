@@ -6,48 +6,31 @@ build_dependencies=
 iscustombuild=1
 
 
-# hashlib and zlib extensions fail to build, because of
+# hashlib and ssl fails to build, because of
 # ld: /opt/libressl/lib/libcrypto.a(libcrypto_la-err.o): relocation R_X86_64_32 against `.rodata' can not be used when making a shared object; recompile with -fPIC
-# TODO: fix libressl and zlib to include shared libraries
+# TODO: fix
 
 custombuild(){
         package_fullname=$package_name-$package_version
+        wget $url
+        tar xvf $package_fullname.tar.$tarball_suffix
+        cd $package_fullname/
+        ./configure --prefix=/opt/$package_fullname/
         
-        # TODO: remove this dirty patch, once we find a way to automatically compile python
-        if [ ! -f $package_fullname/setup_patched ]; then
-            wget $url
-            tar xvf $package_fullname.tar.$tarball_suffix
-            cd $package_fullname/
-            # WTF: Configure seems to be missing
-            #sh Configure -Dprefix=/opt/$package_fullname/ -d
-            sh configure --prefix=/opt/$package_fullname/
-
-            echo ''
-            echo 'IMPORTANT: you need to do a manual operation during the Python build, see file packages/python3'
-            echo 'Enter Python source folder'
-            echo 'Edit Module/Setup file:'
-            echo ' 1. find SSL module part, and edit to look like this:'
-            echo ' SSL=/opt/libressl
-            echo ' _ssl _ssl.c \'
-            echo '      -DUSE_SSL -I$(SSL)/include -I$(SSL)/include/openssl \'
-            echo '      -L$(SSL)/lib -lssl -lcrypto'
-            echo ' 2. find zlib module part and uncomment line:'
-            echo ' zlib zlibmodule.c -I$(prefix)/include -L$(exec_prefix)/lib -lz'
-            echo ' 3. find binascii module part and uncomment line:'
-            echo ' binascii binascii.c '
-            echo ''
-            echo 'IMPORTANT: finally, create file setup_patched, to skip this message and continue to build'
-            echo 'Return one foder up and run again: ./packageinstall python3'
-            echo ''
-            exit 1
-        else
-            cd $package_fullname/
-            make
-            make install
-            ln -sf /opt/$package_fullname /opt/$package_name
-            ln -sf /opt/$package_name/bin/* /bin/
-            # make python3 the default python, some software expect "python" to exist
-            ln -s /bin/python3 /bin/python
-            cd ..
-        fi
+        echo 'Error: you need to do a manual operation during the Python build:'
+	echo 'Edit Module/Setup file:'
+	echo ' find SSL module part, and edit to look like this:'
+	echo ' SSL=/opt/libressl
+	echo ' _ssl _ssl.c \'
+	echo '      -DUSE_SSL -I$(SSL)/include -I$(SSL)/include/openssl \'
+	echo '      -L$(SSL)/lib -lssl -lcrypto'
+        exit 1
+        
+        make
+        make install
+        ln -sv /opt/$package_fullname /opt/$package_name
+        ln -sv /opt/$package_name/bin/* /bin/
+	# make python3 the default python, some software expect "python" to exist
+	ln -sv /bin/python3 /bin/python
+        cd ..
 }

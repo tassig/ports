@@ -1,6 +1,8 @@
 # usage: ./packageinstall.sh package_identifier
 # example: ./packageinstall.sh autoconf
 # the script is assuming you're running it in the ports directory (which is a bit stupid, need to be changed later)
+#
+# TODO: add error management. installpackage() should be a transaction. ex: what do you do when "make install" returns an error? right now, we do nothing, which is incorrect
 
 packagedirectory=packages
 
@@ -34,7 +36,7 @@ installpackage(){
 	
 	echo "dependencies of $1: $build_dependencies"
 	
-	# installing the dependencies recursively
+	# installing the package's dependencies recursively
 	for pkg_name in $build_dependencies
 	do
 		(installpackage $pkg_name)
@@ -50,6 +52,10 @@ installpackage(){
 	if test $haspostinstall
 	then postinstall
 	fi
+	
+	# clean up by removing the build directory and the tarball
+	rm -rf $package_fullname
+	rm $package_tarball_name
 	
 }
 
