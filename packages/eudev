@@ -2,7 +2,7 @@ package_name=eudev
 package_version=3.1.5
 tarball_suffix=gz
 url=http://dev.gentoo.org/~blueness/eudev/eudev-3.1.5.tar.gz
-build_dependencies=
+build_dependencies=gperf
 haspostinstall=1
 
 postinstall(){
