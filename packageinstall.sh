@@ -26,6 +26,10 @@ defaultbuild(){
 installpackage(){
 	echo "installing package $1"
 	
+	# set default values for variables
+	iscustombuild=
+	haspostinstall=
+
 	source $packagedirectory/$1
 	
 	package_fullname=$package_name-$package_version
