@@ -34,3 +34,10 @@ These variables are mandatory and can be used by without restrictions, by intern
 example:
 build_dependencies="m4 perl"
 
+
+## Policies
+
+* add the symlinks with `ln -sv`, not just `ln -s`. Rationale: we want to have some visual clue that the symlinks were correctly created.
+
+* only have a `postinstall()` section when really necessary. When that's the case, only add the `include` and `lib` symlinks when really necessary, same with the `pkgconfig` stuff. Rationale: we want as few symlinks as possible in the `/usr/` subdirectories.
+
