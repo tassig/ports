@@ -1,0 +1,19 @@
+package_name=tcl-core
+package_version=8.6.5
+tarball_suffix=gz
+url=http://sourceforge.net/projects/tcl/files/Tcl/8.6.5/tcl-core8.6.5-src.tar.gz
+iscustombuild=1
+
+
+custombuild(){
+	wget url
+	tar xvf tar xvf tcl-core8.6.5-src.tar.gz
+	cd tcl8.6.5/unix/
+	./configure --prefix=/opt/tcl-core-8.6.5
+	make
+	make install
+	cd ..
+}
+
+
+

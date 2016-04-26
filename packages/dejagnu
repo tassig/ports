@@ -1,0 +1,5 @@
+package_name=dejagnu
+package_version=1.6
+tarball_suffix=gz
+url=http://ftp.gnu.org/gnu/dejagnu/dejagnu-1.6.tar.gz
+build_dependencies=expect
