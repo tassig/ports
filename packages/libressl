@@ -7,6 +7,6 @@ haspostinstall=1
 
 postinstall(){
 	# libressl is expected in the third party default directories by some software
-	ln -s /opt/libressl/lib/* /usr/lib/
-	ln -s /opt/libressl/include/* /usr/local/include/
+	ln -sv /opt/libressl/lib/* /usr/lib/
+	ln -sv /opt/libressl/include/* /usr/local/include/
 }
