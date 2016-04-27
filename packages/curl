@@ -1,0 +1,22 @@
+package_name=curl
+package_version=7.47.1
+tarball_suffix=tar.bz2
+url=http://curl.haxx.se/download/curl-7.47.1.tar.bz2
+build_dependencies="zlib libressl"
+iscustombuild=1
+
+
+custombuild(){
+	package_fullname=$package_name-$package_version
+	wget https://curl.haxx.se/download/$package_fullname.tar.bz2
+	tar xvf $package_fullname.tar.bz2
+	cd $package_fullname/
+	export CFLAGS=-O2
+	export PERL=""
+	./configure --prefix=/opt/$package_fullname/ SSL_LIBS="-lssl -lcrypto"
+	make
+	make install
+	ln -s /opt/$package_fullname /opt/curl
+	ln -s /opt/curl/bin/* /bin/
+	cd ..
+}
