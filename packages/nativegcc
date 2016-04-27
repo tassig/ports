@@ -1,0 +1,43 @@
+package_name=nativegcc
+package_version=5.3.0
+build_dependencies=linux-kernel-headers
+iscustombuild=1
+
+##########################
+#
+# install gcc and binutils
+# C and C++ support
+#
+# TODO: re-add multilib support
+#
+##########################
+
+
+custombuild(){
+	prefixname=nativegcc
+	
+	wget http://ftp.gnu.org/gnu/binutils/binutils-2.26.tar.bz2
+	tar xvf binutils-2.26.tar.bz2
+	mkdir objdir
+	cd objdir
+	../binutils-2.26/configure --prefix=/opt/$prefixname --disable-werror
+	make
+	make check
+	make install
+	cd ..
+
+	wget http://mirror1.babylon.network/gcc/releases/gcc-5.3.0/gcc-5.3.0.tar.bz2
+	tar xvf gcc-5.3.0.tar.bz2
+	cd gcc-5.3.0/
+	contrib/download_prerequisites
+	cd ..
+	mkdir gccobjdir
+	cd gccobjdir
+	../gcc-5.3.0/configure --prefix=/opt/$prefixname --enable-languages=c,c++ --disable-libquadmath --disable-multilib
+	make -j 2
+	make -k check
+	make install
+	
+	ln -sv /opt/$prefixname/bin/* /bin/
+	ln -sv /bin/gcc /bin/cc
+}

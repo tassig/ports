@@ -17,8 +17,8 @@ defaultbuild(){
 	./configure --prefix=/opt/$package_fullname/
 	make
 	make install
-	ln -s /opt/$package_fullname /opt/$package_name
-	ln -s /opt/$package_name/bin/* /bin/
+	ln -sv /opt/$package_fullname /opt/$package_name
+	ln -sv /opt/$package_name/bin/* /bin/
 	cd ..
 }
 
@@ -26,7 +26,7 @@ defaultbuild(){
 installpackage(){
 	echo "installing package $1"
 	
-	# set default values for variables
+	# set default values for variables TODO: these variables belong to the packages definitions files, it's not the job of the package manager to set these variables
 	iscustombuild=
 	haspostinstall=
 
