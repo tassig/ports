@@ -1,6 +1,6 @@
 package_name=curl
 package_version=7.47.1
-tarball_suffix=tar.bz2
+tarball_suffix=tat.bz2
 url=http://curl.haxx.se/download/curl-7.47.1.tar.bz2
 build_dependencies="zlib libressl"
 iscustombuild=1
@@ -16,7 +16,9 @@ custombuild(){
 	./configure --prefix=/opt/$package_fullname/ SSL_LIBS="-lssl -lcrypto"
 	make
 	make install
-	ln -s /opt/$package_fullname /opt/curl
-	ln -s /opt/curl/bin/* /bin/
+	ln -s /opt/$package_fullname /opt/$package_name
+	ln -s /opt/$package_name/bin/* /bin/
+	ln -s /opt/$package_name/lib/* /usr/lib/
+	ln -s /opt/$package_name/include/* /usr/local/include/
 	cd ..
 }
