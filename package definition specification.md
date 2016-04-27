@@ -19,6 +19,14 @@ These variables are defined to be used internally within the package functions (
 `tarball_suffix`
 `url`
 
+[Dimitrije] TODO: each package shall define more variables: 
+ - $configure_string custom, per package configure options
+ - $configure_cflags custom CFLAGS to be exported before ./configure call
+ - $configure_ldflags custom LFDLAGS to be exported before ./configure call
+ - $make_cflags custom CFLAGS to be exported before make (this way we can explicitly define CC=musl-gcc, instead of having it define in the environment by some other configs)
+ - $make_ldflags custom LFDLAGS o be exported before make
+(Whtihout these variables, we have to define iscustom build to specifty additional options)
+
 ### Public, optional variables
 
 `iscustombuild`: `0` or `1`, if `1` then a function `custombuild()` needs to be provided, such function will be called in place of the `defaultbuild()` function
