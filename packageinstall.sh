@@ -59,7 +59,7 @@ installpackage(){
 	
 	# clean up by removing the build directory and the tarball
 	rm -rf $package_fullname
-	rm $package_tarball_name
+	rm $package_fullname.tar.$tarball_suffix
 	
 }
 
