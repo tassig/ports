@@ -22,7 +22,7 @@ custombuild(){
 	cd objdir
 	../binutils-2.26/configure --prefix=/opt/$prefixname --disable-werror
 	make
-	make check
+	#make check
 	make install
 	cd ..
 

@@ -2,7 +2,7 @@ package_name=glibc
 package_version=2.23
 tarball_suffix=xz
 url=http://ftp.gnu.org/gnu/glibc/glibc-2.23.tar.xz
-build_dependencies=
+build_dependencies=gawk
 iscustombuild=1
 
 
@@ -17,6 +17,6 @@ custombuild(){
 	make install
 	
 	ln -sfv /opt/glibc-2.23 /opt/glibc
-	ln -sv /opt/glibc/bin/* /bin/
+	#ln -sv /opt/glibc/bin/* /bin/
 	ln -sv /opt/glibc/lib/* /lib/
 }
