@@ -12,7 +12,9 @@ custombuild(){
         wget $url
         tar xvf $package_fullname.tar.$tarball_suffix
         cd $package_fullname/
-        sh Configure -Dprefix=/opt/$package_fullname/ -d
+        
+        # we're going to compile perl against glibc, because its configure gets confused with our multi-libc system
+        sh Configure -Dprefix=/opt/$package_fullname/ -Dcc=gcc -d
         make
         make install
         ln -sf /opt/$package_fullname /opt/$package_name
