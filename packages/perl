@@ -5,6 +5,7 @@ url=http://www.cpan.org/src/5.0/perl-5.22.1.tar.xz
 build_dependencies=
 iscustombuild=1
 
+# TODO: perl looks for the system headers in /usr/include , fix perl
 
 custombuild(){
         package_fullname=$package_name-$package_version
