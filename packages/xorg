@@ -16,6 +16,8 @@ iscustombuild=1
 # * libxcb: many syntax errors. files c_client.py, xcbgen/xtypes.py , xcbgen/align.py
 # * mesa/drm/libkms/kms-symbol-check (and intel, nouveau, etc.) scripts are /bin/bash, change to sh
 # * mesa/drm/tests/nouveau/threaded.c : non posix signature for ioctl()
+# * mesa/mesa/m4/ax_check_python_mako_module.m4 : python2-style comparing map()s, wrap it like this:
+#       sys.exit(int(list(ver_req) > list(ver_act)))
 #
 ##########################
 
