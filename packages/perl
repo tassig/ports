@@ -6,6 +6,7 @@ build_dependencies=
 iscustombuild=1
 
 # TODO: perl looks for the system headers in /usr/include , fix perl
+# TODO: perl asks to press [Enter] during configure, breaking non-interactivity, fix, probably by adding some argument to configure
 
 custombuild(){
         package_fullname=$package_name-$package_version
@@ -17,7 +18,7 @@ custombuild(){
         sh Configure -Dprefix=/opt/$package_fullname/ -Dcc=gcc -d
         make
         make install
-        ln -sf /opt/$package_fullname /opt/$package_name
-        ln -sf /opt/$package_name/bin/* /bin/
+        ln -sv /opt/$package_fullname /opt/$package_name
+        ln -sv /opt/$package_name/bin/* /bin/
         cd ..
 }

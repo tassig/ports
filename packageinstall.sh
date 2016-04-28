@@ -3,6 +3,8 @@
 # the script is assuming you're running it in the ports directory (which is a bit stupid, need to be changed later)
 #
 # TODO: add error management. installpackage() should be a transaction. ex: what do you do when "make install" returns an error? right now, we do nothing, which is incorrect
+# TODO: if a package installation returns an error, the *whole* build should be aborted immediately,
+#       namely, your (installpackage $pkg_name) should check if it returns an error and abort if that's the case
 
 packagedirectory=packages
 
