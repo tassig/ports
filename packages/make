@@ -1,0 +1,20 @@
+package_name=make
+package_version=4.1
+tarball_suffix=bz2
+url=ftp://ftp.gnu.org/pub/gnu/make/
+build_dependencies=
+iscustombuild=1
+
+custombuild(){
+	package_fullname=$package_name-$package_version
+	package_tarball_name=$package_fullname.tar.$tarball_suffix
+	wget $url/$package_tarball_name
+	tar xvf $package_fullname.tar.$tarball_suffix
+	cd $package_fullname/
+	./configure --prefix=/opt/$package_fullname/ AR=x86_64-linux-musl-ar
+	./build.sh
+	./make install
+	ln -s /opt/$package_fullname /opt/$package_name
+	ln -s /opt/$package_name/bin/* /bin/
+	cd ..
+}
