@@ -13,6 +13,7 @@ defaultbuild(){
 	package_fullname=$package_name-$package_version
 	package_tarball_name=$package_fullname.tar.$tarball_suffix
 	rm $package_tarball_name
+	# TODO: This is hardcoded url, all packages shall define just base URL, while we have to call wget $url/$package_tarball_name... 
 	wget $url
 	tar xvf $package_tarball_name
 	cd $package_fullname/
