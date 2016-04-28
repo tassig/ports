@@ -18,7 +18,7 @@ custombuild(){
 	make install
 	ln -s /opt/$package_fullname /opt/$package_name
 	ln -s /opt/$package_name/bin/* /bin/
-	ln -s /opt/$package_name/lib/* /usr/lib/
-	ln -s /opt/$package_name/include/* /usr/local/include/
+	ln -s /opt/$package_name/lib/* /usr/lib/ # TODO: is this needed?
+	ln -s /opt/$package_name/include/* /usr/local/include/ # TODO: is this needed?
 	cd ..
 }
