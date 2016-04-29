@@ -10,7 +10,6 @@ packagedirectory=packages
 
 # the function called by default to build a package, works for most packages
 defaultbuild(){
-	package_fullname=$package_name-$package_version
 	package_tarball_name=$package_fullname.tar.$tarball_suffix
 	rm $package_tarball_name
 	# TODO: This is hardcoded url, all packages shall define just base URL, while we have to call wget $url/$package_tarball_name... 
@@ -29,13 +28,14 @@ defaultbuild(){
 installpackage(){
 	echo "installing package $1"
 	
-	# set default values for variables TODO: these variables belong to the packages definitions files, it's not the job of the package manager to set these variables
+	# set default values for variables for safety TODO: these variables belong to the packages definitions files, it's not the job of the package manager to set these variables
+	package_fullname=
 	iscustombuild=
 	haspostinstall=
 
 	source $packagedirectory/$1
 	
-	package_fullname=$package_name-$package_version
+	package_fullname=${package_fullname:-package_name-$package_version}
 	if [ -d "/opt/$package_fullname" ]; then
 		echo "package $package_fullname already installed"
 		return

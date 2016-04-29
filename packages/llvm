@@ -5,7 +5,12 @@ package_fullname=llvm-3.8.0.src
 url=http://llvm.org/releases/3.8.0/llvm-3.8.0.src.tar.xz
 build_dependencies=
 iscustombuild=1
-#haspostinstall=1
+haspostinstall=1
+
+# for c++ to work, link /opt/native-compiler/x86_64-linux-musl/lib64/* to /lib,
+# and create musl-g++ wrapper in /bin, exactly like musl-gcc (you can copy it)
+# and create /opt/musl/lib/musl-g++.specs from x86_64-linux-musl-g++ -dumpspecs
+# changing cc1plus and linker entries to -I /usr/local/include and -L /usr/lib
 
 custombuild(){
         package_fullname=${package_fullname:-"$package_name-$package_version"}
@@ -30,7 +35,8 @@ custombuild(){
 }
 
 
-#TODO: uncomment when the package works
-#postinstall(){
-	#rm -r llvm-build
-#}
+postinstall(){
+	rm -r llvm-build
+	ln -sv /opt/llvm/lib/* /usr/lib
+	ln -sv /opt/llvm/include/* /usr/local/include
+}
