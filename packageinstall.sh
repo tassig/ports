@@ -35,7 +35,7 @@ installpackage(){
 
 	source $packagedirectory/$1
 	
-	package_fullname=${package_fullname:-package_name-$package_version}
+	package_fullname=${package_fullname:-$package_name-$package_version}
 	if [ -d "/opt/$package_fullname" ]; then
 		echo "package $package_fullname already installed"
 		return
