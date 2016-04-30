@@ -14,8 +14,6 @@ A package definition is a file in the directory `packages/`
 
 These variables are defined to be used internally within the package functions (if they exist) or by the function `defaultbuild()`. They MUST NOT be used anywhere else.
 
-`package_name`: internal name used by the package. NB: This is *not* the unique identifier of the package
-`package_version`
 `tarball_suffix`
 `url`
 
@@ -36,6 +34,8 @@ These variables are defined to be used internally within the package functions (
 
 These variables are mandatory and can be used by without restrictions, by internal or external scripts.
 
+`package_name`: internal name used by the package. NB: This is *not* the unique identifier of the package
+`package_version`
 `build_dependencies`: a list of packages unique identifiers separated by spaces and quoted, representing the packages needed by this package at build time. Empty if there are no build build_dependencies
 `runtime_dependencies`: same as above, but representing the packages needed at runtime
 
@@ -47,5 +47,5 @@ build_dependencies="m4 perl"
 
 * add the symlinks with `ln -sv`, not just `ln -s`. Rationale: we want to have some visual clue that the symlinks were correctly created.
 
-* only have a `postinstall()` section when really necessary. When that's the case, only add the `include` and `lib` symlinks when really necessary, same with the `pkgconfig` stuff. Rationale: we want as few symlinks as possible in the `/usr/` subdirectories.
+* only have a `postinstall()` section when really necessary. When that's the case, only add the `include` and `lib` symlinks when really necessary, same with the `pkgconfig` stuff. Justify what is done in the `postinstall()` with comments.
 

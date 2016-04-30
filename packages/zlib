@@ -6,7 +6,7 @@ build_dependencies=
 haspostinstall=1
 
 postinstall(){
-	# zlib is expected in the third party default directories by some software
-	ln -s /opt/zlib/lib/* /usr/lib/
+	# discoverability by third party software
+	ln -sv /opt/zlib/lib/* /usr/lib/
 	ln -s /opt/zlib/include/* /usr/local/include/
 }
