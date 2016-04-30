@@ -5,18 +5,20 @@ url=http://www.cpan.org/src/5.0/perl-5.22.1.tar.xz
 build_dependencies=
 iscustombuild=1
 
-# TODO: perl looks for the system headers in /usr/include , fix perl
-# TODO: perl asks to press [Enter] during configure, breaking non-interactivity, fix, probably by adding some argument to configure
-
 custombuild(){
         package_fullname=$package_name-$package_version
         wget $url
         tar xvf $package_fullname.tar.$tarball_suffix
         cd $package_fullname/
         
-        # we're going to compile perl against glibc, because its configure gets confused with our multi-libc system
-        sh Configure -Dprefix=/opt/$package_fullname/ -Dcc=gcc -d
+        sh Configure -Dprefix=/opt/$package_fullname/ -Dcc=gcc -de 
+        
+        # a hack to make errno.h available to perl build system # TODO: perl looks for the system headers in /usr/include , fix perl
+        mkdir -p /usr/include
+        ln -s /opt/musl/include/errno.h /usr/include/
         make
+        rm -r /usr/include
+        
         make install
         ln -sv /opt/$package_fullname /opt/$package_name
         ln -sv /opt/$package_name/bin/* /bin/
