@@ -12,14 +12,10 @@ custombuild(){
 	wget $url/$package_tarball_name
 	tar xvf $package_tarball_name
 	cd $package_fullname/
-	export CFLAGS=-O2
-	export PERL=""
-	./configure --prefix=/opt/$package_fullname/ SSL_LIBS="-lssl -lcrypto"
+	./configure --prefix=/opt/$package_fullname/ SSL_LIBS="-lssl -lcrypto" PERL=""
 	make
 	make install
 	ln -s /opt/$package_fullname /opt/$package_name
 	ln -s /opt/$package_name/bin/* /bin/
-	ln -s /opt/$package_name/lib/* /usr/lib/ # TODO: is this needed? Yes, git prefers to link with libcurl
-	ln -s /opt/$package_name/include/* /usr/local/include/ # TODO: is this needed? Yes, the same..
 	cd ..
 }
