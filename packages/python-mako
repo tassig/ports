@@ -4,6 +4,7 @@ build_dependencies=python
 iscustombuild=1
 
 
+# TODO: mako needs to be installed both for python3 and python2
 custombuild(){
 	wget https://pypi.python.org/packages/source/M/Mako/Mako-1.0.4.tar.gz
 	tar xvf Mako-1.0.4.tar.gz
