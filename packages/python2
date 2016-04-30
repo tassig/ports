@@ -1,0 +1,11 @@
+package_name=Python
+package_version=2.7.11
+tarball_suffix=xz
+url=https://www.python.org/ftp/python/2.7.11/Python-2.7.11.tar.xz
+build_dependencies=
+haspostinstall=1
+
+postinstall(){
+	# python2 is not the default python, so we add the symlinks manually
+	ln -sv /opt/Python-2.7.11/bin/* /bin/
+}

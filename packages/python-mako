@@ -1,3 +1,5 @@
+package_name=Mako
+package_version=1.0.4
 build_dependencies=python
 iscustombuild=1
 
