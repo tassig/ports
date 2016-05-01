@@ -15,7 +15,7 @@ iscustombuild=1
 
 custombuild(){
         package_fullname=$package_name-$package_version
-        package_tarball_name=$package_fullname.tar.$tarball_suffix
+        package_tarball_name=$package_fullname.src.tar.$tarball_suffix
         rm $package_tarball_name
         wget $url
         tar xvf $package_tarball_name
