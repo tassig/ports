@@ -20,6 +20,7 @@ iscustombuild=1
 #       sys.exit(int(list(ver_req) > list(ver_act)))
 # * mesa/mesa: the mesa built failed with the musl-gcc wrapper over gcc-glibc, so we use the gcc-musl as in llvm, and the build is manual
 # * mesa/mesa: another error involving bash, replace /bin/sh
+# * mesa/mesa/src/glx: Makefile:785: recipe for target 'libGL.la' failed
 #
 ##########################
 
