@@ -14,7 +14,7 @@ iscustombuild=1
 # the gcc-glibc toolchain doesn't work at compiling llvm, some bugs...
 
 custombuild(){
-        package_fullname=$package_name-$package_version"
+        package_fullname=$package_name-$package_version
         package_tarball_name=$package_fullname.tar.$tarball_suffix
         rm $package_tarball_name
         wget $url
