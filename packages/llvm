@@ -1,9 +1,8 @@
 package_name=llvm
 package_version=3.8.0
 tarball_suffix=xz
-package_fullname=llvm-3.8.0.src
 url=http://llvm.org/releases/3.8.0/llvm-3.8.0.src.tar.xz
-build_dependencies=
+build_dependencies=cmake
 iscustombuild=1
 
 # for c++ to work, link /opt/native-compiler/x86_64-linux-musl/lib64/* to /lib
@@ -15,28 +14,30 @@ iscustombuild=1
 # the gcc-glibc toolchain doesn't work at compiling llvm, some bugs...
 
 custombuild(){
-        package_fullname=${package_fullname:-"$package_name-$package_version"}
+        package_fullname=$package_name-$package_version"
         package_tarball_name=$package_fullname.tar.$tarball_suffix
         rm $package_tarball_name
         wget $url
         tar xvf $package_tarball_name
-	cd $package_fullname
+	cd $package_fullname.src
 	for p in ../packages/llvm-*.patch; do
 		patch -p1 < $p
 	done
 	cd ..
 	mkdir llvm-build
 	cd llvm-build
-	export CC=/opt/native-compiler-bak/bin/x86_64-linux-musl-gcc
-	export CXX=/opt/native-compiler-bak/bin/x86_64-linux-musl-g++
-        ../$package_fullname/configure --prefix=/opt/$package_fullname/
-        make -j 4
-        make install
-        ln -sv /opt/$package_fullname /opt/$package_name
-        ln -sv /opt/$package_name/bin/* /bin/
-        cd ..
-	rm -r llvm-build
-	#ln -sv /opt/llvm/lib/* /usr/lib
-	#ln -sv /opt/llvm/include/* /usr/local/include
+	
+	# change to a native musl-based gcc instead of the musl-gcc wrapper we usually use
+	export CC=/opt/native-compiler/bin/x86_64-linux-musl-gcc
+	export CXX=/opt/native-compiler/bin/x86_64-linux-musl-g++
+	
+	#../$package_fullname/configure --prefix=/opt/$package_fullname/
+	cmake -DCMAKE_INSTALL_PREFIX=/opt/$package_fullname/ -DBUILD_SHARED_LIBS=ON ../$package_fullname/
+
+	make -j 4
+	make install
+	ln -sv /opt/$package_fullname /opt/$package_name
+	ln -sv /opt/$package_name/bin/* /bin/
+	cd ..
 }
 
