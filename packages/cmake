@@ -12,8 +12,8 @@ custombuild(){
 	cd $package_name-$package_version
 	
 	# change to a native musl-based gcc instead of the musl-gcc wrapper we usually use
-	export CC=/opt/native-compiler-bak/bin/x86_64-linux-musl-gcc
-	export CXX=/opt/native-compiler-bak/bin/x86_64-linux-musl-g++
+	export CC=/opt/native-compiler/bin/x86_64-linux-musl-gcc
+	export CXX=/opt/native-compiler/bin/x86_64-linux-musl-g++
 	
 	./configure --prefix=/opt/$package_name-$package_version
 	make
