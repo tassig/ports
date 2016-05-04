@@ -28,16 +28,21 @@ custombuild(){
 	cd llvm-build
 	
 	# change to a native musl-based gcc instead of the musl-gcc wrapper we usually use
+	export OLDCC=$CC   # saving the old CC variable
 	export CC=/opt/native-compiler/bin/x86_64-linux-musl-gcc
 	export CXX=/opt/native-compiler/bin/x86_64-linux-musl-g++
 	
 	#../$package_fullname.src/configure --prefix=/opt/$package_fullname/
 	cmake -DCMAKE_INSTALL_PREFIX=/opt/$package_fullname/ -DBUILD_SHARED_LIBS=ON ../$package_fullname.src/
 
-	make -j 4
+	make -j
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name
 	ln -sv /opt/$package_name/bin/* /bin/
 	cd ..
+	
+	export CC=$OLDCC   # restoring the old CC variable
+	unset OLDCC
+	unset CXX
 }
 

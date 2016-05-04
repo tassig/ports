@@ -3,9 +3,3 @@ package_version=3.5.1
 tarball_suffix=xz
 url=https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tar.xz
 build_dependencies=
-haspostinstall=1
-
-postinstall(){
-	# make python3 the default python, some software expect "python" to exist
-	ln -sv /bin/python3 /bin/python
-}

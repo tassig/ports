@@ -16,7 +16,7 @@ defaultbuild(){
 	tar xvf $package_tarball_name
 	cd $package_fullname/
 	./configure --prefix=/opt/$package_fullname/
-	make
+	make -j
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name
 	ln -sv /opt/$package_name/bin/* /bin/
@@ -58,6 +58,7 @@ installpackage(){
 	fi
 	
 	# clean up by removing the build directory and the tarball
+	# TODO: only if $package_name is defined
 	rm -rf $package_name*
 	
 }
