@@ -27,6 +27,7 @@ custombuild(){
 	git clone git://anongit.freedesktop.org/git/xorg/util/modular util/modular
 	mkdir $HOME/build
 	cd $HOME/src
+	export CXX=/opt/native-compiler/bin/x86_64-linux-musl-g++
 	export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check
 	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check --autoresume resumefile
 }
