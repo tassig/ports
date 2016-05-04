@@ -1,5 +1,5 @@
 package_name=curl
 package_version=7.47.1   # 7.48.0 was tested, it does *not* compile
 tarball_suffix=bz2
-url=http://curl.haxx.se/download/
+url=https://curl.haxx.se/download/curl-7.47.1.tar.bz2
 build_dependencies="zlib libressl perl"
