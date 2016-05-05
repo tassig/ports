@@ -15,7 +15,7 @@ defaultbuild(){
 	wget $url
 	tar xvf $package_tarball_name
 	cd $package_fullname/
-	./configure --prefix=/opt/$package_fullname/
+	./configure --prefix=/opt/$package_fullname/ $confflags
 	make -j
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name
@@ -30,6 +30,7 @@ installpackage(){
 	# set default values for variables for safety TODO: these variables belong to the packages definitions files, it's not the job of the package manager to set these variables
 	iscustombuild=
 	haspostinstall=
+	confflags=
 
 	source $packagedirectory/$1
 	

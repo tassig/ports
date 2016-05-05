@@ -2,10 +2,12 @@ package_name=Python
 package_version=2.7.11
 tarball_suffix=xz
 url=https://www.python.org/ftp/python/2.7.11/Python-2.7.11.tar.xz
-build_dependencies=
+build_dependencies=bzip2
 haspostinstall=1
+confflags="--enable-shared"
 
 postinstall(){
+	ln -sv /opt/Python-2.7.11/lib/*.so* /usr/lib/
 	python -m ensurepip
 	ln -sv /opt/Python-2.7.11/bin/* /bin/
 	pip install --upgrade pip

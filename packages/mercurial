@@ -1,0 +1,23 @@
+package_name=mercurial
+package_version=3.8.1
+tarball_suffix=gz
+url=http://mercurial.selenic.com/release/mercurial-3.8.1.tar.gz
+build_dependencies="python2"
+iscustombuild=1
+
+# the function called by default to build a package, works for most packages    
+custombuild(){                                                                 
+        package_fullname=$package_name-$package_version                     
+        package_tarball_name=$package_fullname.tar.$tarball_suffix          
+        rm $package_tarball_name                                            
+        # TODO: This is hardcoded url, all packages shall define just base URL,
+        wget $url                                                              
+	# TODO: "Language: el\n" in mercurial/i18n/{el,ro,fr,zh_CN,maybe more}
+        tar xvf $package_tarball_name                                          
+        cd $package_fullname/                                                  
+        make PREFIX=/opt/$package_fullname/ install                                
+        ln -sv /opt/$package_fullname /opt/$package_name
+        ln -sv /opt/$package_name/bin/* /bin/           
+        cd ..                                           
+}
+
