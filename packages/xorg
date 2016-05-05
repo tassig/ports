@@ -22,12 +22,20 @@ iscustombuild=1
 ##########################
 
 custombuild(){
+	pwd="`pwd`"
 	mkdir $HOME/src
 	cd $HOME/src
 	git clone git://anongit.freedesktop.org/git/xorg/util/modular util/modular
 	mkdir $HOME/build
 	cd $HOME/src
+	export CC=/opt/native-compiler/bin/x86_64-linux-musl-gcc
 	export CXX=/opt/native-compiler/bin/x86_64-linux-musl-g++
-	export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check
+	export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check --cmd "git checkout HEAD"
+	for p in "$pwd"/packages/xorg-*.patch; do
+		patch -p1 < $p
+	done
+
+	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check
 	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check --autoresume resumefile
+	export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --autoresume resumefile
 }

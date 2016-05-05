@@ -1,0 +1,22 @@
+Fix musl build
+
+Downloaded from
+https://cgit.gentoo.org/proj/musl.git/tree/x11-apps/sessreg/files/sessreg-1.1.0-missing_path_wtmpx.patch
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+diff -Naur sessreg-1.0.8.orig/app/sessreg/sessreg.h sessreg-1.0.8/app/sessreg/sessreg.h
+--- sessreg-1.0.8.orig/app/sessreg/sessreg.h	2013-02-10 21:43:50.000000000 -0500
++++ sessreg-1.0.8/app/sessreg/sessreg.h	2014-06-18 10:02:17.769459663 -0400
+@@ -106,3 +106,11 @@
+ #ifndef UTMPX_FILE
+ # define UTMPX_FILE	_PATH_UTMPX
+ #endif
++
++#ifndef _PATH_WTMPX
++# define _PATH_WTMPX	"/var/log/wtmp"
++#endif
++
++#ifndef _PATH_UTMPX
++# define _PATH_UTMPX	"/var/log/utmp"
++#endif

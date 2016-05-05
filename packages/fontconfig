@@ -6,5 +6,6 @@ build_dependencies="expat freetype"
 haspostinstall=1
 
 postinstall(){
+	ln -sv /opt/fontconfig/lib/* /usr/lib/
 	ln -sv /opt/fontconfig/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
 }

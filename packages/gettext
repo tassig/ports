@@ -3,3 +3,10 @@ package_version=0.19
 tarball_suffix=gz
 url=http://ftp.gnu.org/pub/gnu/gettext/gettext-0.19.tar.gz
 build_dependencies=
+haspostinstall=1
+
+postinstall(){
+	ln -sv /opt/gettext/include/* /usr/local/include/
+	ln -sv /opt/gettext/lib/* /usr/lib
+	ln -sv /opt/gettext/share/aclocal/* `aclocal --print-ac-dir`/
+}

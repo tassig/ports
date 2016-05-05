@@ -1,0 +1,103 @@
+diff --git a/mesa/drm/amdgpu/amdgpu-symbol-check b/mesa/drm/amdgpu/amdgpu-symbol-check
+index 648db9b..a77778d 100755
+--- a/mesa/drm/amdgpu/amdgpu-symbol-check
++++ b/mesa/drm/amdgpu/amdgpu-symbol-check
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ 
+ # The following symbols (past the first five) are taken from the public headers.
+ # A list of the latter should be available Makefile.am/libdrm_amdgpuinclude_HEADERS
+diff --git a/mesa/drm/exynos/exynos-symbol-check b/mesa/drm/exynos/exynos-symbol-check
+index 9692caa..b3d24af 100755
+--- a/mesa/drm/exynos/exynos-symbol-check
++++ b/mesa/drm/exynos/exynos-symbol-check
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ 
+ # The following symbols (past the first five) are taken from the public headers.
+ # A list of the latter should be available Makefile.am/libdrm_exynos*_HEADERS
+diff --git a/mesa/drm/freedreno/freedreno-symbol-check b/mesa/drm/freedreno/freedreno-symbol-check
+index f517b6e..fd40f4b 100755
+--- a/mesa/drm/freedreno/freedreno-symbol-check
++++ b/mesa/drm/freedreno/freedreno-symbol-check
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ 
+ # The following symbols (past the first five) are taken from the public headers.
+ # A list of the latter should be available Makefile.sources/LIBDRM_FREEDRENO_H_FILES
+diff --git a/mesa/drm/intel/intel-symbol-check b/mesa/drm/intel/intel-symbol-check
+index bde7634..cecf573 100755
+--- a/mesa/drm/intel/intel-symbol-check
++++ b/mesa/drm/intel/intel-symbol-check
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ 
+ # The following symbols (past the first five) are taken from the public headers.
+ # A list of the latter should be available Makefile.sources/LIBDRM_INTEL_H_FILES
+diff --git a/mesa/drm/libkms/kms-symbol-check b/mesa/drm/libkms/kms-symbol-check
+index 658b269..292105a 100755
+--- a/mesa/drm/libkms/kms-symbol-check
++++ b/mesa/drm/libkms/kms-symbol-check
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ 
+ # The following symbols (past the first five) are taken from the public headers.
+ # A list of the latter should be available Makefile.sources/LIBKMS_H_FILES
+diff --git a/mesa/drm/nouveau/nouveau-symbol-check b/mesa/drm/nouveau/nouveau-symbol-check
+index b265cea..12ee67f 100755
+--- a/mesa/drm/nouveau/nouveau-symbol-check
++++ b/mesa/drm/nouveau/nouveau-symbol-check
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ 
+ # The following symbols (past the first five) are taken from the public headers.
+ # A list of the latter should be available Makefile.sources/LIBDRM_NOUVEAU_H_FILES
+diff --git a/mesa/drm/omap/omap-symbol-check b/mesa/drm/omap/omap-symbol-check
+index 759c84b..0f3f43c 100755
+--- a/mesa/drm/omap/omap-symbol-check
++++ b/mesa/drm/omap/omap-symbol-check
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ 
+ # The following symbols (past the first five) are taken from the public headers.
+ # A list of the latter should be available Makefile.am/libdrm_omap*HEADERS
+diff --git a/mesa/drm/radeon/radeon-symbol-check b/mesa/drm/radeon/radeon-symbol-check
+index 0bf2ffc..7e8114c 100755
+--- a/mesa/drm/radeon/radeon-symbol-check
++++ b/mesa/drm/radeon/radeon-symbol-check
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ 
+ # The following symbols (past the first five) are taken from the public headers.
+ # A list of the latter should be available Makefile.sources/LIBDRM_RADEON_H_FILES
+diff --git a/mesa/drm/tegra/mesa/drm/tegra-symbol-check b/mesa/drm/tegra/mesa/drm/tegra-symbol-check
+index 4020831..3350775 100755
+--- a/mesa/drm/tegra/mesa/drm/tegra-symbol-check
++++ b/mesa/drm/tegra/mesa/drm/tegra-symbol-check
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ 
+ # The following symbols (past the first five) are taken from the public headers.
+ # A list of the latter should be available Makefile.sources/LIBDRM_FREEDRENO_H_FILES
+diff --git a/mesa/drm/tests/nouveau/threaded.c b/mesa/drm/tests/nouveau/threaded.c
+index 281af46..ba55e3a 100644
+--- a/mesa/drm/tests/nouveau/threaded.c
++++ b/mesa/drm/tests/nouveau/threaded.c
+@@ -40,7 +40,7 @@ static int failed;
+ 
+ static int import_fd;
+ 
+-int ioctl(int fd, unsigned long request, ...)
++int ioctl(int fd, int request, ...)
+ {
+ 	va_list va;
+ 	int ret;

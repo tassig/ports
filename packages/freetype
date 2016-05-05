@@ -6,5 +6,7 @@ build_dependencies=pkgconf
 haspostinstall=1
 
 postinstall(){
+	ln -sv /opt/freetype/include/* /usr/local/include
+	ln -sv /opt/freetype/lib/* /usr/lib
 	ln -sv /opt/freetype/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
 }
