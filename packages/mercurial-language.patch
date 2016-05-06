@@ -1,0 +1,48 @@
+diff --git a/i18n/el.po b/i18n/el.po
+index c8de95c..d8941a4 100644
+--- a/i18n/el.po
++++ b/i18n/el.po
+@@ -10,6 +10,7 @@ msgstr ""
+ "POT-Creation-Date: 2009-10-25 12:38+0100\n"
+ "PO-Revision-Date: 2009-12-02 03:23+0200\n"
+ "Last-Translator: <keramida@ceid.upatras.gr>\n"
++"Language: el\n"
+ "Language-Team: Greek\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+diff --git a/i18n/fr.po b/i18n/fr.po
+index e7bd2be..45e1751 100644
+--- a/i18n/fr.po
++++ b/i18n/fr.po
+@@ -89,6 +89,7 @@ msgstr ""
+ "POT-Creation-Date: 2009-10-25 12:38+0100\n"
+ "PO-Revision-Date: 2009-10-25 12:43+0100\n"
+ "Last-Translator: Cedric Duval <cedricduval@free.fr>\n"
++"Language: fr\n"
+ "Language-Team: French\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+diff --git a/i18n/ro.po b/i18n/ro.po
+index 9d50bb4..04296ee 100644
+--- a/i18n/ro.po
++++ b/i18n/ro.po
+@@ -109,6 +109,7 @@ msgstr ""
+ "POT-Creation-Date: 2011-06-08 15:03+0200\n"
+ "PO-Revision-Date: 2011-06-08 17:00+0200\n"
+ "Last-Translator: Daniel Dumitriu <daniel.dumitriu@gmail.com>\n"
++"Language: ro\n"
+ "Language-Team: Romanian <>\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+diff --git a/i18n/zh_CN.po b/i18n/zh_CN.po
+index 7e1ce70..5ce4db2 100644
+--- a/i18n/zh_CN.po
++++ b/i18n/zh_CN.po
+@@ -50,6 +50,7 @@ msgstr ""
+ "POT-Creation-Date: 2009-10-19 11:47+0800\n"
+ "PO-Revision-Date: 2009-03-31 20:38+0200\n"
+ "Last-Translator: Dongsheng Song <dongsheng.song@gmail.com>\n"
++"Language: zh_CN\n"
+ "Language-Team: Chinese translation team <i18n-zh@googlegroups.com>\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
