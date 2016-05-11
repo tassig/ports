@@ -1,6 +1,7 @@
 # usage: ./packageinstall.sh package_identifier
 # example: ./packageinstall.sh autoconf
 # the script is assuming you're running it in the ports directory (which is a bit stupid, need to be changed later)
+# refer to "package definition specifications.md" for laws and regulations
 #
 # TODO: add error management. installpackage() should be a transaction. ex: what do you do when "make install" returns an error? right now, we do nothing, which is incorrect
 
@@ -15,7 +16,7 @@ defaultbuild(){
 	wget $url
 	tar xvf $package_tarball_name
 	cd $package_fullname/
-	./configure --prefix=/opt/$package_fullname/ $confflags
+	./configure --prefix=/opt/$package_fullname/ $confflags   # TODO: if you need confflags then it's not a default build anymore, use custombuild() instead
 	make -j
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name
@@ -27,7 +28,8 @@ defaultbuild(){
 installpackage(){
 	echo "installing package $1"
 	
-	# set default values for variables for safety TODO: these variables belong to the packages definitions files, it's not the job of the package manager to set these variables
+	# set default values for variables for safety 
+	# TODO: these variables are shell variables, not environment variables. There is no safety hazard, such variables don't go into the subshells. So you can clean this up.
 	iscustombuild=
 	haspostinstall=
 	confflags=
@@ -50,7 +52,7 @@ installpackage(){
 	# do a custom build if the package defines custombuild(), otherwise do a default build
 	if test $iscustombuild
 	then custombuild || exit $?
-	else defaultbuild
+	else defaultbuild || exit $?
 	fi
 	
 	# call its postinstall() function if the package defines postinstall(), otherwise do nothing
