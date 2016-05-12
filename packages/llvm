@@ -2,16 +2,8 @@ package_name=llvm
 package_version=3.8.0
 tarball_suffix=xz
 url=http://llvm.org/releases/3.8.0/llvm-3.8.0.src.tar.xz
-build_dependencies=cmake python
+build_dependencies="cmake python"
 iscustombuild=1
-
-# for c++ to work, link /opt/native-compiler/x86_64-linux-musl/lib64/* to /lib
-# TODO: there might be better ways to do it
-#
-# for building LLVM, the native gcc-musl toolchain works, provided we apply some compatibility patches
-# we set the CC and CXX variables to gcc and g++ of this toolchain, that's all
-#
-# the gcc-glibc toolchain doesn't work at compiling llvm, some bugs...
 
 custombuild(){
         package_fullname=$package_name-$package_version
@@ -26,10 +18,6 @@ custombuild(){
 	cd ..
 	mkdir llvm-build
 	cd llvm-build
-	
-	# change to a native musl-based gcc instead of the musl-gcc wrapper we usually use
-	export CC=/opt/native-compiler/bin/x86_64-linux-musl-gcc
-	export CXX=/opt/native-compiler/bin/x86_64-linux-musl-g++
 	
 	#../$package_fullname.src/configure --prefix=/opt/$package_fullname/
 	cmake -DCMAKE_INSTALL_PREFIX=/opt/$package_fullname/ -DBUILD_SHARED_LIBS=ON ../$package_fullname.src/

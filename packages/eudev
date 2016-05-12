@@ -7,6 +7,4 @@ haspostinstall=1
 
 postinstall(){
 	ln -sv /opt/eudev/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
-	ln -sv /opt/eudev/lib/* /usr/lib/
-	ln -sv /opt/eudev/include/* /usr/local/include/
 }

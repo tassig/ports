@@ -6,7 +6,5 @@ build_dependencies=
 haspostinstall=1
 
 postinstall(){
-	# discoverability by third party software
-	ln -sv /opt/libressl/lib/* /usr/lib/
-	ln -sv /opt/libressl/include/* /usr/local/include/
+	ln -sv /opt/libressl/* /lib/   # needed by python
 }

@@ -16,7 +16,7 @@ defaultbuild(){
 	wget $url
 	tar xvf $package_tarball_name
 	cd $package_fullname/
-	./configure --prefix=/opt/$package_fullname/ $confflags   # TODO: if you need confflags then it's not a default build anymore, use custombuild() instead
+	./configure --prefix=/opt/$package_fullname/
 	make -j
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name

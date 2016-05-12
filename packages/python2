@@ -5,10 +5,33 @@ url=https://www.python.org/ftp/python/2.7.11/Python-2.7.11.tar.xz
 build_dependencies=bzip2   # TODO: justify why it's needed
 haspostinstall=1
 confflags="--enable-shared"   # TODO: if it needs a configure flag, then it's not a default build anymore. Change to custom build instead.
+                              # TODO: justify why needed
+                              
+# TODO: if a version of python is needed that has full supports for lots of plugins, we can add a new packages, named "python-full" or something
 
-postinstall(){
-	ln -sv /opt/Python-2.7.11/lib/*.so* /usr/lib/
-	python -m ensurepip
-	ln -sv /opt/Python-2.7.11/bin/* /bin/
-	pip install --upgrade pip
+custombuild() {
+	package_fullname=$package_name-$package_version
+	package_tarball_name=$package_fullname.tar.$tarball_suffix
+	rm $package_tarball_name
+	wget $url
+	tar xvf $package_tarball_name
+	cd $package_fullname/
+	
+	# hack to help python to find include files and libraries
+	mkdir -p /usr/local/include
+	mkdir -p /usr/local/lib
+	ln -sv /opt/zlib/include/* /usr/local/include/
+	ln -sv /opt/libressl/include/* /usr/local/include/
+	ln -sv /opt/zlib/lib/* /usr/local/lib/
+	ln -sv /opt/libressl/lib/* /usr/local/lib/
+	
+	./configure --prefix=/opt/Python-2.7.11 --with-ensurepip
+	make -j
+	
+	rm -r /usr
+	
+	make install
+	ln -sv /opt/$package_fullname /opt/$package_name
+	ln -sv /opt/$package_name/bin/* /bin/
+	cd ..
 }

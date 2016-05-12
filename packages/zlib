@@ -6,7 +6,5 @@ build_dependencies=
 haspostinstall=1
 
 postinstall(){
-	# discoverability by third party software
-	ln -sv /opt/zlib/lib/* /usr/lib/
-	ln -s /opt/zlib/include/* /usr/local/include/
+	ln -sv /opt/zlib/* /lib/   # needed by python
 }

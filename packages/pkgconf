@@ -2,7 +2,7 @@ package_name=pkgconf
 package_version=0.9.9
 tarball_suffix=gz
 url=http://rabbit.dereferenced.org/%7Enenolod/distfiles/pkgconf-0.9.9.tar.gz
-build_dependencies=
+build_dependencies=automake
 haspostinstall=1
 
 postinstall(){

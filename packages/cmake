@@ -3,23 +3,3 @@ package_version=3.5.2
 tarball_suffix=gz
 url=http://www.cmake.org/files/v3.5/cmake-3.5.2.tar.gz
 build_dependencies=
-iscustombuild=1
-
-
-custombuild(){
-	wget $url
-	tar xvf $package_name-$package_version.tar.$tarball_suffix
-	cd $package_name-$package_version
-	
-	# change to a native musl-based gcc instead of the musl-gcc wrapper we usually use
-	export CC=/opt/native-compiler/bin/x86_64-linux-musl-gcc
-	export CXX=/opt/native-compiler/bin/x86_64-linux-musl-g++
-	
-	./configure --prefix=/opt/$package_name-$package_version
-	make
-	make install
-	
-	ln -sv /opt/$package_name-$package_version /opt/$package_name
-	ln -sv /opt/$package_name/bin/* /bin/
-	cd ..
-}

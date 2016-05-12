@@ -15,9 +15,9 @@ custombuild(){
         
         # a hack to make errno.h available to perl build system # TODO: perl looks for the system headers in /usr/include , fix perl
         mkdir -p /usr/include
-        ln -s /opt/musl/include/errno.h /usr/include/
-        make
-        rm -r /usr/include
+        ln -s /opt/native-compiler-musl/x86_64-linux-musl/include/errno.h /usr/include/
+        make -j
+        rm -r /usr
         
         make install
         ln -sv /opt/$package_fullname /opt/$package_name
