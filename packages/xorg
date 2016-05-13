@@ -2,7 +2,7 @@
 # the list of dependencies is taken from http://www.x.org/wiki/Building_the_X_Window_System/
 # however more dependencies are actually needed, for example python, and some dependencies can be replaced by other software
 
-build_dependencies="autoconf automake libtool pkgconf python2 gettext flex bison freetype fontconfig python-mako eudev llvm"
+build_dependencies="autoconf automake libtool pkgconf python2 gettext flex bison freetype fontconfig python-mako eudev llvm python3"
 iscustombuild=1
 
 
@@ -10,14 +10,12 @@ iscustombuild=1
 #
 # X.org
 #
-# NOTE: slightly different way to build than other software
+# NOTE: different way to build than other software
 #
 # Issues to fix manually:
-# * mesa/drm/libkms/kms-symbol-check (and intel, nouveau, etc.) scripts are /bin/bash, change to sh
-# * mesa/drm/tests/nouveau/threaded.c : non posix signature for ioctl()
-# * mesa/mesa: the mesa built failed with the musl-gcc wrapper over gcc-glibc, so we use the gcc-musl as in llvm, and the build is manual
-# * mesa/mesa: another error involving bash, replace /bin/sh
-# * mesa/mesa/src/glx: Makefile:785: recipe for target 'libGL.la' failed
+# * mesa/mesa: another error involving bash, replace by /bin/sh
+# * mesa/mesa: missing include at some point
+# * app: -rpath needed in some linking commands (can be worked around with: export LDFLAGS="-Wl,-rpath=/root/build/lib"), bdftopcf using xfont instead of xfont2, etc.
 #
 ##########################
 
