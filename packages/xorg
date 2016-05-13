@@ -32,8 +32,19 @@ custombuild(){
 	for p in "$pwd"/packages/xorg-*.patch; do
 		patch -p1 < $p
 	done
+	
+	
+	# hack for libfontenc that assumes zlib.h is a system header, which is not true TODO: fix libfontenc
+	ln -sv /opt/zlib/include/zlib.h /opt/native-compiler-musl/x86_64-linux-musl/include/
+	ln -sv /opt/zlib/lib/libz.so* /opt/native-compiler-musl/x86_64-linux-musl/lib/
+	
 
 	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check
 	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check --autoresume resumefile
 	export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --autoresume resumefile
+	
+	
+	# previous hack cleanup
+	rm /opt/native-compiler-musl/x86_64-linux-musl/include/zlib.h
+	rm /opt/native-compiler-musl/x86_64-linux-musl/lib/libz.so*
 }
