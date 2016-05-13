@@ -22,7 +22,7 @@ custombuild(){
 	#../$package_fullname.src/configure --prefix=/opt/$package_fullname/
 	cmake -DCMAKE_INSTALL_PREFIX=/opt/$package_fullname/ -DBUILD_SHARED_LIBS=ON ../$package_fullname.src/
 
-	make -j
+	make -j4   # difficult to do more than that, the build chokes, memory usage too high
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name
 	ln -sv /opt/$package_name/bin/* /bin/
