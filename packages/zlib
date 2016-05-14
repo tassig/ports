@@ -6,5 +6,6 @@ build_dependencies=
 haspostinstall=1
 
 postinstall(){
-	ln -sv /opt/zlib/* /lib/   # needed by python
+	ln -sv /opt/zlib/lib/libz.* /lib/   # needed by python
+	ln -sv /opt/zlib/lib/pkgconfig/zlib.pc /opt/pkgconf/lib/pkgconfig/   # some packages rely on pkgconf
 }

@@ -1,0 +1,18 @@
+package_name=wget
+package_version=1.17
+tarball_suffix=xz
+url=http://ftp.gnu.org/gnu/wget/wget-1.17.tar.xz
+build_dependencies=
+iscustombuild=1
+
+custombuild() {
+	wget $url
+	tar xvf wget-$package_version.tar.xz
+	cd wget-$package_version
+	./configure --prefix=/opt/wget-$package_version --with-ssl=openssl
+	make 
+	make install
+	ln -sv /opt/wget-$package_version /opt/wget
+	ln -sfv /opt/wget/bin/* /bin/
+	cd ..
+}
