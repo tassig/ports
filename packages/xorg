@@ -2,7 +2,7 @@
 # the list of dependencies is taken from http://www.x.org/wiki/Building_the_X_Window_System/
 # however more dependencies are actually needed, for example python, and some dependencies can be replaced by other software
 
-build_dependencies="autoconf automake libtool pkgconf python2 gettext flex bison freetype fontconfig python-mako eudev llvm python3"
+build_dependencies="git autoconf automake libtool pkgconf python2 gettext flex bison freetype fontconfig python-mako eudev llvm python3 wget"
 iscustombuild=1
 
 
@@ -11,10 +11,12 @@ iscustombuild=1
 # X.org
 #
 # NOTE: different way to build than other software
+# 
 #
 # Issues to fix manually:
 # * mesa/mesa: another error involving bash, replace by /bin/sh
 # * mesa/mesa: missing include at some point
+#
 # * app: -rpath needed in some linking commands (can be worked around with: export LDFLAGS="-Wl,-rpath=/root/build/lib"), bdftopcf using xfont instead of xfont2, etc.
 #
 ##########################
@@ -25,11 +27,16 @@ custombuild(){
 	cd $HOME/src
 	git clone git://anongit.freedesktop.org/git/xorg/util/modular util/modular
 	mkdir $HOME/build
-	cd $HOME/src
-	export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check --cmd "git checkout HEAD"
-	for p in "$pwd"/packages/xorg-*.patch; do
-		patch -p1 < $p
-	done
+	
+	# get the tarballs of the 7.7 release as a tree
+	wget -r --no-parent -A.tar.gz https://www.x.org/releases/X11R7.7/src/
+	cp -r www.x.org/releases/X11R7.7/src/* ./
+	
+	#  TODO: select which modules we're going to clone, other modules have already been downloads as tarballs
+	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check --cmd "git checkout HEAD"
+	#for p in "$pwd"/packages/xorg-*.patch; do
+	#	patch -p1 < $p
+	#done
 	
 	
 	# hack for libfontenc that assumes zlib.h is a system header, which is not true TODO: fix libfontenc
@@ -39,7 +46,7 @@ custombuild(){
 
 	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check
 	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check --autoresume resumefile
-	export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --autoresume resumefile
+	PREFIX=/opt/xorg ./util/modular/build.sh $HOME/build --autoresume resumefile
 	
 	
 	# previous hack cleanup
