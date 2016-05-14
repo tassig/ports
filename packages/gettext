@@ -6,7 +6,5 @@ build_dependencies=
 haspostinstall=1
 
 postinstall(){
-	ln -sv /opt/gettext/include/* /usr/local/include/
-	ln -sv /opt/gettext/lib/* /usr/lib
 	ln -sv /opt/gettext/share/aclocal/* `aclocal --print-ac-dir`/
 }

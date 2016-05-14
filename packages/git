@@ -2,7 +2,7 @@ package_name=git
 package_version=2.7.3
 tarball_suffix=xz
 url=https://www.kernel.org/pub/software/scm/git/
-build_dependencies="zlib libressl curl"
+build_dependencies="zlib libressl curl perl gettext"
 iscustombuild=1
 
 # this is a minimal version of git for bootstrapping purposes
@@ -17,8 +17,8 @@ custombuild(){
 	wget $url/$package_tarball_name
 	tar xvf $package_tarball_name
 	cd $package_fullname/
-	./configure --prefix=/opt/$package_fullname --with-zlib=/opt/zlib
-	make -j CURLDIR="/opt/curl" NO_PERL=1 NO_GETTEXT=1 NO_SYS_POLL_H=1 install
+	./configure --prefix=/opt/$package_fullname --with-zlib=/opt/zlib --with-curl=/opt/curl --with-perl=/bin/perl
+	make -j NO_SYS_POLL_H=1 install
 	ln -s /opt/$package_fullname /opt/$package_name
 	ln -s /opt/$package_name/bin/* /bin/
 	cd ..
