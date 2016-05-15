@@ -17,39 +17,69 @@ iscustombuild=1
 # * mesa/mesa: another error involving bash, replace by /bin/sh
 # * mesa/mesa: missing include at some point
 #
-# * app: -rpath needed in some linking commands (can be worked around with: export LDFLAGS="-Wl,-rpath=/root/build/lib"), bdftopcf using xfont instead of xfont2, etc.
+# * app: -rpath needed in some linking commands (can be worked around with: export LDFLAGS="-Wl,-rpath=/root/build/lib")
+#
+# * fc-cache takes too long for some fonts
+#
+# TODO: put the tarballs on a fast server
 #
 ##########################
 
 custombuild(){
+	# we're building X.org release 7.7
+	
+	# get util/modular (where the build.sh file is located)
 	pwd="`pwd`"
 	mkdir $HOME/src
 	cd $HOME/src
+	# normally, we should move to the git commit corresponding to the 7.7 release, see: https://cgit.freedesktop.org/xorg/util/modular/log/
+	# but the version of build.sh at that time is a bit buggy, so we use the newer version
 	git clone git://anongit.freedesktop.org/git/xorg/util/modular util/modular
 	mkdir $HOME/build
 	
+	
 	# get the tarballs of the 7.7 release as a tree
 	wget -r --no-parent -A.tar.gz https://www.x.org/releases/X11R7.7/src/
-	cp -r www.x.org/releases/X11R7.7/src/* ./
+	mv www.x.org/releases/X11R7.7/src/* ./
 	
-	#  TODO: select which modules we're going to clone, other modules have already been downloads as tarballs
-	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check --cmd "git checkout HEAD"
-	#for p in "$pwd"/packages/xorg-*.patch; do
-	#	patch -p1 < $p
-	#done
+	# for some dependencies, X.org does not distribute the tarballs, so we get the code ourselves
+	# get a stable release of pixman, MESA - projects external to X.org
+	wget https://www.cairographics.org/releases/pixman-0.34.0.tar.gz
+	mkdir -p mesa
+	cd mesa
+	#wget https://mesa.freedesktop.org/archive/older-versions/10.x/10.4.7/MesaLib-10.4.7.tar.gz  # a version released approximately at the same time as X.org 7.7
+	git clone git://anongit.freedesktop.org/git/mesa/drm   # TODO: need to choose a particular commit, not take the latest version
+	git clone git://anongit.freedesktop.org/git/mesa/mesa   # TODO: need to choose a particular commit, not take the latest version
+	cd ..
+	cd proto
+	git clone git://anongit.freedesktop.org/git/xorg/proto/dri3proto   # mesa needs it TODO: double-check
+	git clone git://anongit.freedesktop.org/git/xorg/proto/presentproto   # mesa needs it TODO: double-check
+	cd ..
+	cd lib
+	git clone git://anongit.freedesktop.org/git/xorg/lib/libxshmfence   # mesa needs it
+	cd ..
 	
 	
-	# hack for libfontenc that assumes zlib.h is a system header, which is not true TODO: fix libfontenc
-	ln -sv /opt/zlib/include/zlib.h /opt/native-compiler-musl/x86_64-linux-musl/include/
-	ln -sv /opt/zlib/lib/libz.so* /opt/native-compiler-musl/x86_64-linux-musl/lib/
+	# replacements of the 7.7 packages with newer versions
+	cd xcb
+	rm libxcb-1.8.1.tar.gz
+	rm xcb-proto-1.7.1.tar.gz
+	git clone git://anongit.freedesktop.org/git/xcb/libxcb
+	git clone git://anongit.freedesktop.org/git/xcb/proto
+	cd ..
+	cd util
+	git clone git://anongit.freedesktop.org/git/xorg/util/macros   # wanted by build.sh and the latest version of libxcb
+	cd ..
+	
+	
+	
+	# apply patches (for musl compatibility)
+	for p in "$pwd"/packages/xorg-*.patch; do
+		patch -p1 < $p
+	done
 	
 
 	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check
 	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check --autoresume resumefile
 	PREFIX=/opt/xorg ./util/modular/build.sh $HOME/build --autoresume resumefile
-	
-	
-	# previous hack cleanup
-	rm /opt/native-compiler-musl/x86_64-linux-musl/include/zlib.h
-	rm /opt/native-compiler-musl/x86_64-linux-musl/lib/libz.so*
 }
