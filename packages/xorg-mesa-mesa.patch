@@ -1,0 +1,16 @@
+commit f1cc7cf2e16de2d60eca096ebf0fc7e7fcfdf5d5
+Author: Anton Novikov <an146@ya.ru>
+Date:   Mon May 16 14:00:00 2016 +0000
+
+    sh
+
+diff --git a/mesa/mesa/src/intel/isl/isl_format_layout_gen.bash b/mesa/mesa/src/intel/isl/isl_format_layout_gen.bash
+index db88382..7a99fdf 100755
+--- a/mesa/mesa/src/intel/isl/isl_format_layout_gen.bash
++++ b/mesa/mesa/src/intel/isl/isl_format_layout_gen.bash
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env bash
++#!/bin/sh
+ #
+ # Copyright 2015 Intel Corporation
+ #

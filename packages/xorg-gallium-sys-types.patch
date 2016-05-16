@@ -1,0 +1,18 @@
+commit 50a1a597b037957b4390c68594a9cf10247180b6
+Author: Anton Novikov <an146@ya.ru>
+Date:   Mon May 16 14:34:35 2016 +0000
+
+    include sys/types.h
+
+diff --git a/mesa/mesa/src/gallium/winsys/svga/drm/vmw_screen.h b/mesa/mesa/src/gallium/winsys/svga/drm/vmw_screen.h
+index 79d0949..0a63920 100644
+--- a/mesa/mesa/src/gallium/winsys/svga/drm/vmw_screen.h
++++ b/mesa/mesa/src/gallium/winsys/svga/drm/vmw_screen.h
+@@ -35,6 +35,7 @@
+ #define VMW_SCREEN_H_
+ 
+ 
++#include <sys/types.h>
+ #include "pipe/p_compiler.h"
+ #include "pipe/p_state.h"
+ 
