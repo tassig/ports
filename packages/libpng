@@ -10,9 +10,9 @@ custombuild(){
         package_tarball_name=$package_fullname.tar.$tarball_suffix
         wget $url                                                              
         tar xvf $package_tarball_name                                          
-        cd $package_fullname/                                                  
+        cd $package_fullname/                          
 	./configure CFLAGS="-I/opt/zlib/include" LDFLAGS="-L/opt/zlib/lib" --prefix=/opt/$package_fullname
-        make
+        make   # TODO: still some zlib.h missing => patch the Makefile
         make install                                
         ln -sv /opt/$package_fullname /opt/$package_name
         ln -sv /opt/$package_name/bin/* /bin/           
