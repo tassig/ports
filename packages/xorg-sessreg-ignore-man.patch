@@ -1,0 +1,16 @@
+commit a0fed1108499907c23b8bccfce387d4b4e04647c
+Author: Anton Novikov <an146@ya.ru>
+Date:   Mon May 16 16:18:59 2016 +0000
+
+    ignore man
+
+diff --git a/app/sessreg-1.0.7/man/Makefile.am b/app/sessreg-1.0.7/man/Makefile.am
+index 5ef6009..f499b90 100644
+--- a/app/sessreg-1.0.7/man/Makefile.am
++++ b/app/sessreg-1.0.7/man/Makefile.am
+@@ -19,4 +19,4 @@ MAN_SUBSTS += -f filenames.sed
+ sessreg.$(APP_MAN_SUFFIX): filenames.sed
+ 
+ .man.$(APP_MAN_SUFFIX):
+-	$(AM_V_GEN)$(SED) $(MAN_SUBSTS) < $< > $@
++	touch $@
