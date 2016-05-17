@@ -1,20 +1,31 @@
 package_name=libpng
 package_version=1.6.21
-tarball_suffix=gz
-url=http://download.sourceforge.net/libpng/libpng-1.6.21.tar.gz
-build_dependencies=
+tarball_suffix=xz
+url=http://prdownloads.sourceforge.net/libpng/libpng-1.6.21.tar.xz
+build_dependencies=pkgconf
 iscustombuild=1
+haspostinstall=1
 
-custombuild(){                                                                 
-        package_fullname=$package_name-$package_version                     
-        package_tarball_name=$package_fullname.tar.$tarball_suffix
-        wget $url                                                              
-        tar xvf $package_tarball_name                                          
-        cd $package_fullname/                          
-	./configure CFLAGS="-I/opt/zlib/include" LDFLAGS="-L/opt/zlib/lib" --prefix=/opt/$package_fullname
-        make   # TODO: still some zlib.h missing => patch the Makefile
-        make install                                
-        ln -sv /opt/$package_fullname /opt/$package_name
-        ln -sv /opt/$package_name/bin/* /bin/           
-        cd ..                                           
+custombuild(){
+	package_fullname=$package_name-$package_version
+	package_tarball_name=$package_fullname.tar.$tarball_suffix
+	rm $package_tarball_name
+	# TODO: This is hardcoded url, all packages shall define just base URL,
+	wget $url
+	tar xvf $package_tarball_name
+	cd $package_fullname/
+	cp scripts/pnglibconf.h.prebuilt pnglibconf.h
+	cp scripts/makefile.linux makefile
+	sed -i '/\.c\.pic\.o/{n;s@-c@-c $(CPPFLAGS)@}' makefile
+	sed -i "s@prefix=/usr/local@prefix=/opt/$package_fullname/@" makefile
+	export ZLIBINC=/opt/zlib/include ZLIBLIB=/opt/zlib/lib
+	make -j ZLIBINC=$ZLIBINC ZLIBLIB=$ZLIBLIB
+	make install
+	ln -sv /opt/$package_fullname /opt/$package_name
+	ln -sv /opt/$package_name/bin/* /bin/
+	cd ..
+}
+
+postinstall(){
+	ln -sv /opt/libpng/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
 }

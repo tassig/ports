@@ -78,8 +78,8 @@ custombuild(){
 		patch -p1 < $p
 	done
 	
-	export LDFLAGS="$LDFLAGS -Wl,-rpath-link=/root/build/lib -Wl,-rpath=/opt/freetype/lib -Wl,-rpath-link=/opt/zlib/lib"
-	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/fontconfig/lib -Wl,-rpath=/opt/expat/lib"
+	export LDFLAGS="$LDFLAGS -Wl,-rpath-link=/root/build/lib -Wl,-rpath=/opt/freetype/lib -Wl,-rpath=/opt/zlib/lib"
+	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/fontconfig/lib -Wl,-rpath=/opt/expat/lib -L/opt/zlib/lib"
 
 	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check
 	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check --autoresume resumefile
