@@ -2,7 +2,7 @@
 # the list of dependencies is taken from http://www.x.org/wiki/Building_the_X_Window_System/
 # however more dependencies are actually needed, for example python, and some dependencies can be replaced by other software
 
-build_dependencies="git autoconf automake libtool libpng pkgconf python2 gettext flex bison freetype fontconfig python-mako eudev llvm python3 wget"
+build_dependencies="git autoconf automake libtool libpng mtdev pkgconf python2 gettext flex bison freetype fontconfig python-mako eudev llvm python3 wget"
 iscustombuild=1
 
 
@@ -69,17 +69,49 @@ custombuild(){
 	cd ..
 	cd util
 	git clone git://anongit.freedesktop.org/git/xorg/util/macros   # wanted by build.sh and the latest version of libxcb
+	git clone git://anongit.freedesktop.org/git/xorg/util/cf
+	git clone git://anongit.freedesktop.org/git/xorg/util/imake
+	git clone git://anongit.freedesktop.org/git/xorg/util/gccmakedep
+	git clone git://anongit.freedesktop.org/git/xorg/util/lndir
+	cd ..
+	#git clone git://anongit.freedesktop.org/git/xkeyboard-config
+	#cd xkeyboard-config
+	#git checkout xkeyboard-config-2.6
+	#cd ..
+	#tar xvf www.x.org/releases/X11R7.7/src/everything/xkeyboard-config-2.6.tar.gz
+	#mv xkeyboard-config-2.6 xkeyboard-config
+	cp www.x.org/releases/X11R7.7/src/everything/xkeyboard-config-2.6.tar.gz .
+	
+
+	# unpack the parts to be patched
+	cd app
+	tar xvf sessreg-1.0.7.tar.gz   #TODO: patch still has no effect the first time!
+	cd ../lib
+	tar xvf libpciaccess-0.13.1.tar.gz
+	cd ..
+	tar xvf xserver/xorg-server-1.12.2.tar.gz
+	cd font
+	for f in *.tar.gz; do
+		tar xvf $f
+	done
 	cd ..
 	
-	
+	#echo all: > $HOME/build/Makefile.dummy
+	#PREFIX=/opt/xorg ./util/modular/build.sh $HOME/build --cmd "make -f$HOME/build/Makefile.dummy"
 	
 	# apply patches (for musl compatibility)
 	for p in "$pwd"/packages/xorg-*.patch; do
 		patch -p1 < $p
 	done
-	
-	export LDFLAGS="$LDFLAGS -Wl,-rpath-link=/root/build/lib -Wl,-rpath=/opt/freetype/lib -Wl,-rpath=/opt/zlib/lib"
-	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/fontconfig/lib -Wl,-rpath=/opt/expat/lib -L/opt/zlib/lib"
+	for f in font/*/; do
+		sed -i 's/@RUN_FCCACHE@/#@RUN_FCCACHE@/' $f/Makefile.am
+		sed -i 's/@RUN_FCCACHE@/#@RUN_FCCACHE@/' $f/Makefile.in
+	done
+
+	export CFLAGS="$CFLAGS -D_GNU_SOURCE -I/opt/zlib/include -I/opt/eudev/include -I/opt/mtdev/include"
+	export LDFLAGS="$LDFLAGS -Wl,-rpath=/root/build/lib -Wl,-rpath=/opt/freetype/lib -Wl,-rpath=/opt/zlib/lib"
+	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/fontconfig/lib -Wl,-rpath=/opt/expat/lib -Wl,-rpath=/opt/libpng/lib"
+	export LDFLAGS="$LDFLAGS -L/opt/eudev/lib -L/opt/mtdev/lib -L/opt/zlib/lib"
 
 	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check
 	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check --autoresume resumefile

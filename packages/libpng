@@ -21,6 +21,7 @@ custombuild(){
 	export ZLIBINC=/opt/zlib/include ZLIBLIB=/opt/zlib/lib
 	make -j ZLIBINC=$ZLIBINC ZLIBLIB=$ZLIBLIB
 	make install
+	ln -sv /opt/$package_fullname/lib/libpng16.so /opt/$package_fullname/lib/libpng16.so.16
 	ln -sv /opt/$package_fullname /opt/$package_name
 	ln -sv /opt/$package_name/bin/* /bin/
 	cd ..
