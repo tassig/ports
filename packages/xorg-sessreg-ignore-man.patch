@@ -14,3 +14,16 @@ index 5ef6009..f499b90 100644
  .man.$(APP_MAN_SUFFIX):
 -	$(AM_V_GEN)$(SED) $(MAN_SUBSTS) < $< > $@
 +	touch $@
+diff --git a/app/sessreg-1.0.7/man/Makefile.in b/app/sessreg-1.0.7/man/Makefile.in
+index 2b376db..ebb1bb0 100644
+--- a/app/sessreg-1.0.7/man/Makefile.in
++++ b/app/sessreg-1.0.7/man/Makefile.in
+@@ -416,7 +416,7 @@ filenames.sed: filenames.sed.c
+ sessreg.$(APP_MAN_SUFFIX): filenames.sed
+ 
+ .man.$(APP_MAN_SUFFIX):
+-	$(AM_V_GEN)$(SED) $(MAN_SUBSTS) < $< > $@
++	touch $@
+ 
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
