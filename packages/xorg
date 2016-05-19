@@ -74,18 +74,12 @@ custombuild(){
 	git clone git://anongit.freedesktop.org/git/xorg/util/gccmakedep
 	git clone git://anongit.freedesktop.org/git/xorg/util/lndir
 	cd ..
-	#git clone git://anongit.freedesktop.org/git/xkeyboard-config
-	#cd xkeyboard-config
-	#git checkout xkeyboard-config-2.6
-	#cd ..
-	#tar xvf www.x.org/releases/X11R7.7/src/everything/xkeyboard-config-2.6.tar.gz
-	#mv xkeyboard-config-2.6 xkeyboard-config
 	cp -v everything/xkeyboard-config-2.6.tar.gz .
 	
 
 	# unpack the parts to be patched
 	cd app
-	tar xvf sessreg-1.0.7.tar.gz   #TODO: patch still has no effect the first time!
+	tar xvf sessreg-1.0.7.tar.gz
 	cd ../lib
 	tar xvf libpciaccess-0.13.1.tar.gz
 	cd ..
