@@ -58,6 +58,9 @@ custombuild(){
 	cd lib
 	git clone git://anongit.freedesktop.org/git/xorg/lib/libxshmfence   # mesa needs it
 	cd ..
+	cd app
+	git clone git://anongit.freedesktop.org/git/xorg/app/xinit
+	cd ..
 	
 	
 	# replacements of the 7.7 packages with newer versions
