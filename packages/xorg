@@ -113,4 +113,13 @@ custombuild(){
 	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check
 	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check --autoresume resumefile
 	PREFIX=/opt/xorg ./util/modular/build.sh $HOME/build --autoresume resumefile
+  cat <<EOF >$HOME/build/share/X11/xorg.conf.d/20-modules.conf
+Section "Module"
+  Load "int10"
+  Load "fb"
+  Load "shadow"
+  Load "vbe"
+  Load "vesa"
+EndSection
+EOF
 }
