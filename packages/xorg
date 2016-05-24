@@ -35,7 +35,8 @@ custombuild(){
 	# normally, we should move to the git commit corresponding to the 7.7 release, see: https://cgit.freedesktop.org/xorg/util/modular/log/
 	# but the version of build.sh at that time is a bit buggy, so we use the newer version
 	git clone git://anongit.freedesktop.org/git/xorg/util/modular util/modular
-	mkdir $HOME/build
+	export PREFIX=/opt/xorg #$HOME/build
+	mkdir -p $PREFIX
 	
 	
 	# get the tarballs of the 7.7 release as a tree
@@ -60,6 +61,7 @@ custombuild(){
 	cd ..
 	cd app
 	git clone git://anongit.freedesktop.org/git/xorg/app/xinit
+	git clone git://anongit.freedesktop.org/git/xorg/app/twm
 	cd ..
 	
 	
@@ -106,14 +108,14 @@ custombuild(){
 	done
 
 	export CFLAGS="$CFLAGS -D_GNU_SOURCE -I/opt/zlib/include -I/opt/eudev/include -I/opt/mtdev/include"
-	export LDFLAGS="$LDFLAGS -Wl,-rpath=/root/build/lib -Wl,-rpath=/opt/freetype/lib -Wl,-rpath=/opt/zlib/lib"
+	export LDFLAGS="$LDFLAGS -Wl,-rpath=$PREFIX/lib -Wl,-rpath=/opt/freetype/lib -Wl,-rpath=/opt/zlib/lib"
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/fontconfig/lib -Wl,-rpath=/opt/expat/lib -Wl,-rpath=/opt/libpng/lib"
 	export LDFLAGS="$LDFLAGS -L/opt/eudev/lib -L/opt/mtdev/lib -L/opt/zlib/lib"
 
 	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check
 	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check --autoresume resumefile
-	PREFIX=/opt/xorg ./util/modular/build.sh $HOME/build --autoresume resumefile
-  cat <<EOF >$HOME/build/share/X11/xorg.conf.d/20-modules.conf
+	./util/modular/build.sh --autoresume resumefile
+	cat <<EOF >$HOME/build/share/X11/xorg.conf.d/20-modules.conf
 Section "Module"
   Load "int10"
   Load "fb"
