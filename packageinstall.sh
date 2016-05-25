@@ -4,17 +4,18 @@
 # refer to "package definition specifications.md" for laws and regulations
 #
 # TODO: add error management. installpackage() should be a transaction. ex: what do you do when "make install" returns an error? right now, we do nothing, which is incorrect
+#
 
-packagedirectory=packages
+packagedirectory=packages   # the directory name where the packages definitions are located
+
 
 # the function called by default to build a package, works for most packages
 defaultbuild(){
-	# set package_fullname to $package_name if package_version is empty
+	# set package_fullname to $package_name if package_version is empty TODO: a package is forbidden to not have a version
 	package_fullname=$package_name${package_version:+-}$package_version
 	package_tarball_name=$package_fullname.tar.$tarball_suffix
 	rm $package_tarball_name
-	# TODO: This is hardcoded url, all packages shall define just base URL, while we have to call wget $url/$package_tarball_name... 
-	wget -O $package_tarball_name $url
+	wget -O $package_tarball_name $url   # TODO: when does that happen?
 	tar xvf $package_tarball_name
 	cd $package_fullname/
 	./configure --prefix=/opt/$package_fullname/

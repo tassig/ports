@@ -26,7 +26,7 @@ custombuild(){
 	# normally, we should move to the git commit corresponding to the 7.7 release, see: https://cgit.freedesktop.org/xorg/util/modular/log/
 	# but the version of build.sh at that time is a bit buggy, so we use the newer version
 	git clone git://anongit.freedesktop.org/git/xorg/util/modular util/modular
-	export PREFIX=/opt/xorg #$HOME/build
+	export PREFIX=/opt/$package_name-$package_version
 	mkdir -p $PREFIX
 	
 	
@@ -71,6 +71,19 @@ custombuild(){
 	git clone git://anongit.freedesktop.org/git/xorg/util/gccmakedep
 	git clone git://anongit.freedesktop.org/git/xorg/util/lndir
 	cd ..
+	cp -v everything/xkeyboard-config-2.6.tar.gz .
+
+	
+	# replacements of the 7.7 packages with newer versions TODO: get a specific commit corresponding to a release, not the git HEAD (not stable enough)
+	cd xcb
+	rm libxcb-1.8.1.tar.gz
+	rm xcb-proto-1.7.1.tar.gz
+	git clone git://anongit.freedesktop.org/git/xcb/libxcb
+	git clone git://anongit.freedesktop.org/git/xcb/proto
+	#rm -r xserver TODO: remove the xserver tarball, to make sure the build system is not using it
+	git clone git://anongit.freedesktop.org/git/xorg/xserver
+	git clone git://anongit.freedesktop.org/git/libevdev
+	cd ..
 	cd driver
 	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-input-synaptics
 	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-v4l
@@ -107,19 +120,6 @@ custombuild(){
 	rm -r xf86-video-ati*
 	rm -r xf86-video-neomagic*
 	cd ..
-	cp -v everything/xkeyboard-config-2.6.tar.gz .
-	#rm -r xserver
-	git clone git://anongit.freedesktop.org/git/xorg/xserver
-	git clone git://anongit.freedesktop.org/git/libevdev
-
-	
-	# replacements of the 7.7 packages with newer versions
-	cd xcb
-	rm libxcb-1.8.1.tar.gz
-	rm xcb-proto-1.7.1.tar.gz
-	git clone git://anongit.freedesktop.org/git/xcb/libxcb
-	git clone git://anongit.freedesktop.org/git/xcb/proto
-	cd ..
 	
 
 	# unpack the parts to be patched
@@ -135,9 +135,6 @@ custombuild(){
 	done
 	cd ..
 	
-	
-	#echo all: > $HOME/build/Makefile.dummy
-	#PREFIX=/opt/xorg ./util/modular/build.sh $HOME/build --cmd "make -f$HOME/build/Makefile.dummy"
 	
 	# apply patches (for musl compatibility)
 	for p in "$pwd"/packages/xorg-*.patch; do
@@ -155,8 +152,9 @@ custombuild(){
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/fontconfig/lib -Wl,-rpath=/opt/expat/lib -Wl,-rpath=/opt/libpng/lib"
 	export LDFLAGS="$LDFLAGS -L/opt/eudev/lib -L/opt/mtdev/lib -L/opt/zlib/lib"
 
-	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check --autoresume resumefile
-	./util/modular/build.sh --autoresume resumefile
+	
+	# running the main build and installation script
+	./util/modular/build.sh --autoresume resumefile   # --check
 	
 	
 	cat <<EOF >$PREFIX/share/X11/xorg.conf.d/20-modules.conf
