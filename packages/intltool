@@ -1,0 +1,10 @@
+package_name=intltool
+package_version=0.51.0
+tarball_suffix=gz
+url=https://launchpad.net/intltool/trunk/0.51.0/+download/intltool-0.51.0.tar.gz
+build_dependencies=perl-xml-parser
+haspostinstall=1
+
+postinstall(){
+	ln -sv /opt/intltool/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
+}
