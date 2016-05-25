@@ -64,6 +64,15 @@ custombuild(){
 	git clone git://anongit.freedesktop.org/git/xorg/app/twm
 	git clone git://anongit.freedesktop.org/git/xorg/app/xclock
 	cd ..
+	cd util
+	git clone git://anongit.freedesktop.org/git/xorg/util/macros   # wanted by build.sh and the latest version of libxcb
+	# TODO: explain why these ones below are needed
+	git clone git://anongit.freedesktop.org/git/xorg/util/cf
+	git clone git://anongit.freedesktop.org/git/xorg/util/imake
+	git clone git://anongit.freedesktop.org/git/xorg/util/gccmakedep
+	git clone git://anongit.freedesktop.org/git/xorg/util/lndir
+	cd ..
+	cp -v everything/xkeyboard-config-2.6.tar.gz .
 	
 	
 	# replacements of the 7.7 packages with newer versions
@@ -73,14 +82,6 @@ custombuild(){
 	git clone git://anongit.freedesktop.org/git/xcb/libxcb
 	git clone git://anongit.freedesktop.org/git/xcb/proto
 	cd ..
-	cd util
-	git clone git://anongit.freedesktop.org/git/xorg/util/macros   # wanted by build.sh and the latest version of libxcb
-	git clone git://anongit.freedesktop.org/git/xorg/util/cf
-	git clone git://anongit.freedesktop.org/git/xorg/util/imake
-	git clone git://anongit.freedesktop.org/git/xorg/util/gccmakedep
-	git clone git://anongit.freedesktop.org/git/xorg/util/lndir
-	cd ..
-	cp -v everything/xkeyboard-config-2.6.tar.gz .
 	
 
 	# unpack the parts to be patched
@@ -96,6 +97,7 @@ custombuild(){
 	done
 	cd ..
 	
+	
 	#echo all: > $HOME/build/Makefile.dummy
 	#PREFIX=/opt/xorg ./util/modular/build.sh $HOME/build --cmd "make -f$HOME/build/Makefile.dummy"
 	
@@ -108,14 +110,15 @@ custombuild(){
 		sed -i 's/@RUN_FCCACHE@/#@RUN_FCCACHE@/' $f/Makefile.in
 	done
 
-	export CFLAGS="$CFLAGS -D_GNU_SOURCE -I/opt/zlib/include -I/opt/eudev/include -I/opt/mtdev/include"
+	export CFLAGS="-D_GNU_SOURCE -I/opt/zlib/include -I/opt/eudev/include -I/opt/mtdev/include"   # TODO: comments needed - D_GNU_SOURCE a bit funny in our context
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=$PREFIX/lib -Wl,-rpath=/opt/freetype/lib -Wl,-rpath=/opt/zlib/lib"
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/fontconfig/lib -Wl,-rpath=/opt/expat/lib -Wl,-rpath=/opt/libpng/lib"
 	export LDFLAGS="$LDFLAGS -L/opt/eudev/lib -L/opt/mtdev/lib -L/opt/zlib/lib"
 
-	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check
 	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check --autoresume resumefile
 	./util/modular/build.sh --autoresume resumefile
+	
+	
 	cat <<EOF >$PREFIX/share/X11/xorg.conf.d/20-modules.conf
 Section "Module"
   Load "int10"

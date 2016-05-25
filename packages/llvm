@@ -19,8 +19,9 @@ custombuild(){
 	mkdir llvm-build
 	cd llvm-build
 	
+	# TODO: see if the build with configure works, to remove the dependency on cmake
 	#../$package_fullname.src/configure --prefix=/opt/$package_fullname/
-	cmake -DCMAKE_INSTALL_PREFIX=/opt/$package_fullname/ -DBUILD_SHARED_LIBS=ON ../$package_fullname.src/
+	cmake -DCMAKE_INSTALL_PREFIX=/opt/$package_fullname/ -DBUILD_SHARED_LIBS=ON ../$package_fullname.src/   # TODO: shared libs probably not needed, check
 
 	make -j4   # difficult to do more than that, the build chokes, memory usage too high
 	make install
