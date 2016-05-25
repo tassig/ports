@@ -1,0 +1,23 @@
+package_name=XML-Parser
+package_version=1.0.4
+build_dependencies="expat perl"
+iscustombuild=1
+
+
+custombuild(){
+	#rm -r $HOME/.cpan/build
+	#export CFLAGS="-I/opt/libressl/include -I/opt/expat/include"
+	#export LDFLAGS="-L/opt/libressl/lib -L/opt/expat/lib"
+	export EXPATINCPATH="/opt/expat/include"
+	export EXPATLIBPATH="/opt/expat/lib"
+	rm XML-Parser-2.44.tar.gz
+	wget http://www.cpan.org/authors/id/T/TO/TODDR/XML-Parser-2.44.tar.gz
+	tar xvf XML-Parser-2.44.tar.gz
+	cd XML-Parser-2.44
+	perl Makefile.PL EXPATINCPATH=$EXPATINCPATH EXPATLIBPATH=$EXPATLIBPATH
+	make
+	make install
+	cd ..
+	rm -r XML-Parser-2.44
+	#cpan XML::Parser
+}
