@@ -16,7 +16,7 @@ iscustombuild=1
 custombuild(){
 	prefixname=nativegcc
 	
-	wget http://ftp.gnu.org/gnu/binutils/binutils-2.26.tar.bz2
+	wget http://mirrors.tassig.com/binutils/binutils-2.26.tar.bz2
 	tar xvf binutils-2.26.tar.bz2
 	mkdir objdir
 	cd objdir
@@ -26,7 +26,7 @@ custombuild(){
 	make install
 	cd ..
 
-	wget http://mirror1.babylon.network/gcc/releases/gcc-5.3.0/gcc-5.3.0.tar.bz2
+	wget http://mirrors.tassig.com/gcc/gcc-5.3.0.tar.bz2
 	tar xvf gcc-5.3.0.tar.bz2
 	cd gcc-5.3.0/
 	contrib/download_prerequisites

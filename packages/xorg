@@ -29,15 +29,15 @@ custombuild(){
 	
 	
 	# get the tarballs of the 7.7 release as a tree
-	wget -r --no-parent -A.tar.gz https://www.x.org/releases/X11R7.7/src/
-	mv www.x.org/releases/X11R7.7/src/* ./
+	wget -r --no-parent -A.tar.gz http://mirrors.tassig.com/xorg/src/
+	mv mirrors.tassig.com/xorg/src/* ./
 	
 	# for some dependencies, X.org does not distribute the tarballs, so we get the code ourselves
 	# get a stable release of pixman, MESA - projects external to X.org
-	wget https://www.cairographics.org/releases/pixman-0.34.0.tar.gz
+	wget http://mirrors.tassig.com/pixman/pixman-0.34.0.tar.gz
 	mkdir -p mesa
 	cd mesa
-	#wget https://mesa.freedesktop.org/archive/older-versions/10.x/10.4.7/MesaLib-10.4.7.tar.gz  # a version released approximately at the same time as X.org 7.7
+	#wget http://mirrors.tassig.com/mesa/MesaLib-10.4.7.tar.gz  # a version released approximately at the same time as X.org 7.7
 	git clone git://anongit.freedesktop.org/git/mesa/drm   # TODO: need to choose a particular commit, not take the latest version
 	git clone git://anongit.freedesktop.org/git/mesa/mesa   # TODO: need to choose a particular commit, not take the latest version
 	cd ..

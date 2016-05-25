@@ -1,7 +1,7 @@
 package_name=Python
 package_version=2.7.11
 tarball_suffix=xz
-url=https://www.python.org/ftp/python/2.7.11/Python-2.7.11.tar.xz
+url=http://mirrors.tassig.com/python/Python-2.7.11.tar.xz
 build_dependencies=bzip2   # TODO: justify why it's needed
 iscustombuild=1
 confflags="--enable-shared"   # TODO: if it needs a configure flag, then it's not a default build anymore. Change to custom build instead.

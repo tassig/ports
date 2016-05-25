@@ -1,7 +1,7 @@
 package_name=mercurial
 package_version=3.8.1
 tarball_suffix=gz
-url=http://mercurial.selenic.com/release/mercurial-3.8.1.tar.gz
+url=http://mirrors.tassig.com/mercurial/mercurial-3.8.1.tar.gz
 build_dependencies="python2"
 iscustombuild=1
 

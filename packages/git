@@ -1,7 +1,7 @@
 package_name=git
 package_version=2.7.3
 tarball_suffix=xz
-url=https://www.kernel.org/pub/software/scm/git/
+url=http://mirrors.tassig.com/git/
 build_dependencies="zlib libressl curl perl gettext"
 iscustombuild=1
 
