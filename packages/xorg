@@ -2,6 +2,8 @@
 # the list of dependencies is taken from http://www.x.org/wiki/Building_the_X_Window_System/
 # however more dependencies are actually needed, for example python, and some dependencies can be replaced by other software
 
+package_name=xorg
+package_version=X11R7.7
 build_dependencies="git autoconf automake libpng mtdev pkgconf python2 gettext flex bison freetype fontconfig python-mako eudev llvm python3 wget libtool intltool"
 iscustombuild=1
 
@@ -44,9 +46,17 @@ custombuild(){
 	cd proto
 	git clone git://anongit.freedesktop.org/git/xorg/proto/dri3proto   # mesa needs it TODO: double-check
 	git clone git://anongit.freedesktop.org/git/xorg/proto/presentproto   # mesa needs it TODO: double-check
+	git clone git://anongit.freedesktop.org/git/xorg/proto/glproto   # xserver needs it
+	git clone git://anongit.freedesktop.org/git/xorg/proto/inputproto   # xserver needs it
+	git clone git://anongit.freedesktop.org/git/xorg/proto/x11proto   # xserver needs it
+	git clone git://anongit.freedesktop.org/git/xorg/proto/randrproto   # xserver needs it
+	git clone git://anongit.freedesktop.org/git/xorg/proto/xextproto   # xserver needs it
+	git clone git://anongit.freedesktop.org/git/xorg/proto/fontsproto   # xserver needs it
+	git clone git://anongit.freedesktop.org/git/xorg/proto/videoproto   # video-v4l needs it
 	cd ..
 	cd lib
 	git clone git://anongit.freedesktop.org/git/xorg/lib/libxshmfence   # mesa needs it
+	git clone git://anongit.freedesktop.org/git/xorg/lib/libxtrans   # xserver needs it
 	cd ..
 	cd app
 	git clone git://anongit.freedesktop.org/git/xorg/app/xinit
@@ -61,8 +71,47 @@ custombuild(){
 	git clone git://anongit.freedesktop.org/git/xorg/util/gccmakedep
 	git clone git://anongit.freedesktop.org/git/xorg/util/lndir
 	cd ..
+	cd driver
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-input-synaptics
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-v4l
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-intel
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-ast
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-cirrus
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-dummy
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-fbdev
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-glint
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-i128
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-mach64
+	#TODO: past this point I've just added all video drivers, some of them might work without that
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-mga
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-newport
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-nv
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-openchrome
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-geode
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-glide
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-r128
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-savage
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-siliconmotion
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-sis
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-suncg6
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-tdfx
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-tga
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-trident
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-vesa
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-vmware
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-voodoo
+	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-wsfb
+
+	rm -r xf86-video-sunffb*
+	rm -r xf86-video-ark*
+	rm -r xf86-video-ati*
+	rm -r xf86-video-neomagic*
+	cd ..
 	cp -v everything/xkeyboard-config-2.6.tar.gz .
-	
+	#rm -r xserver
+	git clone git://anongit.freedesktop.org/git/xorg/xserver
+	git clone git://anongit.freedesktop.org/git/libevdev
+
 	
 	# replacements of the 7.7 packages with newer versions
 	cd xcb

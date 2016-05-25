@@ -9,11 +9,12 @@ packagedirectory=packages
 
 # the function called by default to build a package, works for most packages
 defaultbuild(){
-	package_fullname=$package_name-$package_version
+	# set package_fullname to $package_name if package_version is empty
+	package_fullname=$package_name${package_version:+-}$package_version
 	package_tarball_name=$package_fullname.tar.$tarball_suffix
 	rm $package_tarball_name
 	# TODO: This is hardcoded url, all packages shall define just base URL, while we have to call wget $url/$package_tarball_name... 
-	wget $url
+	wget -O $package_tarball_name $url
 	tar xvf $package_tarball_name
 	cd $package_fullname/
 	./configure --prefix=/opt/$package_fullname/
@@ -30,13 +31,14 @@ installpackage(){
 	
 	# set default values for variables for safety 
 	# TODO: these variables are shell variables, not environment variables. There is no safety hazard, such variables don't go into the subshells. So you can clean this up.
+	package_version=
 	iscustombuild=
 	haspostinstall=
 	confflags=
 
 	source $packagedirectory/$1
 	
-	if [ -d "/opt/$package_name-$package_version" ]; then
+	if [ -d "/opt/$package_name${package_version:+-}$package_version" ]; then
 		echo "package $package_name is already installed, not reinstalling"
 		return 0
 	fi
