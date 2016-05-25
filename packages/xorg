@@ -11,17 +11,6 @@ iscustombuild=1
 # X.org
 #
 # NOTE: different way to build than other software
-# 
-#
-# Issues to fix manually:
-# * mesa/mesa: another error involving bash, replace by /bin/sh
-# * mesa/mesa: missing include at some point
-#
-# * app: -rpath needed in some linking commands (can be worked around with: export LDFLAGS="-Wl,-rpath=/root/build/lib")
-#
-# * fc-cache takes too long for some fonts
-#
-# TODO: put the tarballs on a fast server
 #
 ##########################
 
@@ -105,6 +94,8 @@ custombuild(){
 	for p in "$pwd"/packages/xorg-*.patch; do
 		patch -p1 < $p
 	done
+	
+	# patch for fc-cache hanging on some fonts (TODO: is that even a correct explanation?)
 	for f in font/*/; do
 		sed -i 's/@RUN_FCCACHE@/#@RUN_FCCACHE@/' $f/Makefile.am
 		sed -i 's/@RUN_FCCACHE@/#@RUN_FCCACHE@/' $f/Makefile.in
