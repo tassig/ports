@@ -131,6 +131,7 @@ custombuild(){
 	tar xvf sessreg-1.0.7.tar.gz
 	cd ../lib
 	tar xvf libpciaccess-0.13.1.tar.gz
+	tar xvf libXfont-1.4.5.tar.gz
 	cd ..
 	#tar xvf xserver/xorg-server-1.12.2.tar.gz TODO: now the patch won't work cause we're getting xserver from git
 	cd font
