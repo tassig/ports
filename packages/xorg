@@ -80,10 +80,10 @@ custombuild(){
 	rm xcb-proto-1.7.1.tar.gz
 	git clone git://anongit.freedesktop.org/git/xcb/libxcb
 	git clone git://anongit.freedesktop.org/git/xcb/proto
+	cd ..
 	rm -r xserver # remove the xserver tarball, to make sure the build system is not using it
 	git clone git://anongit.freedesktop.org/git/xorg/xserver
 	git clone git://anongit.freedesktop.org/git/libevdev
-	cd ..
 	cd driver
 	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-input-synaptics
 	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-v4l
