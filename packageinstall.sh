@@ -4,6 +4,7 @@
 # refer to "package definition specifications.md" for laws and regulations
 #
 # TODO: add error management. installpackage() should be a transaction. ex: what do you do when "make install" returns an error? right now, we do nothing, which is incorrect
+# TODO: implement it differently for root and normal users (different --prefix)
 #
 
 packagedirectory=packages   # the directory name where the packages definitions are located
@@ -29,13 +30,6 @@ defaultbuild(){
 
 installpackage(){
 	echo "installing package $1"
-	
-	# set default values for variables for safety 
-	# TODO: these variables are shell variables, not environment variables. There is no safety hazard, such variables don't go into the subshells. So you can clean this up.
-	package_version=
-	iscustombuild=
-	haspostinstall=
-	confflags=
 
 	source $packagedirectory/$1
 	
@@ -49,7 +43,7 @@ installpackage(){
 	# installing the package's dependencies recursively
 	for pkg_name in $build_dependencies
 	do
-		(installpackage $pkg_name) || exit $?
+		(./packageinstall.sh $pkg_name) || exit $?   # i initially used a recursive call to "installpackage" instead, but it was inheriting the shell variables
 	done
 	
 	# do a custom build if the package defines custombuild(), otherwise do a default build
