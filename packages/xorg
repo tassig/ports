@@ -47,8 +47,6 @@ custombuild(){
 	cd proto
 	git clone git://anongit.freedesktop.org/git/xorg/proto/dri3proto   # mesa needs it TODO: double-check
 	git clone git://anongit.freedesktop.org/git/xorg/proto/presentproto   # mesa needs it TODO: double-check
-	
-	# TODO: for the following, tarballs already exist
 	git clone git://anongit.freedesktop.org/git/xorg/proto/glproto   # xserver needs it
 	git clone git://anongit.freedesktop.org/git/xorg/proto/inputproto   # xserver needs it
 	git clone git://anongit.freedesktop.org/git/xorg/proto/x11proto   # xserver needs it
@@ -151,6 +149,8 @@ custombuild(){
 		sed -i 's/@RUN_FCCACHE@/#@RUN_FCCACHE@/' $f/Makefile.in
 	done
 
+	
+	# set CFLAGS and LDFLAGS
 	export CFLAGS="-D_GNU_SOURCE -I/opt/zlib/include -I/opt/eudev/include -I/opt/mtdev/include"   # TODO: comments needed - D_GNU_SOURCE a bit funny in our context
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=$PREFIX/lib -Wl,-rpath=/opt/freetype/lib -Wl,-rpath=/opt/zlib/lib"
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/fontconfig/lib -Wl,-rpath=/opt/expat/lib -Wl,-rpath=/opt/libpng/lib"
