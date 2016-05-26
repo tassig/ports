@@ -23,16 +23,17 @@ custombuild(){
 	pwd="`pwd`"
 	mkdir $HOME/src
 	cd $HOME/src
-	# normally, we should move to the git commit corresponding to the 7.7 release, see: https://cgit.freedesktop.org/xorg/util/modular/log/
-	# but the version of build.sh at that time is a bit buggy, so we use the newer version
-	git clone git://anongit.freedesktop.org/git/xorg/util/modular util/modular
 	export PREFIX=/opt/$package_name-$package_version
 	mkdir -p $PREFIX
-	
 	
 	# get the tarballs of the 7.7 release as a tree
 	wget -r --no-parent -A.tar.gz http://mirrors.tassig.com/xorg/src/
 	mv mirrors.tassig.com/xorg/src/* ./
+	
+	# get the build.sh script
+	# normally, we should move to the git commit corresponding to the 7.7 release, see: https://cgit.freedesktop.org/xorg/util/modular/log/
+	# but the version of build.sh at that time is a bit buggy, so we use the newer version
+	git clone git://anongit.freedesktop.org/git/xorg/util/modular util/modular
 	
 	# for some dependencies, X.org does not distribute the tarballs, so we get the code ourselves
 	# get a stable release of pixman, MESA - projects external to X.org
@@ -46,6 +47,8 @@ custombuild(){
 	cd proto
 	git clone git://anongit.freedesktop.org/git/xorg/proto/dri3proto   # mesa needs it TODO: double-check
 	git clone git://anongit.freedesktop.org/git/xorg/proto/presentproto   # mesa needs it TODO: double-check
+	
+	# TODO: for the following, tarballs already exist
 	git clone git://anongit.freedesktop.org/git/xorg/proto/glproto   # xserver needs it
 	git clone git://anongit.freedesktop.org/git/xorg/proto/inputproto   # xserver needs it
 	git clone git://anongit.freedesktop.org/git/xorg/proto/x11proto   # xserver needs it
@@ -64,6 +67,7 @@ custombuild(){
 	git clone git://anongit.freedesktop.org/git/xorg/app/xclock
 	cd ..
 	cd util
+	rm util-macros-1.17.tar.gz
 	git clone git://anongit.freedesktop.org/git/xorg/util/macros   # wanted by build.sh and the latest version of libxcb
 	# TODO: explain why these ones below are needed
 	git clone git://anongit.freedesktop.org/git/xorg/util/cf
@@ -128,13 +132,12 @@ custombuild(){
 	cd ../lib
 	tar xvf libpciaccess-0.13.1.tar.gz
 	cd ..
-	tar xvf xserver/xorg-server-1.12.2.tar.gz
+	#tar xvf xserver/xorg-server-1.12.2.tar.gz TODO: now the patch won't work cause we're getting xserver from git
 	cd font
 	for f in *.tar.gz; do
 		tar xvf $f
 	done
 	cd ..
-	
 	
 	# apply patches (for musl compatibility)
 	for p in "$pwd"/packages/xorg-*.patch; do
