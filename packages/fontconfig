@@ -1,7 +1,7 @@
 package_name=fontconfig
 package_version=2.11.95
 tarball_suffix=bz2
-url=https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.11.95.tar.bz2
+url=http://mirrors.tassig.com/fontconfig/fontconfig-2.11.95.tar.bz2
 build_dependencies="expat freetype"
 haspostinstall=1
 

@@ -1,5 +1,5 @@
 package_name=bison
 package_version=3.0
 tarball_suffix=xz
-url=http://ftp.gnu.org/gnu/bison/bison-3.0.tar.xz
+url=http://mirrors.tassig.com/bison/bison-3.0.tar.xz
 build_dependencies=
