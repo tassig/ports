@@ -9,8 +9,6 @@ iscustombuild=1
 # it lacks some features essential to git, however it's able to clone repositories, which is all we need for bootstrapping
 # TODO: this package should be renamed git-minimal, the real git package shouldn't have these restrictions
 
-# TODO: git with http or https doesn't work, it doesn't seem to use curl. It doesn't really matter for bootstrapping purposes
-
 custombuild(){
 	package_fullname=$package_name-$package_version
 	package_tarball_name=$package_fullname.tar.$tarball_suffix
