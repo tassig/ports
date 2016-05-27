@@ -6,7 +6,7 @@ package_name=xorg
 package_version=X11R7.7
 build_dependencies="git autoconf automake libtool mtdev pkgconf python2 gettext flex bison freetype fontconfig python-mako eudev llvm python3 wget libpng intltool"
 iscustombuild=1
-
+freedesktop_url=http://mirrors.tassig.com/repos/freedesktop
 
 ##########################
 #
@@ -33,7 +33,7 @@ custombuild(){
 	# get the build.sh script
 	# normally, we should move to the git commit corresponding to the 7.7 release, see: https://cgit.freedesktop.org/xorg/util/modular/log/
 	# but the version of build.sh at that time is a bit buggy, so we use the newer version
-	git clone git://anongit.freedesktop.org/git/xorg/util/modular util/modular
+	git clone $freedesktop_url/modular util/modular
 	
 	# for some dependencies, X.org does not distribute the tarballs, so we get the code ourselves
 	# get a stable release of pixman, MESA - projects external to X.org
@@ -41,37 +41,37 @@ custombuild(){
 	mkdir -p mesa
 	cd mesa
 	#wget http://mirrors.tassig.com/mesa/MesaLib-10.4.7.tar.gz  # a version released approximately at the same time as X.org 7.7
-	git clone git://anongit.freedesktop.org/git/mesa/drm   # TODO: need to choose a particular commit, not take the latest version
-	git clone git://anongit.freedesktop.org/git/mesa/mesa   # TODO: need to choose a particular commit, not take the latest version
+	git clone $freedesktop_url/drm   # TODO: need to choose a particular commit, not take the latest version
+	git clone $freedesktop_url/mesa   # TODO: need to choose a particular commit, not take the latest version
 	cd ..
 	cd proto
-	git clone git://anongit.freedesktop.org/git/xorg/proto/dri3proto   # mesa needs it TODO: double-check
-	git clone git://anongit.freedesktop.org/git/xorg/proto/presentproto   # mesa needs it TODO: double-check
-	git clone git://anongit.freedesktop.org/git/xorg/proto/glproto   # xserver needs it
-	git clone git://anongit.freedesktop.org/git/xorg/proto/inputproto   # xserver needs it
-	git clone git://anongit.freedesktop.org/git/xorg/proto/x11proto   # xserver needs it
-	git clone git://anongit.freedesktop.org/git/xorg/proto/randrproto   # xserver needs it
-	git clone git://anongit.freedesktop.org/git/xorg/proto/xextproto   # xserver needs it
-	git clone git://anongit.freedesktop.org/git/xorg/proto/fontsproto   # xserver needs it
-	git clone git://anongit.freedesktop.org/git/xorg/proto/videoproto   # video-v4l needs it
+	git clone $freedesktop_url/dri3proto   # mesa needs it TODO: double-check
+	git clone $freedesktop_url/presentproto   # mesa needs it TODO: double-check
+	git clone $freedesktop_url/glproto   # xserver needs it
+	git clone $freedesktop_url/inputproto   # xserver needs it
+	git clone $freedesktop_url/x11proto   # xserver needs it
+	git clone $freedesktop_url/randrproto   # xserver needs it
+	git clone $freedesktop_url/xextproto   # xserver needs it
+	git clone $freedesktop_url/fontsproto   # xserver needs it
+	git clone $freedesktop_url/videoproto   # video-v4l needs it
 	cd ..
 	cd lib
-	git clone git://anongit.freedesktop.org/git/xorg/lib/libxshmfence   # mesa needs it
-	git clone git://anongit.freedesktop.org/git/xorg/lib/libxtrans   # xserver needs it
+	git clone $freedesktop_url/libxshmfence   # mesa needs it
+	git clone $freedesktop_url/libxtrans   # xserver needs it
 	cd ..
 	cd app
-	git clone git://anongit.freedesktop.org/git/xorg/app/xinit
-	git clone git://anongit.freedesktop.org/git/xorg/app/twm
-	git clone git://anongit.freedesktop.org/git/xorg/app/xclock
+	git clone $freedesktop_url/xinit
+	git clone $freedesktop_url/twm
+	git clone $freedesktop_url/xclock
 	cd ..
 	cd util
 	rm util-macros-1.17.tar.gz
-	git clone git://anongit.freedesktop.org/git/xorg/util/macros   # wanted by build.sh and the latest version of libxcb
+	git clone $freedesktop_url/macros   # wanted by build.sh and the latest version of libxcb
 	# TODO: explain why these ones below are needed
-	git clone git://anongit.freedesktop.org/git/xorg/util/cf
-	git clone git://anongit.freedesktop.org/git/xorg/util/imake
-	git clone git://anongit.freedesktop.org/git/xorg/util/gccmakedep
-	git clone git://anongit.freedesktop.org/git/xorg/util/lndir
+	git clone $freedesktop_url/cf
+	git clone $freedesktop_url/imake
+	git clone $freedesktop_url/gccmakedep
+	git clone $freedesktop_url/lndir
 	cd ..
 	cp -v everything/xkeyboard-config-2.6.tar.gz .
 
@@ -80,42 +80,42 @@ custombuild(){
 	cd xcb
 	rm libxcb-1.8.1.tar.gz
 	rm xcb-proto-1.7.1.tar.gz
-	git clone git://anongit.freedesktop.org/git/xcb/libxcb
-	git clone git://anongit.freedesktop.org/git/xcb/proto
+	git clone $freedesktop_url/libxcb
+	git clone $freedesktop_url/proto
 	cd ..
 	rm -r xserver # remove the xserver tarball, to make sure the build system is not using it
-	git clone git://anongit.freedesktop.org/git/xorg/xserver
-	git clone git://anongit.freedesktop.org/git/libevdev
+	git clone $freedesktop_url/xserver
+	git clone $freedesktop_url/libevdev
 	cd driver
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-input-synaptics
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-v4l
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-intel
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-ast
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-cirrus
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-dummy
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-fbdev
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-glint
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-i128
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-mach64
+	git clone $freedesktop_url/xf86-input-synaptics
+	git clone $freedesktop_url/xf86-video-v4l
+	git clone $freedesktop_url/xf86-video-intel
+	git clone $freedesktop_url/xf86-video-ast
+	git clone $freedesktop_url/xf86-video-cirrus
+	git clone $freedesktop_url/xf86-video-dummy
+	git clone $freedesktop_url/xf86-video-fbdev
+	git clone $freedesktop_url/xf86-video-glint
+	git clone $freedesktop_url/xf86-video-i128
+	git clone $freedesktop_url/xf86-video-mach64
 	#TODO: past this point I've just added all video drivers, some of them might work without that
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-mga
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-newport
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-nv
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-openchrome
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-geode
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-glide
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-r128
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-savage
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-siliconmotion
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-sis
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-suncg6
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-tdfx
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-tga
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-trident
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-vesa
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-vmware
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-voodoo
-	git clone git://anongit.freedesktop.org/git/xorg/driver/xf86-video-wsfb
+	git clone $freedesktop_url/xf86-video-mga
+	git clone $freedesktop_url/xf86-video-newport
+	git clone $freedesktop_url/xf86-video-nv
+	git clone $freedesktop_url/xf86-video-openchrome
+	git clone $freedesktop_url/xf86-video-geode
+	git clone $freedesktop_url/xf86-video-glide
+	git clone $freedesktop_url/xf86-video-r128
+	git clone $freedesktop_url/xf86-video-savage
+	git clone $freedesktop_url/xf86-video-siliconmotion
+	git clone $freedesktop_url/xf86-video-sis
+	git clone $freedesktop_url/xf86-video-suncg6
+	git clone $freedesktop_url/xf86-video-tdfx
+	git clone $freedesktop_url/xf86-video-tga
+	git clone $freedesktop_url/xf86-video-trident
+	git clone $freedesktop_url/xf86-video-vesa
+	git clone $freedesktop_url/xf86-video-vmware
+	git clone $freedesktop_url/xf86-video-voodoo
+	git clone $freedesktop_url/xf86-video-wsfb
 
 	rm -r xf86-video-sunffb*
 	rm -r xf86-video-ark*
