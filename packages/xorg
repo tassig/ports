@@ -2,7 +2,7 @@
 # the list of dependencies is taken from http://www.x.org/wiki/Building_the_X_Window_System/
 # however more dependencies are actually needed, for example python, and some dependencies can be replaced by other software
 
-build_dependencies="git autoconf automake libtool libpng mtdev pkgconf python2 gettext flex bison freetype fontconfig python-mako eudev llvm python3 wget"
+build_dependencies="git autoconf automake libtool mtdev pkgconf python2 gettext flex bison freetype fontconfig python-mako eudev llvm python3 wget libpng intltool"
 iscustombuild=1
 
 
