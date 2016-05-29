@@ -5,10 +5,6 @@ url=http://mirrors.tassig.com/git/
 build_dependencies="zlib libressl curl perl gettext expat"
 iscustombuild=1
 
-# this is a minimal version of git for bootstrapping purposes
-# it lacks some features essential to git, however it's able to clone repositories, which is all we need for bootstrapping
-# TODO: this package should be renamed git-minimal, the real git package shouldn't have these restrictions
-
 custombuild(){
 	package_fullname=$package_name-$package_version
 	package_tarball_name=$package_fullname.tar.$tarball_suffix
