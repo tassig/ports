@@ -83,8 +83,9 @@ custombuild(){
 	git clone $freedesktop_url/libxcb
 	git clone $freedesktop_url/proto
 	cd ..
-	rm -r xserver # remove the xserver tarball, to make sure the build system is not using it
+	rm xserver/*.tar.gz # remove the xserver tarball, to make sure the build system is not using it
 	git clone $freedesktop_url/xserver
+	cd xserver && git checkout xorg-server-1.18.3 && cd ..
 	git clone $freedesktop_url/libevdev
 	cd driver
 	git clone $freedesktop_url/xf86-input-synaptics
@@ -96,15 +97,11 @@ custombuild(){
 	git clone $freedesktop_url/xf86-video-fbdev
 	git clone $freedesktop_url/xf86-video-glint
 	git clone $freedesktop_url/xf86-video-i128
-	git clone $freedesktop_url/xf86-video-mach64
 	#TODO: past this point I've just added all video drivers, some of them might work without that
-	git clone $freedesktop_url/xf86-video-mga
 	git clone $freedesktop_url/xf86-video-newport
-	git clone $freedesktop_url/xf86-video-nv
 	git clone $freedesktop_url/xf86-video-openchrome
 	git clone $freedesktop_url/xf86-video-geode
 	git clone $freedesktop_url/xf86-video-glide
-	git clone $freedesktop_url/xf86-video-r128
 	git clone $freedesktop_url/xf86-video-savage
 	git clone $freedesktop_url/xf86-video-siliconmotion
 	git clone $freedesktop_url/xf86-video-sis
@@ -120,7 +117,11 @@ custombuild(){
 	rm -r xf86-video-sunffb*
 	rm -r xf86-video-ark*
 	rm -r xf86-video-ati*
+	rm -r xf86-video-mach64*
+	rm -r xf86-video-mga*
 	rm -r xf86-video-neomagic*
+	rm -r xf86-video-nv*
+	rm -r xf86-video-r128*
 	cd ..
 	
 
