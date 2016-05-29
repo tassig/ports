@@ -4,8 +4,6 @@ tarball_suffix=xz
 url=http://mirrors.tassig.com/python/Python-2.7.11.tar.xz
 build_dependencies=bzip2   # TODO: justify why it's needed
 iscustombuild=1
-confflags="--enable-shared"   # TODO: if it needs a configure flag, then it's not a default build anymore. Change to custom build instead.
-                              # TODO: justify why needed
                               
 # TODO: if a version of python is needed that has full supports for lots of plugins, we can add a new packages, named "python-full" or something
 
