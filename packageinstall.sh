@@ -13,11 +13,12 @@ defaultbuild(){
 	package_tarball_name=$package_fullname.tar.$tarball_suffix
 	rm $package_tarball_name
 	# TODO: This is hardcoded url, all packages shall define just base URL, while we have to call wget $url/$package_tarball_name... 
-	wget $url
-	tar xvf $package_tarball_name
+	wget $url || exit $?
+	tar xvf $package_tarball_name || exit $?
 	cd $package_fullname/
-	./configure --prefix=/opt/$package_fullname/
-	make -j
+
+	CFLAGS=$configure_cflags LDFLAGS=$configure_ldflags ./configure --prefix=/opt/$package_fullname/ $configure_string || exit $?
+	make -j || exit $?
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name
 	ln -sv /opt/$package_name/bin/* /bin/
@@ -33,6 +34,10 @@ installpackage(){
 	iscustombuild=
 	haspostinstall=
 	confflags=
+	build_dependencies=
+	configure_string=
+	configure_ldflags=
+	configure_cflags=
 
 	source $packagedirectory/$1
 	

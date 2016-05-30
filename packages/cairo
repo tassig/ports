@@ -1,0 +1,14 @@
+package_name=cairo
+package_version=1.14.6
+tarball_suffix=xz
+url=https://www.cairographics.org/releases/$package_name-$package_version.tar.$tarball_suffix
+build_dependencies="pixman zlib expat"
+# TODO: check the disabled features
+configure_string="--enable-ps=no --enable-pdf=no --enable-trace=no"
+configure_ldflags="-Wl,-L/opt/zlib/lib/,-rpath=/opt/expat/lib/,-rpath=/opt/xorg/lib/"
+configure_cflags="-I/opt/zlib/include"
+haspostinstall=1
+
+postinstall(){
+	ln -sv /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # some packages rely on pkgconf
+}

@@ -1,0 +1,36 @@
+package_name=glib
+package_version=2.48.1
+tarball_suffix=xz
+url=http://ftp.gnome.org/pub/gnome/sources/glib/2.48/$package_name-$package_version.tar.$tarball_suffix
+build_dependencies="libffi pcre"
+haspostinstall=1
+# TODO: add to build_dependencies lib from -rpath=/lib/ Find out exact lib
+configure_ldflags="-Wl,-rpath=/opt/pcre/lib/,-rpath=/opt/libffi/lib64/,-rpath=/lib/"
+iscustombuild=1
+
+custombuild(){
+	package_fullname=$package_name-$package_version
+	package_tarball_name=$package_fullname.tar.$tarball_suffix
+	rm $package_tarball_name
+
+	# TODO: This is hardcoded url, all packages shall define just base URL, while we have to call wget $url/$package_tarball_name... 
+	wget $url || exit $?
+	tar xvf $package_tarball_name || exit $?
+	cd $package_fullname/
+
+	pwd="`pwd`"
+	for p in "$pwd"/../packages/$package_name-*.patch; do
+		patch -p1 < $p
+	done
+
+	LDFLAGS=$configure_ldflags  ./configure --prefix=/opt/$package_fullname/ $configure_string || exit $?
+	make -j || exit $?
+	make install
+	ln -sv /opt/$package_fullname /opt/$package_name
+	ln -sv /opt/$package_name/bin/* /bin/
+	cd ..
+}
+
+postinstall(){
+	ln -sv /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # some packages rely on pkgconf
+}

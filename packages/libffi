@@ -1,0 +1,9 @@
+package_name=libffi
+package_version=3.2
+tarball_suffix=gz
+url=ftp://sourceware.org/pub/libffi/$package_name-$package_version.tar.$tarball_suffix
+haspostinstall=1
+
+postinstall(){
+	ln -sv /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # some packages rely on pkgconf
+}
