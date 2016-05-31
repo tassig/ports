@@ -16,7 +16,7 @@ defaultbuild(){
 	package_fullname=$package_name${package_version:+-}$package_version
 	package_tarball_name=$package_fullname.tar.$tarball_suffix
 	rm $package_tarball_name
-	wget -O $package_tarball_name $url   # TODO: when does that happen?
+	wget -O $package_tarball_name $url   # TODO: when $url is inconsistent with $package_tarball_name, then it's an error in the package definition. In that case, we should exit with an error, not ignore the inconsistency
 	tar xvf $package_tarball_name
 	cd $package_fullname/
 	./configure --prefix=/opt/$package_fullname/

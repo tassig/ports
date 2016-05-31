@@ -12,7 +12,8 @@ freedesktop_url=http://mirrors.tassig.com/repos/freedesktop
 #
 # X.org
 #
-# NOTE: different way to build than other software
+# the X system is a big bundle of software that have to be build in a certain order. It comes with a script "build.sh" to automate this work for you.
+# We start from a so-called katamari release (X11R7.7) and we update certain packages from there by getting a more recent version from the git repository.
 #
 ##########################
 
@@ -135,7 +136,7 @@ custombuild(){
 	tar xvf libpciaccess-0.13.1.tar.gz
 	tar xvf libXfont-1.4.5.tar.gz
 	cd ..
-	#tar xvf xserver/xorg-server-1.12.2.tar.gz TODO: now the patch won't work cause we're getting xserver from git
+	# TODO: now the xserver patch won't work cause we're getting xserver from git
 	cd font
 	for f in *.tar.gz; do
 		tar xvf $f
@@ -156,9 +157,11 @@ custombuild(){
 	
 	# set CFLAGS and LDFLAGS
 	export CFLAGS="-D_GNU_SOURCE -I/opt/zlib/include -I/opt/eudev/include -I/opt/mtdev/include"   # TODO: comments needed - D_GNU_SOURCE a bit funny in our context
+	
+	# TODO: all these -rpath will end up in every binary and library that we build here, see if we can find a cleaner solution
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=$PREFIX/lib -Wl,-rpath=/opt/freetype/lib -Wl,-rpath=/opt/zlib/lib"
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/fontconfig/lib -Wl,-rpath=/opt/expat/lib -Wl,-rpath=/opt/libpng/lib"
-	export LDFLAGS="$LDFLAGS -L/opt/eudev/lib -L/opt/mtdev/lib -L/opt/zlib/lib"
+	export LDFLAGS="$LDFLAGS -L/opt/eudev/lib -L/opt/mtdev/lib"
 
 	
 	# running the main build and installation script
