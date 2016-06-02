@@ -10,9 +10,12 @@ custombuild(){
 	tar xvf tcl-core8.6.5-src.tar.gz
 	cd tcl8.6.5/unix/
 	./configure --prefix=/opt/tcl-core-8.6.5
-	make
+	make -j
 	make install
 	cd ..
+	
+	ln -sv /opt/tcl-core-8.6.5 /opt/tcl-core
+	ln -sv /opt/tcl-core/bin/* /bin/
 }
 
 

@@ -1,3 +1,5 @@
+#!/bin/sh -e
+
 # usage: ./packageinstall.sh package_identifier
 # example: ./packageinstall.sh autoconf
 # the script is assuming you're running it in the ports directory (which is a bit stupid, need to be changed later)
@@ -12,13 +14,11 @@ packagedirectory=packages   # the directory name where the packages definitions 
 
 # the function called by default to build a package, works for most packages
 defaultbuild(){
-	# set package_fullname to $package_name if package_version is empty TODO: a package is forbidden to not have a version
-	package_fullname=$package_name${package_version:+-}$package_version
-	package_tarball_name=$package_fullname.tar.$tarball_suffix
-	rm $package_tarball_name
-	wget -O $package_tarball_name $url   # TODO: when $url is inconsistent with $package_tarball_name, then it's an error in the package definition. In that case, we should exit with an error, not ignore the inconsistency
-	tar xvf $package_tarball_name
-	cd $package_fullname/
+	package_fullname=$package_name-$package_version
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	cd $package_name*
 	./configure --prefix=/opt/$package_fullname/
 	make -j
 	make install
@@ -33,7 +33,7 @@ installpackage(){
 
 	source $packagedirectory/$1
 	
-	if [ -d "/opt/$package_name${package_version:+-}$package_version" ]; then
+	if [ -d "/opt/$package_name-$package_version" ]; then
 		echo "package $package_name is already installed, not reinstalling"
 		return 0
 	fi

@@ -6,11 +6,9 @@ build_dependencies=
 iscustombuild=1
 
 custombuild(){
-	# cf http://www.linuxfromscratch.org/lfs/view/development/chapter05/linux-headers.html
-	
 	wget $url
 	tar xvf linux-4.4.6.tar.xz
 	cd linux-4.4.6
-	make INSTALL_HDR_PATH=/usr/ headers_install
+	make INSTALL_HDR_PATH=/opt/$package_name-$package_version/ headers_install
 	cd ..
 }
