@@ -168,13 +168,5 @@ custombuild(){
 	./util/modular/build.sh --autoresume resumefile   # --check
 	
 	
-	cat <<EOF >$PREFIX/share/X11/xorg.conf.d/20-modules.conf
-Section "Module"
-  Load "int10"
-  Load "fb"
-  Load "shadow"
-  Load "vbe"
-  Load "vesa"
-EndSection
-EOF
+	cp "$pwd"/packages/xorg-20-modules.conf $PREFIX/share/X11/xorg.conf.d/20-modules.conf
 }
