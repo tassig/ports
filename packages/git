@@ -11,7 +11,7 @@ custombuild(){
 	wget $url/$package_tarball_name
 	tar xvf $package_tarball_name
 	cd $package_fullname/
-	LDFLAGS="-Wl,-rpath-link=/opt/libressl/lib" ./configure --prefix=/opt/$package_fullname --with-zlib=/opt/zlib --with-curl=/opt/curl --with-perl=/bin/perl --with-expat=/opt/expat
+	./configure --prefix=/opt/$package_fullname --with-openssl=/opt/libressl --with-zlib=/opt/zlib --with-curl=/opt/curl --with-perl=/bin/perl --with-expat=/opt/expat
 	make -j NO_SYS_POLL_H=1 install   # TODO: document this environment variable
 	ln -s /opt/$package_fullname /opt/$package_name
 	ln -s /opt/$package_name/bin/* /bin/

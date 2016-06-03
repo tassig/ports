@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh
 
 # usage: ./packageinstall.sh package_identifier
 # example: ./packageinstall.sh autoconf

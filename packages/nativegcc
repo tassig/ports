@@ -10,31 +10,33 @@ iscustombuild=1
 #
 # TODO: point to mirrors.tassig.com
 #
-# 
+# TODO: fix hardcoded ARCH
+#
 #
 ##########################
 
 
 custombuild(){
-	prefixname=$package_name-$package_version
+	packagename=$package_name-$package_version
 	target_triple=x86_64-longhorn-linux-musl   # TODO: depends on ARCH
 	
 	
 	# do binutils
 	
-	#wget http://mirrors.tassig.com/binutils/binutils-2.26.tar.bz2
 	wget http://ftp.gnu.org/gnu/binutils/binutils-2.26.tar.bz2
 	tar xvf binutils-2.26.tar.bz2
 	mkdir objdir
-	cd objdir
-	../binutils-2.26/configure --prefix=/opt/$prefixname \
-	                           --with-lib-path= \
+	cd objdir                  
+	../binutils-2.26/configure --prefix=/opt/$packagename \
+	                           --with-lib-path=/lib \
+	                           --build=$target_triple \
 	                           --disable-werror \
 	                           --disable-nls
 	make -j
 	#make check
 	make install
 	cd ..
+	rm -r objdir
 	
 	
 	
@@ -43,31 +45,47 @@ custombuild(){
 	wget http://www.musl-libc.org/releases/musl-1.1.14.tar.gz
 	tar xvf musl-1.1.14.tar.gz
 	cd musl-1.1.14
-	./configure --prefix=$prefixname/$target_triple
+	./configure --prefix=/opt/$packagename/$target_triple
 	make -j
 	make install
+	cp /opt/$packagename/$target_triple/lib/libc.so /lib/ld-musl-x86_64.so.1   # TODO: dynamic linker name depends on ARCH
+	echo "/opt/$packagename/$target_triple/lib/" > /etc/ld-musl-x86_64.path   # TODO: same
+	echo "/opt/$packagename/lib64" >> /etc/ld-musl-x86_64.path
 	cd ..
 	
 	
 
 	# do gcc
 	
-	#wget http://mirrors.tassig.com/gcc/gcc-5.3.0.tar.bz2
 	wget http://ftp.gnu.org/gnu/gcc/gcc-6.1.0/gcc-6.1.0.tar.bz2
 	tar xvf gcc-6.1.0.tar.bz2
 	cd gcc-6.1.0/
 	contrib/download_prerequisites
+	
+	echo 'echo "x86_64-longhorn-linux-musl"' > config.guess   # TODO: depends on ARCH
+	cp -f config.guess mpc/config.guess
+	cp -f config.guess isl/config.guess
+	cp -f config.guess gmp/config.guess
+	cp -f config.guess mpfr/config.guess
+	cp -f config.guess config.sub
+	cp -f config.sub mpc/config.sub
+	cp -f config.sub isl/config.sub
+	cp -f config.sub gmp/config.sub
+	cp -f config.sub mpfr/config.sub
+
 	cd ..
 	mkdir gccobjdir
 	cd gccobjdir
-	../gcc-6.1.0/configure --prefix=/opt/$prefixname \
+	../gcc-6.1.0/configure --prefix=/opt/$packagename \
 	                       --enable-languages=c,c++ \
-	                       --with-native-system-header-dir=/opt/$prefixname/$target_triple/include \
+	                       --with-native-system-header-dir=/opt/$packagename/$target_triple/include \
 	                       --disable-multilib \
 	                       --disable-nls \
 	                       --disable-libsanitizer \
 	                       --disable-libcilkrts
-	make -j
+	ln -sv /opt/$packagename/$target_triple/lib/*.o /lib/   # hack to pass the bootstrap stage, some configure scripts probably incorrect TODO: could be patched
+	make --debug -j4
+	rm /lib/*.o   # previous hack clean up
 	#make -k check -j
 	make install
 	cd ..
@@ -76,7 +94,6 @@ custombuild(){
 	
 	# final links
 	
-	ln -sv /opt/$prefixname/bin/* /bin/
-	cp /opt/$prefixname/$target_triple/lib/libc.so /lib/ld-musl-x86_64.so.1   # TODO: dynamic linker name depends on ARCH
-	ln -sv /opt/linux-kernel-headers/include/* /opt/$prefixname/$target_triple/include/
+	ln -svf /opt/$packagename/bin/* /bin/
+	ln -svf /opt/linux-kernel-headers/include/* /opt/$packagename/$target_triple/include/   # linux headers into system headers location
 }
