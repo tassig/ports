@@ -1,7 +1,7 @@
 package_name=make
 package_version=4.1
 tarball_suffix=bz2
-url=ftp://ftp.gnu.org/pub/gnu/make/
+url=http://mirrors.tassig.com/make/
 build_dependencies=
 iscustombuild=1
 

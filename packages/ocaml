@@ -1,13 +1,13 @@
 package_name=ocaml
 package_version=4.02.3.
 tarball_suffix=xz
-url=http://caml.inria.fr/pub/distrib/ocaml-4.02/ocaml-4.02.3.tar.xz
+url=http://mirrors.tassig.com/ocaml/ocaml-4.02.3.tar.xz
 build_dependencies=
 iscustombuild=1
 
 
 custombuild(){
-	wget http://caml.inria.fr/pub/distrib/ocaml-4.02/ocaml-4.02.3.tar.xz
+	wget $url
 	tar xvf ocaml-4.02.3.tar.xz
 	cd ocaml-4.02.3
 	./configure --prefix /opt/ocaml-4.02.3/

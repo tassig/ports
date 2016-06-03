@@ -2,31 +2,29 @@
 # the list of dependencies is taken from http://www.x.org/wiki/Building_the_X_Window_System/
 # however more dependencies are actually needed, for example python, and some dependencies can be replaced by other software
 
+package_name=xorg
+package_version=X11R7.7
 build_dependencies="git autoconf automake libtool mtdev pkgconf python2 gettext flex bison freetype fontconfig python-mako eudev llvm python3 wget libpng intltool"
 iscustombuild=1
-haspostinstall=1
-
-package_name=xorg
-package_version=7.7
+freedesktop_url=http://mirrors.tassig.com/repos/freedesktop
 
 ##########################
 #
 # X.org
 #
-# NOTE: different way to build than other software
-# 
-#
-# Issues to fix manually:
-# * mesa/mesa: another error involving bash, replace by /bin/sh
-# * mesa/mesa: missing include at some point
-#
-# * app: -rpath needed in some linking commands (can be worked around with: export LDFLAGS="-Wl,-rpath=/root/build/lib")
-#
-# * fc-cache takes too long for some fonts
-#
-# TODO: put the tarballs on a fast server
+# the X system is a big bundle of software that have to be build in a certain order. It comes with a script "build.sh" to automate this work for you.
+# We start from a so-called katamari release (X11R7.7) and we update certain packages from there by getting a more recent version from the git repository.
 #
 ##########################
+
+set -e
+
+# git clone $freedesktop_url/$1 ($1 should be 1-component path)
+# and checkout $2
+clone(){
+	git clone $freedesktop_url/$1
+	cd $1 && git checkout $2 && cd ..
+}
 
 custombuild(){
 	# we're building X.org release 7.7
@@ -35,57 +33,102 @@ custombuild(){
 	pwd="`pwd`"
 	mkdir $HOME/src
 	cd $HOME/src
-	# normally, we should move to the git commit corresponding to the 7.7 release, see: https://cgit.freedesktop.org/xorg/util/modular/log/
-	# but the version of build.sh at that time is a bit buggy, so we use the newer version
-	git clone git://anongit.freedesktop.org/git/xorg/util/modular util/modular
-
-	package_fullname=$package_name-$package_version
-	export PREFIX=/opt/$package_fullname
+	export PREFIX=/opt/$package_name-$package_version
 	mkdir -p $PREFIX
 	
-	
 	# get the tarballs of the 7.7 release as a tree
-	wget -r --no-parent -A.tar.gz https://www.x.org/releases/X11R7.7/src/
-	mv www.x.org/releases/X11R7.7/src/* ./
+	wget -r --no-parent -A.tar.gz http://mirrors.tassig.com/xorg/src/
+	mv mirrors.tassig.com/xorg/src/* ./
+	
+	# get the build.sh script
+	# normally, we should move to the git commit corresponding to the 7.7 release, see: https://cgit.freedesktop.org/xorg/util/modular/log/
+	# but the version of build.sh at that time is a bit buggy, so we use the newer version
+	git clone $freedesktop_url/modular util/modular
+	cd util/modular && git checkout 2749b723a0225ae70e0b0d26b6b68727d397d607 && cd ../..
 	
 	# for some dependencies, X.org does not distribute the tarballs, so we get the code ourselves
 	# get a stable release of pixman, MESA - projects external to X.org
-	wget https://www.cairographics.org/releases/pixman-0.34.0.tar.gz
+	wget http://mirrors.tassig.com/pixman/pixman-0.34.0.tar.gz
 	mkdir -p mesa
 	cd mesa
-	#wget https://mesa.freedesktop.org/archive/older-versions/10.x/10.4.7/MesaLib-10.4.7.tar.gz  # a version released approximately at the same time as X.org 7.7
-	git clone git://anongit.freedesktop.org/git/mesa/drm   # TODO: need to choose a particular commit, not take the latest version
-	git clone git://anongit.freedesktop.org/git/mesa/mesa   # TODO: need to choose a particular commit, not take the latest version
+	#wget http://mirrors.tassig.com/mesa/MesaLib-10.4.7.tar.gz  # a version released approximately at the same time as X.org 7.7
+	clone drm 7aab852d4ed25703fb986cf42328d3882697cfdc
+	clone mesa 8314dd7ff2c4719ffb64b202cf5fdd0e38ad276e
 	cd ..
 	cd proto
-	git clone git://anongit.freedesktop.org/git/xorg/proto/dri3proto   # mesa needs it TODO: double-check
-	git clone git://anongit.freedesktop.org/git/xorg/proto/presentproto   # mesa needs it TODO: double-check
+	clone dri3proto 91df0f88b70c268f3580385a7b37543ab8c544c8   # mesa needs it TODO: double-check
+	clone presentproto ef84007fc4a23d3897b4776906139de9d0698c2a  # mesa needs it TODO: double-check
+	clone glproto bd3d751e1eb17efb39f65093271bb4ac071aa9e0  # xserver needs it
+	clone inputproto 6946d497e3fe496818fa70de6702934bf70e44ec  # xserver needs it
+	clone x11proto 3e975a39b002070d245d21838f837aaf6e5c41d0  # xserver needs it
+	clone randrproto cf3272717e08325f69bdbb759ab35cb4d1839fb7  # xserver needs it
+	clone xextproto 66afec3f49e8eb0d4c2e9af7088fc3116d4bafd7  # xserver needs it
+	clone fontsproto f900146aa6d6b67ad5e15436201ce81a874a29a7  # xserver needs it
+	clone videoproto 65e74494e4d215e7bee64bafbcfa89088562cda4  # video-v4l needs it
 	cd ..
 	cd lib
-	git clone git://anongit.freedesktop.org/git/xorg/lib/libxshmfence   # mesa needs it
+	clone libxshmfence fe2d6dbba6356ff275649017dd516f0270d79595  # mesa needs it
+	clone libxtrans 3810e026323210df6ec6cf818f01832a63e9fbb9  # xserver needs it
 	cd ..
 	cd app
-	git clone git://anongit.freedesktop.org/git/xorg/app/xinit
-	git clone git://anongit.freedesktop.org/git/xorg/app/twm
-	git clone git://anongit.freedesktop.org/git/xorg/app/xclock
+	clone xinit 72160c42bea2073bf95c01aca59a12f0ca7ab707
+	clone twm c5abcb619eb0b01f074fd9acb9128f19af774834
+	clone xclock 4697248c5a3e2aa505eceadd45f17554d4424aff
 	cd ..
+	cd util
+	rm util-macros-1.17.tar.gz
+	clone macros d7acec2d3a3abe79814ceb72e2c0d4d95ed31d37  # wanted by build.sh and the latest version of libxcb
+	cd ..
+	cp -v everything/xkeyboard-config-2.6.tar.gz .
+
 	
-	
-	# replacements of the 7.7 packages with newer versions
+	# replacements of the 7.7 packages with newer versions TODO: get a specific commit corresponding to a release, not the git HEAD (not stable enough)
 	cd xcb
 	rm libxcb-1.8.1.tar.gz
 	rm xcb-proto-1.7.1.tar.gz
-	git clone git://anongit.freedesktop.org/git/xcb/libxcb
-	git clone git://anongit.freedesktop.org/git/xcb/proto
+	clone libxcb d34785a34f28fa6a00f8ce00d87e3132ff0f6467
+	clone proto 6398e42131eedddde0d98759067dde933191f049
 	cd ..
-	cd util
-	git clone git://anongit.freedesktop.org/git/xorg/util/macros   # wanted by build.sh and the latest version of libxcb
-	git clone git://anongit.freedesktop.org/git/xorg/util/cf
-	git clone git://anongit.freedesktop.org/git/xorg/util/imake
-	git clone git://anongit.freedesktop.org/git/xorg/util/gccmakedep
-	git clone git://anongit.freedesktop.org/git/xorg/util/lndir
+	rm xserver/*.tar.gz # remove the xserver tarball, to make sure the build system is not using it
+	clone xserver xorg-server-1.18.3
+	clone libevdev 7f2fffc0d9fe47a76dcaaa3db9bd758e8433c0b6
+	cd driver
+	clone xf86-input-synaptics 59e5db025307404fbfbc82f2fb3fe91d6a3005d7
+	clone xf86-video-v4l 95fcc10d962f3ff682cfb8c1bbfd3f14db167a13
+	clone xf86-video-intel 8477615ae1bd284aca1221185ffefe0630d3f7ab
+	clone xf86-video-ast 39e80895acb4b818ecc15af51a68178562ebb41d
+	clone xf86-video-cirrus 27f85fc523102f89c3fc1546ae500816ccbffc8a
+	clone xf86-video-dummy 8706f60ab457867c120dd44e812b8fadc2be7179
+	clone xf86-video-fbdev 66e7909bfefd93c05aa37d0cadccc5348f0382be
+	clone xf86-video-glint 5b22c69898330d2e321596f7061b91362c0e6216
+	clone xf86-video-i128 c87753733a6e1f85d1d037dced0b47ce0cf41658
+	#TODO: past this point I've just added all video drivers, some of them might work without that
+	#no repository found
+	#clone xf86-video-newport
+	#clone xf86-video-openchrome
+	#clone xf86-video-geode
+	#clone xf86-video-glide
+	clone xf86-video-savage de61497415e58a21fa247faf6db180ca47fb5df0
+	clone xf86-video-siliconmotion 647e5a93d9387e3bc8d2c8569e3a5f996acfb169
+	clone xf86-video-sis 328073e46f9b9fcc09e637c94496c90273a0a4f6
+	clone xf86-video-suncg6 ee1cfb2f37416f6efbdb93c1d1b566fcdd0a655f
+	clone xf86-video-tdfx 278042ff4c469f24ab7bc28e517e8a78e2821ddc
+	clone xf86-video-tga b7022db0559cd1b6cd3eb6b5abf6896a607b478d
+	clone xf86-video-trident 64c02f307d7146641adf65e31bcaa2d1238479e7
+	clone xf86-video-vesa 0400b332a90f53b7a1361f832b60f1d4e90fd6e7
+	clone xf86-video-vmware 57d4499cc252bd1c3362a569ca7fd99ba6b645ed
+	clone xf86-video-voodoo 9172ae566a0e85313fc80ab62b4455393eefe593
+	clone xf86-video-wsfb 9058c301e6d0af04b73cf0df3b3be553560f3f7c
+
+	rm -r xf86-video-sunffb*
+	rm -r xf86-video-ark*
+	rm -r xf86-video-ati*
+	rm -r xf86-video-mach64*
+	rm -r xf86-video-mga*
+	rm -r xf86-video-neomagic*
+	rm -r xf86-video-nv*
+	rm -r xf86-video-r128*
 	cd ..
-	cp -v everything/xkeyboard-config-2.6.tar.gz .
 	
 
 	# unpack the parts to be patched
@@ -93,48 +136,39 @@ custombuild(){
 	tar xvf sessreg-1.0.7.tar.gz
 	cd ../lib
 	tar xvf libpciaccess-0.13.1.tar.gz
+	tar xvf libXfont-1.4.5.tar.gz
 	cd ..
-	tar xvf xserver/xorg-server-1.12.2.tar.gz
+	# TODO: now the xserver patch won't work cause we're getting xserver from git
 	cd font
 	for f in *.tar.gz; do
 		tar xvf $f
 	done
 	cd ..
 	
-	#echo all: > $HOME/build/Makefile.dummy
-	#PREFIX=/opt/xorg ./util/modular/build.sh $HOME/build --cmd "make -f$HOME/build/Makefile.dummy"
-	
 	# apply patches (for musl compatibility)
 	for p in "$pwd"/packages/xorg-*.patch; do
 		patch -p1 < $p
 	done
+	
+	# patch for fc-cache hanging on some fonts (TODO: is that even a correct explanation?)
 	for f in font/*/; do
 		sed -i 's/@RUN_FCCACHE@/#@RUN_FCCACHE@/' $f/Makefile.am
 		sed -i 's/@RUN_FCCACHE@/#@RUN_FCCACHE@/' $f/Makefile.in
 	done
 
-	export CFLAGS="$CFLAGS -D_GNU_SOURCE -I/opt/zlib/include -I/opt/eudev/include -I/opt/mtdev/include"
+	
+	# set CFLAGS and LDFLAGS
+	export CFLAGS="-D_GNU_SOURCE -I/opt/zlib/include -I/opt/eudev/include -I/opt/mtdev/include"   # TODO: comments needed - D_GNU_SOURCE a bit funny in our context
+	
+	# TODO: all these -rpath will end up in every binary and library that we build here, see if we can find a cleaner solution
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=$PREFIX/lib -Wl,-rpath=/opt/freetype/lib -Wl,-rpath=/opt/zlib/lib"
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/fontconfig/lib -Wl,-rpath=/opt/expat/lib -Wl,-rpath=/opt/libpng/lib"
-	export LDFLAGS="$LDFLAGS -L/opt/eudev/lib -L/opt/mtdev/lib -L/opt/zlib/lib"
+	export LDFLAGS="$LDFLAGS -L/opt/eudev/lib -L/opt/mtdev/lib"
 
-	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check
-	#export PREFIX=/opt/xorg/; ./util/modular/build.sh --clone $HOME/build --check --autoresume resumefile
-	./util/modular/build.sh --autoresume resumefile
-
-	ln -sv /opt/$package_fullname /opt/$package_name
-
-	cat <<EOF >$PREFIX/share/X11/xorg.conf.d/20-modules.conf
-Section "Module"
-  Load "int10"
-  Load "fb"
-  Load "shadow"
-  Load "vbe"
-  Load "vesa"
-EndSection
-EOF
-}
-
-postinstall(){
-	ln -sv /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
+	
+	# running the main build and installation script
+	./util/modular/build.sh --autoresume resumefile   # --check
+	
+	
+	cp "$pwd"/packages/xorg-20-modules.conf $PREFIX/share/X11/xorg.conf.d/20-modules.conf
 }

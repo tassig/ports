@@ -1,7 +1,7 @@
 package_name=strace
 package_version=4.11
 tarball_suffix=xz
-url=http://downloads.sourceforge.net/project/strace/strace/4.11/strace-4.11.tar.xz
+url=http://mirrors.tassig.com/strace/strace-4.11.tar.xz
 build_dependencies=m4
 
 # TODO: statically linked version is better

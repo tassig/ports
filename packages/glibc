@@ -1,13 +1,13 @@
 package_name=glibc
 package_version=2.23
 tarball_suffix=xz
-url=http://ftp.gnu.org/gnu/glibc/glibc-2.23.tar.xz
+url=http://mirrors.tassig.com/glibc/glibc-2.23.tar.xz
 build_dependencies=gawk
 iscustombuild=1
 
 
 custombuild(){
-	wget url
+	wget $url
 	tar xvf glibc-2.23.tar.xz
 	cd glibc-2.23/
 	mkdir build

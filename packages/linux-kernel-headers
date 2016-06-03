@@ -1,16 +1,15 @@
 package_name=linux-kernel-headers
 package_version=4.4.6
 tarball_suffix=xz
-url=https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.4.6.tar.xz
+url=http://mirrors.tassig.com/kernel/linux-4.4.6.tar.xz
 build_dependencies=
 iscustombuild=1
 
 custombuild(){
-	# cf http://www.linuxfromscratch.org/lfs/view/development/chapter05/linux-headers.html
-	
-	wget http://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.4.6.tar.xz
+	wget $url
 	tar xvf linux-4.4.6.tar.xz
 	cd linux-4.4.6
-	make INSTALL_HDR_PATH=/usr/ headers_install
+	make INSTALL_HDR_PATH=/opt/$package_name-$package_version/ headers_install
+	ln -sv /opt/$package_name-$package_version /opt/$package_name
 	cd ..
 }

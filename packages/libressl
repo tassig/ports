@@ -1,7 +1,7 @@
 package_name=libressl
 package_version=2.3.4
 tarball_suffix=gz
-url=http://ftp.openbsd.org/pub/OpenBSD/LibreSSL//$package_name-$package_version.tar.$tarball_suffix
+url=http://mirrors.tassig.com/libressl/libressl-2.3.4.tar.gz
 build_dependencies=
 haspostinstall=1
 

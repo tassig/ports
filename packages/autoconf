@@ -1,5 +1,5 @@
 package_name=autoconf
 package_version=2.69
 tarball_suffix=xz
-url=http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.xz
+url=http://mirrors.tassig.com/autoconf/autoconf-2.69.tar.xz
 build_dependencies="m4 perl"

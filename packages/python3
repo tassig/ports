@@ -1,7 +1,7 @@
 package_name=Python
 package_version=3.5.1
 tarball_suffix=xz
-url=https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tar.xz
+url=http://mirrors.tassig.com/python/Python-3.5.1.tar.xz
 build_dependencies=
 haspostinstall=1
 

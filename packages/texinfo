@@ -1,5 +1,5 @@
 package_name=texinfo
 package_version=6.1
 tarball_suffix=xz
-url=http://ftp.gnu.org/gnu/texinfo/texinfo-6.1.tar.xz
+url=http://mirrors.tassig.com/texinfo/texinfo-6.1.tar.xz
 build_dependencies=
