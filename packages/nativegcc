@@ -10,15 +10,14 @@ iscustombuild=1
 #
 # TODO: point to mirrors.tassig.com
 #
-# TODO: fix hardcoded ARCH
-#
 #
 ##########################
 
 
 custombuild(){
+	ARCH=`uname -m`
 	packagename=$package_name-$package_version
-	target_triple=x86_64-longhorn-linux-musl   # TODO: depends on ARCH
+	target_triple=$ARCH-longhorn-linux-musl
 	
 	
 	# do binutils
@@ -48,10 +47,11 @@ custombuild(){
 	./configure --prefix=/opt/$packagename/$target_triple
 	make -j
 	make install
-	cp /opt/$packagename/$target_triple/lib/libc.so /lib/ld-musl-x86_64.so.1   # TODO: dynamic linker name depends on ARCH
-	echo "/opt/$packagename/$target_triple/lib/" > /etc/ld-musl-x86_64.path   # TODO: same
-	echo "/opt/$packagename/lib64" >> /etc/ld-musl-x86_64.path
+	cp /opt/$packagename/$target_triple/lib/libc.so /lib/ld-musl-$ARCH.so.1
+	echo "/opt/$packagename/$target_triple/lib/" > /etc/ld-musl-$ARCH.path
+	echo "/opt/$packagename/lib64" >> /etc/ld-musl-$ARCH.path
 	cd ..
+	rm -r musl*
 	
 	
 
@@ -62,7 +62,7 @@ custombuild(){
 	cd gcc-6.1.0/
 	contrib/download_prerequisites
 	
-	echo 'echo "x86_64-longhorn-linux-musl"' > config.guess   # TODO: depends on ARCH
+	echo "echo '$target_triple'" > config.guess
 	cp -f config.guess mpc/config.guess
 	cp -f config.guess isl/config.guess
 	cp -f config.guess gmp/config.guess
@@ -96,4 +96,20 @@ custombuild(){
 	
 	ln -svf /opt/$packagename/bin/* /bin/
 	ln -svf /opt/linux-kernel-headers/include/* /opt/$packagename/$target_triple/include/   # linux headers into system headers location
+	
+	
+	
+	# do musl libc again, this time it will use the new compiler
+	
+	wget http://www.musl-libc.org/releases/musl-1.1.14.tar.gz
+	tar xvf musl-1.1.14.tar.gz
+	cd musl-1.1.14
+	./configure --prefix=/opt/$packagename/$target_triple
+	make -j
+	make install
+	cp /opt/$packagename/$target_triple/lib/libc.so /lib/ld-musl-$ARCH.so.1
+	cd ..
+	rm -r musl*
+	
+	
 }

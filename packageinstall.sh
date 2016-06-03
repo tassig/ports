@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# TODO: it would be better if we were running everything with set -e, but the whole thing has to be tested... so for now i just put some " || exit $?" and " || true" here and there
 # usage: ./packageinstall.sh package_identifier
 # example: ./packageinstall.sh autoconf
 # the script is assuming you're running it in the ports directory (which is a bit stupid, need to be changed later)
@@ -14,6 +15,7 @@ packagedirectory=packages   # the directory name where the packages definitions 
 
 # the function called by default to build a package, works for most packages
 defaultbuild(){
+	set -e
 	package_fullname=$package_name-$package_version
 	wget -O archive $url
 	tar xvf archive
@@ -23,8 +25,9 @@ defaultbuild(){
 	make -j
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name
-	ln -sv /opt/$package_name/bin/* /bin/
+	ln -sv /opt/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
 	cd ..
+	set +e
 }
 
 
