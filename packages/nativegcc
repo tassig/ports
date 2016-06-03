@@ -53,9 +53,9 @@ custombuild(){
 	echo "/lib" >> /etc/ld-musl-$ARCH.path
 	cd ..
 	rm -r musl*
-	
-	
 
+	
+	
 	# do gcc
 	
 	wget http://ftp.gnu.org/gnu/gcc/gcc-6.1.0/gcc-6.1.0.tar.bz2
@@ -73,6 +73,20 @@ custombuild(){
 	cp -f config.sub isl/config.sub
 	cp -f config.sub gmp/config.sub
 	cp -f config.sub mpfr/config.sub
+	
+	NOTE: can also add the unofficial gcc patches for advanced features
+	mkdir patches-gcc-6.1.0
+	cd patches-gcc-6.1.0
+	wget http://port70.net/~nsz/musl/gcc-6.1.0/0001-cilkrts.patch
+	wget http://port70.net/~nsz/musl/gcc-6.1.0/0002-posix_memalign.patch
+	wget http://port70.net/~nsz/musl/gcc-6.1.0/0003-libgcc_s.patch
+	wget http://port70.net/~nsz/musl/gcc-6.1.0/0004-linux_libc_has_function.patch
+	wget http://port70.net/~nsz/musl/gcc-6.1.0/0005-nopie.patch
+	wget http://port70.net/~nsz/musl/gcc-6.1.0/0006-ssp_nonshared.patch
+	wget http://port70.net/~nsz/musl/gcc-6.1.0/targetlib-test-fix.diff
+	cd ../
+	for file in patches-gcc-6.1.0/*;do patch -p1 -i $file;done
+	cd ../
 
 	cd ..
 	mkdir gccobjdir
@@ -96,7 +110,7 @@ custombuild(){
 	# final links
 	
 	ln -svf /opt/$packagename/bin/* /bin/
-	ln -svf /opt/linux-kernel-headers/include/* /opt/$packagename/$target_triple/include/   # linux headers into system headers location
+	ln -sv /opt/linux-kernel-headers/include/* /opt/$packagename/$target_triple/include/   # linux headers into system headers location
 	
 	
 	

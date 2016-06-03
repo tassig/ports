@@ -17,6 +17,8 @@ freedesktop_url=http://mirrors.tassig.com/repos/freedesktop
 #
 ##########################
 
+set -e
+
 # git clone $freedesktop_url/$1 ($1 should be 1-component path)
 # and checkout $2
 clone(){
