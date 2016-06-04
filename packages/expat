@@ -6,6 +6,5 @@ build_dependencies=pkgconf
 haspostinstall=1
 
 postinstall(){
-	ln -sv /opt/expat/lib/* /usr/lib/
 	ln -sv /opt/expat/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
 }

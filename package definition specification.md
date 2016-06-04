@@ -17,14 +17,6 @@ These variables are defined to be used internally within the package functions (
 `tarball_suffix`
 `url`
 
-[Dimitrije] TODO: each package shall define more variables: 
- - $configure_string custom, per package configure options
- - $configure_cflags custom CFLAGS to be exported before ./configure call
- - $configure_ldflags custom LFDLAGS to be exported before ./configure call
- - $make_cflags custom CFLAGS to be exported before make (this way we can explicitly define CC=musl-gcc, instead of having it define in the environment by some other configs)
- - $make_ldflags custom LFDLAGS o be exported before make
-(Whtihout these variables, we have to define iscustom build to specifty additional options)
-
 ### Public, optional variables
 
 `iscustombuild`: `0` or `1`, if `1` then a function `custombuild()` needs to be provided, such function will be called in place of the `defaultbuild()` function
@@ -36,16 +28,13 @@ These variables are mandatory and can be used by without restrictions, by intern
 
 `package_name`: internal name used by the package. NB: This is *not* the unique identifier of the package
 `package_version`
-`build_dependencies`: a list of packages unique identifiers separated by spaces and quoted, representing the packages needed by this package at build time. Empty if there are no build build_dependencies
-`runtime_dependencies`: same as above, but representing the packages needed at runtime
-
-example:
-build_dependencies="m4 perl"
+`build_dependencies`: a list of packages unique identifiers separated by spaces and quoted, representing the packages needed by this package at build time. Empty if there are no build build_dependencies. example: build_dependencies="m4 perl"
 
 
 ## Policies
 
 * add the symlinks with `ln -sv`, not just `ln -s`. Rationale: we want to have some visual clue that the symlinks were correctly created.
 
-* only have a `postinstall()` section when really necessary. When that's the case, only add the `include` and `lib` symlinks when really necessary, same with the `pkgconfig` stuff. Justify what is done in the `postinstall()` with comments.
+* only have a `postinstall()` section when really necessary. At the moment it's mainly used by the pkg-config files installation, but we might move it to the defaultbuild().
 
+* justify everything, using comments
