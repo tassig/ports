@@ -59,8 +59,8 @@ installpackage(){
 	
 	# do a custom build if the package defines custombuild(), otherwise do a default build
 	if test $iscustombuild
-	then custombuild || exit $?
-	else defaultbuild || exit $?
+	then custombuild
+	else defaultbuild
 	fi
 	
 	# call its postinstall() function if the package defines postinstall(), otherwise do nothing
