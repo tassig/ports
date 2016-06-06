@@ -1,0 +1,15 @@
+--- configure.ac.orig
++++ configure.ac
+@@ -50,6 +50,12 @@
+ 	 [have_libz="no (requires zlib http://www.gzip.org/zlib/)"])],
+ 	 [have_libz="no (requires zlib http://www.gzip.org/zlib/)"])
+ 
++PKG_CHECK_MODULES(zlib, zlib, [
++          have_libz=yes
++          AC_DEFINE(HAVE_ZLIB, 1, [Define to 1 if you have zlib available])
++         ],
++         [have_libz="no (requires zlib http://www.gzip.org/zlib/)"])
++
+ save_LIBS="$LIBS"
+ AC_CHECK_LIB(lzo2, lzo2a_decompress,
+ 	 [AC_CHECK_HEADER(lzo/lzo2a.h, [

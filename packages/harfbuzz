@@ -2,8 +2,7 @@ package_name=harfbuzz
 package_version=1.2.7
 tarball_suffix=bz2
 url=https://www.freedesktop.org/software/harfbuzz/release/$package_name-$package_version.tar.$tarball_suffix
-build_dependencies="cairo zlib pcre pixman fontconfig libpng expat freetype"
-configure_ldflags="-Wl,-rpath=/opt/zlib/lib/,-rpath=/opt/pcre/lib/,-rpath=/opt/pixman/lib/,-rpath=/opt/fontconfig/lib/,-rpath=/opt/libpng/lib/,-rpath=/opt/xorg/lib/,-rpath=/opt/expat/lib/,-rpath=/opt/freetype/lib/"
+build_dependencies="cairo zlib fontconfig freetype"
 haspostinstall=1
 
 postinstall(){

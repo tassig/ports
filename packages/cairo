@@ -1,14 +1,27 @@
 package_name=cairo
 package_version=1.14.6
-tarball_suffix=xz
-url=https://www.cairographics.org/releases/$package_name-$package_version.tar.$tarball_suffix
-build_dependencies="pixman zlib expat"
-# TODO: check the disabled features
-configure_string="--enable-ps=no --enable-pdf=no --enable-trace=no"
-configure_ldflags="-Wl,-L/opt/zlib/lib/,-rpath=/opt/expat/lib/,-rpath=/opt/xorg/lib/"
-configure_cflags="-I/opt/zlib/include"
-haspostinstall=1
+url=https://www.cairographics.org/releases/$package_name-$package_version.tar.xz
+build_dependencies="zlib expat"
+iscustombuild=1
 
-postinstall(){
-	ln -sv /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # some packages rely on pkgconf
+# custom build because zlib not found automatically by this build system
+custombuild(){
+	set -ex
+	package_fullname=$package_name-$package_version
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	cd $package_name*
+	
+	patch -p1 < ../packages/cairo-build.patch   # patching the build system so zlib is found TODO: send the patch upstream
+	autoreconf
+	
+	./configure --prefix=/opt/$package_fullname/ 
+	make -j
+	make install
+	ln -sv /opt/$package_fullname /opt/$package_name
+	ln -sv /opt/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
+	ln -sv /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   || true
+	cd ..
+	set +ex
 }
