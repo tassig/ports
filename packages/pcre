@@ -7,5 +7,4 @@ configure_string="--enable-utf --enable-unicode-properties"
 
 postinstall(){
 	ln -sv /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # some packages rely on pkgconf
-	ln -sv /opt/$package_name/lib/lib* /lib/
 }
