@@ -4,29 +4,23 @@ tarball_suffix=xz
 url=http://mirrors.tassig.com/libpng/libpng-1.6.21.tar.xz
 build_dependencies=pkgconf
 iscustombuild=1
-haspostinstall=1
 
 custombuild(){
 	package_fullname=$package_name-$package_version
 	package_tarball_name=$package_fullname.tar.$tarball_suffix
 	rm $package_tarball_name
-	# TODO: This is hardcoded url, all packages shall define just base URL,
 	wget $url
 	tar xvf $package_tarball_name
 	cd $package_fullname/
-	cp scripts/pnglibconf.h.prebuilt pnglibconf.h
-	cp scripts/makefile.linux makefile
-	sed -i '/\.c\.pic\.o/{n;s@-c@-c $(CPPFLAGS)@}' makefile
-	sed -i "s@prefix=/usr/local@prefix=/opt/$package_fullname/@" makefile
-	export ZLIBINC=/opt/zlib/include ZLIBLIB=/opt/zlib/lib
-	make -j ZLIBINC=$ZLIBINC ZLIBLIB=$ZLIBLIB
+	
+	export LDFLAGS=-L/opt/zlib/lib
+	export CCPFLAGS=-I/opt/zlib/include
+	make -j check
 	make install
-	ln -sv /opt/$package_fullname/lib/libpng16.so /opt/$package_fullname/lib/libpng16.so.16
+	
+	#ln -sv /opt/$package_fullname/lib/libpng16.so /opt/$package_fullname/lib/libpng16.so.16   # missing .so file
 	ln -sv /opt/$package_fullname /opt/$package_name
 	ln -sv /opt/$package_name/bin/* /bin/
+	ln -svf /opt/libpng/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
 	cd ..
-}
-
-postinstall(){
-	ln -sv /opt/libpng/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
 }
