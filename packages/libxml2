@@ -2,9 +2,3 @@ package_name=libxml2
 package_version=2.9.4
 tarball_suffix=gz
 url=ftp://xmlsoft.org/libxml2/$package_name-$package_version.tar.$tarball_suffix
-configure_string="--without-python"
-haspostinstall=1
-
-postinstall(){
-	ln -sv /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # some packages rely on pkgconf
-}

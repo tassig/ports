@@ -3,8 +3,3 @@ package_version=1.40.0
 tarball_suffix=xz
 url=http://ftp.gnome.org/pub/GNOME/sources/pango/1.40/$package_name-$package_version.tar.$tarball_suffix
 build_dependencies="glib cairo harfbuzz"
-haspostinstall=1
-
-postinstall(){
-	ln -sv /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # some packages rely on pkgconf
-}
