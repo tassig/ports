@@ -14,7 +14,7 @@ custombuild(){
 	cd $package_fullname/
 	
 	export LDFLAGS=-L/opt/zlib/lib
-	export CCPFLAGS=-I/opt/zlib/include
+	export CPPFLAGS=-I/opt/zlib/include
 	./configure --prefix=/opt/$package_fullname
 	make -j check
 	make install
