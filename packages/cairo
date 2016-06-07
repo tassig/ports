@@ -18,6 +18,7 @@ custombuild(){
 	
 	./configure --prefix=/opt/$package_fullname/ 
 	make -j
+	make check
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name
 	ln -sv /opt/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
