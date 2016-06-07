@@ -3,4 +3,4 @@ package_version=3.6.1
 tarball_suffix=xz
 url=http://openbox.org/dist/openbox/$package_name-$package_version.tar.$tarball_suffix
 build_dependencies="glib pango libxml2"
-configure_ldflags="-Wl,-rpath=/opt/xorg/lib/"
+configure_ldflags="-Wl,-rpath=/opt/xorg-X11R7.7/lib/"
