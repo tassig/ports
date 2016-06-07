@@ -110,7 +110,7 @@ custombuild(){
 	# final links
 	
 	ln -svf /opt/$packagename/bin/* /bin/
-	ln -sv /opt/linux-kernel-headers/include/* /opt/$packagename/$target_triple/include/   # linux headers into system headers location
+	ln -svf /opt/linux-kernel-headers/include/* /opt/$packagename/$target_triple/include/   # linux headers into system headers location
 	
 	
 	

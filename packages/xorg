@@ -140,6 +140,8 @@ custombuild(){
 	tar xvf libXfont-1.4.5.tar.gz
 	cd ..
 	# TODO: now the xserver patch won't work cause we're getting xserver from git
+	# TODO: patch app/sessreg-1.0.7/sessreg.h does not work
+	# TODO: patch mesa/drm/tegra/mesa/drm/tegra-symbol-check does not work
 	cd font
 	for f in *.tar.gz; do
 		tar xvf $f
@@ -160,11 +162,12 @@ custombuild(){
 	
 	# set CFLAGS and LDFLAGS
 	export CFLAGS="-D_GNU_SOURCE -I/opt/zlib/include -I/opt/eudev/include -I/opt/mtdev/include"   # TODO: comments needed - D_GNU_SOURCE a bit funny in our context
+	export CFLAGS="$CFLAGS -I/opt/libressl/include"   # TODO: mesa needs it
 	
 	# TODO: all these -rpath will end up in every binary and library that we build here, see if we can find a cleaner solution
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=$PREFIX/lib -Wl,-rpath=/opt/freetype/lib -Wl,-rpath=/opt/zlib/lib"
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/fontconfig/lib -Wl,-rpath=/opt/expat/lib -Wl,-rpath=/opt/libpng/lib"
-	export LDFLAGS="$LDFLAGS -L/opt/eudev/lib -L/opt/mtdev/lib"
+	export LDFLAGS="$LDFLAGS -L/opt/eudev/lib -L/opt/mtdev/lib"   # TODO: if you need to explicitly give -L, then it will probably need -rpath too
 
 	
 	# running the main build and installation script
@@ -172,6 +175,12 @@ custombuild(){
 	
 	
 	cp "$pwd"/packages/xorg-20-modules.conf $PREFIX/share/X11/xorg.conf.d/20-modules.conf
+	
+	
+	# copying all the pkgconf files, some of them might be useful for other software
+	ln -sv /opt/$PREFIX /opt/$package_name   # link for canonical name
+	ln -sv /opt/$PREFIX/lib/pkgconfig/*.pc /opt/pkgconf/lib/pkgconfig/
+	
 }
 
 postinstall(){
