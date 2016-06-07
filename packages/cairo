@@ -1,7 +1,7 @@
 package_name=cairo
 package_version=1.14.6
 url=https://www.cairographics.org/releases/$package_name-$package_version.tar.xz
-build_dependencies="zlib expat"
+build_dependencies="zlib expat libpng libffi"
 iscustombuild=1
 
 # custom build because zlib not found automatically by this build system
