@@ -26,7 +26,9 @@ defaultbuild(){
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name
 	ln -sv /opt/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
-	# TODO: install the pkgconfig files if they exist
+	if [ -d "/opt/$package_name/lib/pkgconfig" ]; then
+		ln -svf /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # install pkg-config files
+	fi  
 	cd ..
 	set +e
 }

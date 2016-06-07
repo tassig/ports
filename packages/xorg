@@ -70,24 +70,28 @@ custombuild(){
 	clone libxshmfence fe2d6dbba6356ff275649017dd516f0270d79595  # mesa needs it
 	clone libxtrans 3810e026323210df6ec6cf818f01832a63e9fbb9  # xserver needs it
 	cd ..
+	cd util
+	clone imake 4063190bf2fd7e3c61b80e98d72e134609612bf8   # is needed by autoconf, later
+	cd ..
 	cd app
+	# these aren't needed but are small and good for testing
 	clone xinit 72160c42bea2073bf95c01aca59a12f0ca7ab707
 	clone twm c5abcb619eb0b01f074fd9acb9128f19af774834
 	clone xclock 4697248c5a3e2aa505eceadd45f17554d4424aff
 	cd ..
-	cd util
-	rm util-macros-1.17.tar.gz
-	clone macros d7acec2d3a3abe79814ceb72e2c0d4d95ed31d37  # wanted by build.sh and the latest version of libxcb
-	cd ..
 	cp -v everything/xkeyboard-config-2.6.tar.gz .
 
 	
-	# replacements of the 7.7 packages with newer versions TODO: get a specific commit corresponding to a release, not the git HEAD (not stable enough)
+	# replacements of the 7.7 packages with newer versions
 	cd xcb
 	rm libxcb-1.8.1.tar.gz
 	rm xcb-proto-1.7.1.tar.gz
 	clone libxcb d34785a34f28fa6a00f8ce00d87e3132ff0f6467
 	clone proto 6398e42131eedddde0d98759067dde933191f049
+	cd ..
+	cd util
+	rm util-macros-1.17.tar.gz
+	clone macros d7acec2d3a3abe79814ceb72e2c0d4d95ed31d37  # wanted by build.sh and the latest version of libxcb
 	cd ..
 	rm xserver/*.tar.gz # remove the xserver tarball, to make sure the build system is not using it
 	clone xserver xorg-server-1.18.3
