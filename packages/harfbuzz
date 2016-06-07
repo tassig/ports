@@ -3,7 +3,7 @@ package_version=1.2.7
 tarball_suffix=bz2
 url=https://www.freedesktop.org/software/harfbuzz/release/$package_name-$package_version.tar.$tarball_suffix
 configure_ldflags="-Wl,-rpath=/opt/libpng/lib/"
-build_dependencies="cairo zlib fontconfig freetype"
+build_dependencies="glib cairo zlib fontconfig freetype"
 haspostinstall=1
 
 postinstall(){
