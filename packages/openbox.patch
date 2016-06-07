@@ -1,0 +1,10 @@
+--- ./configure	2015-07-01 12:23:47.000000000 +0300
++++ ./configure	2016-06-07 16:47:58.653771784 +0300
+@@ -15107,6 +15107,7 @@
+ # Standard set of common directories for X headers.
+ # Check X11 before X11Rn because it is often a symlink to the current release.
+ ac_x_header_dirs='
++/opt/xorg/include
+ /usr/X11/include
+ /usr/X11R7/include
+ /usr/X11R6/include

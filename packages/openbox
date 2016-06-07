@@ -4,3 +4,25 @@ tarball_suffix=xz
 url=http://openbox.org/dist/openbox/$package_name-$package_version.tar.$tarball_suffix
 build_dependencies="glib pango libxml2"
 configure_ldflags="-Wl,-rpath=/opt/xorg/lib/"
+iscustombuild=1
+
+# custom build because xorg headers not found automatically by this build system
+custombuild(){
+	set -ex
+	package_fullname=$package_name-$package_version
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	cd $package_name*
+	
+	patch -p1 < ../packages/openbox.patch   # patching the build system so xorg headers are found TODO: send the patch upstream
+	
+	CFLAGS=$configure_cflags LDFLAGS=$configure_ldflags ./configure --prefix=/opt/$package_fullname/ $configure_string
+	make -j
+	make install
+	ln -sv /opt/$package_fullname /opt/$package_name
+	ln -sv /opt/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
+	ln -sv /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   || true
+	cd ..
+	set +ex
+}
