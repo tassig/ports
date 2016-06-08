@@ -1,0 +1,10 @@
+--- ./share/autoconf/autoconf/libs.m4
++++ ./share/autoconf/autoconf/libs.m4
+@@ -213,6 +213,7 @@
+ [# Standard set of common directories for X headers.
+ # Check X11 before X11Rn because it is often a symlink to the current release.
+ ac_x_header_dirs='
++/opt/xorg/include
+ /usr/X11/include
+ /usr/X11R7/include
+ /usr/X11R6/include

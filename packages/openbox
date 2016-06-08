@@ -15,7 +15,7 @@ custombuild(){
 	rm archive
 	cd $package_name*
 	
-	patch -p1 < ../packages/openbox.patch   # patching the build system so xorg headers are found TODO: send the patch upstream
+	autoreconf
 	
 	CFLAGS=$configure_cflags LDFLAGS=$configure_ldflags ./configure --prefix=/opt/$package_fullname/ $configure_string
 	make -j

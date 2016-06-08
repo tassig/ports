@@ -3,3 +3,8 @@ package_version=2.69
 tarball_suffix=xz
 url=http://mirrors.tassig.com/autoconf/autoconf-2.69.tar.xz
 build_dependencies="m4 perl"
+haspostinstall=1
+
+postinstall(){
+	patch -p0 < ../packages/autoconf-xorg-path.patch   # patching the paths of xorg headers
+}
