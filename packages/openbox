@@ -3,7 +3,6 @@ package_version=3.6.1
 tarball_suffix=xz
 url=http://openbox.org/dist/openbox/$package_name-$package_version.tar.$tarball_suffix
 build_dependencies="glib pango libxml2"
-configure_ldflags="-Wl,-rpath=/opt/xorg/lib/"
 iscustombuild=1
 
 # custom build because xorg headers not found automatically by this build system
@@ -17,7 +16,8 @@ custombuild(){
 	
 	autoreconf
 	
-	CFLAGS=$configure_cflags LDFLAGS=$configure_ldflags ./configure --prefix=/opt/$package_fullname/ $configure_string
+	# TODO: there is no $configure_cflags defined here
+	CFLAGS=$configure_cflags LDFLAGS="-Wl,-rpath=/opt/xorg/lib/" ./configure --prefix=/opt/$package_fullname/ $configure_string
 	make -j
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name

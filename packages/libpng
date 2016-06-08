@@ -19,7 +19,6 @@ custombuild(){
 	make -j check
 	make install
 	
-	#ln -sv /opt/$package_fullname/lib/libpng16.so /opt/$package_fullname/lib/libpng16.so.16   # missing .so file
 	ln -sv /opt/$package_fullname /opt/$package_name
 	ln -sv /opt/$package_name/bin/* /bin/
 	ln -svf /opt/libpng/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/

@@ -37,6 +37,7 @@ defaultbuild(){
 installpackage(){
 	echo "installing package $1"
 
+	# TODO: at this point of the script, these variables are always undefined, so the following is useless
 	iscustombuild=
 	haspostinstall=
 	confflags=
