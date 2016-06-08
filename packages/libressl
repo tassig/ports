@@ -6,6 +6,5 @@ build_dependencies=
 haspostinstall=1
 
 postinstall(){
-	ln -sv /opt/libressl/lib/* /lib/   # needed by python
 	ln -sv /opt/libressl/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # some packages rely on pkgconf
 }
