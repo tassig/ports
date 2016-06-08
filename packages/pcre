@@ -2,3 +2,4 @@ package_name=pcre
 package_version=8.38
 tarball_suffix=gz
 url=ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/$package_name-$package_version.tar.$tarball_suffix
+configure_string="--enable-utf --enable-unicode-properties" # needed for successful building of glib
