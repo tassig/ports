@@ -10,12 +10,10 @@ iscustombuild=1
 custombuild(){
 	set -ex
 	package_fullname=$package_name-$package_version
-	package_tarball_name=$package_fullname.tar.$tarball_suffix
-	rm $package_tarball_name
-
-	wget $url
-	tar xvf $package_tarball_name
-	cd $package_fullname/
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	cd $package_name*
 
 	pwd="`pwd`"
 	for p in "$pwd"/../packages/$package_name-*.patch; do
