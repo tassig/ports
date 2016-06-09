@@ -21,7 +21,7 @@ defaultbuild(){
 	tar xvf archive
 	rm archive
 	cd $package_name*
-	CFLAGS=$configure_cflags LDFLAGS=$configure_ldflags ./configure --prefix=/opt/$package_fullname/ $configure_string
+	./configure --prefix=/opt/$package_fullname/
 	make -j
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name
@@ -36,15 +36,6 @@ defaultbuild(){
 
 installpackage(){
 	echo "installing package $1"
-
-	# TODO: at this point of the script, these variables are always undefined, so the following is useless
-	iscustombuild=
-	haspostinstall=
-	confflags=
-	build_dependencies=
-	configure_string=
-	configure_ldflags=
-	configure_cflags=
 
 	source $packagedirectory/$1
 	
@@ -73,7 +64,6 @@ installpackage(){
 	fi
 	
 	# clean up by removing the build directory and the tarball
-	# TODO: only if $package_name is defined
 	rm -rf $package_name*
 	
 }
