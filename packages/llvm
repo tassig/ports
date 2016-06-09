@@ -9,7 +9,6 @@ custombuild(){
 	set -e
         package_fullname=$package_name-$package_version
         package_tarball_name=$package_fullname.src.tar.$tarball_suffix
-        rm $package_tarball_name
         wget $url
         tar xvf $package_tarball_name
 	cd $package_fullname.src
@@ -22,7 +21,7 @@ custombuild(){
 	
 	# TODO: see if the build with configure works, to remove the dependency on cmake
 	#../$package_fullname.src/configure --prefix=/opt/$package_fullname/
-	cmake -DCMAKE_INSTALL_PREFIX=/opt/$package_fullname/ -DBUILD_SHARED_LIBS=ON ../$package_fullname.src/   # TODO: shared libs probably not needed, check
+	cmake -DCMAKE_INSTALL_PREFIX=/opt/$package_fullname/ -DBUILD_SHARED_LIBS=ON ../$package_fullname.src/   # shared libs needed by mesa
 
 	make -j4   # difficult to do more than that, the build chokes, memory usage too high
 	make install
