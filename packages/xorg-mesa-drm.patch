@@ -78,16 +78,6 @@ index 0bf2ffc..7e8114c 100755
  
  # The following symbols (past the first five) are taken from the public headers.
  # A list of the latter should be available Makefile.sources/LIBDRM_RADEON_H_FILES
-diff --git a/mesa/drm/tegra/mesa/drm/tegra-symbol-check b/mesa/drm/tegra/mesa/drm/tegra-symbol-check
-index 4020831..3350775 100755
---- a/mesa/drm/tegra/mesa/drm/tegra-symbol-check
-+++ b/mesa/drm/tegra/mesa/drm/tegra-symbol-check
-@@ -1,4 +1,4 @@
--#!/bin/bash
-+#!/bin/sh
- 
- # The following symbols (past the first five) are taken from the public headers.
- # A list of the latter should be available Makefile.sources/LIBDRM_FREEDRENO_H_FILES
 diff --git a/mesa/drm/tests/nouveau/threaded.c b/mesa/drm/tests/nouveau/threaded.c
 index 281af46..ba55e3a 100644
 --- a/mesa/drm/tests/nouveau/threaded.c
