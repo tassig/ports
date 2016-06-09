@@ -170,7 +170,7 @@ custombuild(){
 	# TODO: all these -rpath will end up in every binary and library that we build here, see if we can find a cleaner solution
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=$PREFIX/lib -Wl,-rpath=/opt/freetype/lib -Wl,-rpath=/opt/zlib/lib"
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/fontconfig/lib -Wl,-rpath=/opt/expat/lib -Wl,-rpath=/opt/libpng/lib"
-	export LDFLAGS="$LDFLAGS -L/opt/eudev/lib -L/opt/mtdev/lib"   # TODO: if you need to explicitly give -L, then it will probably need -rpath too
+	export LDFLAGS="$LDFLAGS -L/opt/eudev/lib -L/opt/mtdev/lib -L/opt/zlib/lib"   # TODO: if you need to explicitly give -L, then it will probably need -rpath too
 
 	
 	# running the main build and installation script
