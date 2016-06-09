@@ -13,10 +13,10 @@
 
 packagedirectory=packages   # the directory name where the packages definitions are located
 
+set -e
 
 # the function called by default to build a package, works for most packages
 defaultbuild(){
-	set -e
 	package_fullname=$package_name-$package_version
 	wget -O archive $url
 	tar xvf archive
@@ -31,7 +31,6 @@ defaultbuild(){
 		ln -svf /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # install pkg-config files
 	fi  
 	cd ..
-	set +e
 }
 
 
