@@ -3,8 +3,6 @@ package_version=2.48.1
 tarball_suffix=xz
 url=http://ftp.gnome.org/pub/gnome/sources/glib/2.48/$package_name-$package_version.tar.$tarball_suffix
 build_dependencies="python libffi pcre" # python is needed for proper installation
-haspostinstall=1
-# TODO: add to build_dependencies lib from -rpath=/lib/ Find out exact lib
 iscustombuild=1
 
 custombuild(){
@@ -20,15 +18,12 @@ custombuild(){
 		patch -p1 < $p
 	done
 
-	LDFLAGS="-Wl,-rpath=/opt/pcre/lib/,-rpath=/opt/libffi/lib64/"  ./configure --prefix=/opt/$package_fullname/ $configure_string
+	LDFLAGS="-Wl,-rpath=/opt/pcre/lib/"  ./configure --prefix=/opt/$package_fullname/   # apparently a bug in configure
 	make -j
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name
 	ln -sv /opt/$package_name/bin/* /bin/
+	ln -sv /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # some packages rely on pkgconf
 	cd ..
 	set +ex
-}
-
-postinstall(){
-	ln -sv /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # some packages rely on pkgconf
 }
