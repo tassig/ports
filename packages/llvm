@@ -11,6 +11,7 @@ custombuild(){
         package_tarball_name=$package_fullname.src.tar.$tarball_suffix
         wget $url
         tar xvf $package_tarball_name
+        rm $package_tarball_name
 	cd $package_fullname.src
 	for p in ../packages/llvm-*.patch; do
 		patch -p1 < $p
