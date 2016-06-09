@@ -22,7 +22,7 @@ defaultbuild(){
 	tar xvf archive
 	rm archive
 	cd $package_name*
-	./configure --prefix=/opt/$package_fullname/
+	CFLAGS="$CFLAGS $configure_cflags" LDFLAGS="$LDFLAGS $configure_ldflags" ./configure --prefix=/opt/$package_fullname/
 	make -j
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name

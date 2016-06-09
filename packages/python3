@@ -7,5 +7,5 @@ haspostinstall=1
 
 postinstall() {
 	# not the default Python, so has to be done manually
-	ln -s /opt/$package_name-$package_version/bin/* /bin/
+	ln -s /opt/$package_name-$package_version/bin/* /bin/ || true
 }

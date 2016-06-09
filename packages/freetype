@@ -3,10 +3,5 @@ package_version=2.6.2
 tarball_suffix=bz2
 url=http://mirrors.tassig.com/freetype/freetype-2.6.2.tar.bz2
 build_dependencies=pkgconf
-haspostinstall=1
 configure_cflags="-I/opt/zlib/include"
 configure_ldflags="-L/opt/zlib/lib -Wl,-rpath=/opt/zlib/lib"
-
-postinstall(){
-	ln -sv /opt/freetype/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
-}

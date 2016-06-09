@@ -3,8 +3,3 @@ package_version=1.1.5
 tarball_suffix=bz2
 url=http://mirrors.tassig.com/mtdev/mtdev-1.1.5.tar.bz2
 build_dependencies=
-haspostinstall=1
-
-postinstall(){
-	ln -sv /opt/mtdev/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
-}

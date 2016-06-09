@@ -3,9 +3,4 @@ package_version=2.11.95
 tarball_suffix=bz2
 url=http://mirrors.tassig.com/fontconfig/fontconfig-2.11.95.tar.bz2
 build_dependencies="expat freetype"
-haspostinstall=1
 configure_ldflags="-Wl,-rpath=/opt/zlib/lib"
-
-postinstall(){
-	ln -sv /opt/fontconfig/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
-}

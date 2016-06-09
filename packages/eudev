@@ -3,8 +3,3 @@ package_version=3.1.5
 tarball_suffix=gz
 url=http://mirrors.tassig.com/eudev/eudev-3.1.5.tar.gz
 build_dependencies=gperf
-haspostinstall=1
-
-postinstall(){
-	ln -sv /opt/eudev/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
-}

@@ -10,9 +10,9 @@ iscustombuild=1
 custombuild() {
 	package_fullname=$package_name-$package_version
 	package_tarball_name=$package_fullname.tar.$tarball_suffix
-	rm $package_tarball_name
 	wget $url
 	tar xvf $package_tarball_name
+	rm $package_tarball_name
 	cd $package_fullname/
 	
 	# hack to help python to find include files and libraries
