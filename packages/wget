@@ -9,7 +9,7 @@ custombuild() {
 	wget $url
 	tar xvf wget-$package_version.tar.xz
 	cd wget-$package_version
-	export LDFLAGS="-Wl,-rpath=/opt/libressl/lib"
+	export LDFLAGS="-Wl,-rpath=/opt/libressl/lib -Wl,-rpath=/opt/zlib/lib"
 	./configure --prefix=/opt/wget-$package_version --with-ssl=openssl
 	make 
 	make install
