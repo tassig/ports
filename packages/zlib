@@ -3,8 +3,3 @@ package_version=1.2.8
 tarball_suffix=xz
 url=http://mirrors.tassig.com/zlib/zlib-1.2.8.tar.xz
 build_dependencies=
-haspostinstall=1
-
-postinstall(){
-	ln -sv /opt/zlib/lib/pkgconfig/zlib.pc /opt/pkgconf/lib/pkgconfig/   # some packages rely on pkgconf
-}

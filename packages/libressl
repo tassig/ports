@@ -3,8 +3,3 @@ package_version=2.3.4
 tarball_suffix=gz
 url=http://mirrors.tassig.com/libressl/libressl-2.3.4.tar.gz
 build_dependencies=
-haspostinstall=1
-
-postinstall(){
-	ln -sv /opt/libressl/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # some packages rely on pkgconf
-}
