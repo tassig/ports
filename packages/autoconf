@@ -6,6 +6,6 @@ build_dependencies="m4 perl"
 haspostinstall=1
 
 postinstall(){
-	patch -p0 < ../packages/autoconf-xorg-path.patch   # patching the paths of xorg headers
-	autom4te --language=autoconf --freeze --output=/opt/$packagename/share/autoconf/autoconf/autoconf.m4f
+	patch -p0 < packages/autoconf-xorg-path.patch   # patching the paths of xorg headers
+	autom4te --language=autoconf --freeze --output=/opt/$package_name/share/autoconf/autoconf/autoconf.m4f
 }
