@@ -181,8 +181,8 @@ custombuild(){
 	
 	
 	# copying all the pkgconf files, some of them might be useful for other software
-	ln -sv /opt/$PREFIX /opt/$package_name   # link for canonical name
-	ln -svf /opt/$PREFIX/lib/pkgconfig/*.pc /opt/pkgconf/lib/pkgconfig/
+	ln -sv $PREFIX /opt/$package_name   # link for canonical name
+	ln -svf $PREFIX/lib/pkgconfig/*.pc /opt/pkgconf/lib/pkgconfig/
 	rm -r $HOME/src
 	
 }
