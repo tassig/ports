@@ -8,6 +8,7 @@
 #
 # TODO: add error management. installpackage() should be a transaction. ex: what do you do when "make install" returns an error? right now, we do nothing, which is incorrect
 # TODO: implement it differently for root and normal users (different --prefix)
+# TODO: more "make check" should be added
 #
 
 packagedirectory=packages   # the directory name where the packages definitions are located

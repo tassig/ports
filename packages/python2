@@ -23,7 +23,7 @@ custombuild() {
 	ln -sv /opt/zlib/lib/* /usr/local/lib/
 	ln -sv /opt/libressl/lib/* /usr/local/lib/
 	
-	./configure --prefix=/opt/Python-2.7.11 --with-ensurepip --enable-shared   # shared libraries needed because other programs need them
+	./configure --prefix=/opt/Python-2.7.11 --with-ensurepip --enable-shared   # shared libraries needed because other programs need them TODO: this actually breaks python, because the -rpath is not set in python binaries
 	make -j
 	
 	rm -r /usr
