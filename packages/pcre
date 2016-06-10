@@ -15,6 +15,7 @@ custombuild(){
 	make -j
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name
-	ln -sv /opt/$package_name/bin/* /bin/
+	ln -sv /opt/$package_name/bin/* /bin/ || true
+	ln -sv /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/ || true
 	cd ..
 }

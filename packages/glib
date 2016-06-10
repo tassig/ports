@@ -18,7 +18,7 @@ custombuild(){
 		patch -p1 < $p
 	done
 
-	LDFLAGS="-Wl,-rpath=/opt/pcre/lib/"  ./configure --prefix=/opt/$package_fullname/   # apparently a bug in configure
+	LDFLAGS="-Wl,-rpath=/opt/pcre/lib/ -Wl,-rpath=/opt/libffi/lib64 -Wl,-rpath=/opt/zlib/lib"  ./configure --prefix=/opt/$package_fullname/   # apparently a bug in configure
 	make -j
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name
