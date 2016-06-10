@@ -10,9 +10,9 @@ custombuild(){
 	#export LDFLAGS="-L/opt/libressl/lib -L/opt/expat/lib"
 	export EXPATINCPATH="/opt/expat/include"
 	export EXPATLIBPATH="/opt/expat/lib"
-	rm XML-Parser-2.44.tar.gz
 	wget http://mirrors.tassig.com/XML-Parser/XML-Parser-2.44.tar.gz
 	tar xvf XML-Parser-2.44.tar.gz
+	rm XML-Parser-2.44.tar.gz
 	cd XML-Parser-2.44
 	perl Makefile.PL EXPATINCPATH=$EXPATINCPATH EXPATLIBPATH=$EXPATLIBPATH
 	make
