@@ -165,7 +165,7 @@ custombuild(){
 	export CFLAGS="$CFLAGS -I/opt/libressl/include"   # TODO: mesa needs it
 	
 	# TODO: all these -rpath will end up in every binary and library that we build here, see if we can find a cleaner solution
-	export LDFLAGS="-Wl,-rpath=$PREFIX/lib -Wl,-rpath=/opt/freetype/lib -Wl,-rpath=/opt/zlib/lib"
+	export LDFLAGS="-Wl,-rpath=$PREFIX/lib -Wl,-rpath=/opt/freetype/lib -Wl,-rpath=/opt/zlib/lib,-rpath=/opt/llvm/lib"
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/fontconfig/lib -Wl,-rpath=/opt/expat/lib -Wl,-rpath=/opt/libpng/lib"
 
 	
@@ -179,6 +179,7 @@ custombuild(){
 	# copying all the pkgconf files, some of them might be useful for other software
 	ln -sv $PREFIX /opt/$package_name   # link for canonical name
 	ln -svf $PREFIX/lib/pkgconfig/*.pc /opt/pkgconf/lib/pkgconfig/
+	ln -sv $PREFIX/bin/* /bin/
 	rm -r $HOME/src
 	
 }
