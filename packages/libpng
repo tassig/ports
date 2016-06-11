@@ -13,7 +13,7 @@ custombuild(){
 	rm $package_tarball_name
 	cd $package_fullname/
 	
-	export LDFLAGS=-L/opt/zlib/lib
+	export LDFLAGS="-L/opt/zlib/lib -Wl,-rpath=/opt/zlib/lib"
 	export CPPFLAGS=-I/opt/zlib/include
 	./configure --prefix=/opt/$package_fullname
 	make -j check   # check works fine here
