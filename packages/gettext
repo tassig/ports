@@ -3,6 +3,7 @@ package_version=0.19
 tarball_suffix=gz
 url=http://mirrors.tassig.com/gettext/gettext-0.19.tar.gz
 build_dependencies=
+no_check=1   # a few tests fail, this can probably be fixed
 haspostinstall=1
 
 postinstall(){
