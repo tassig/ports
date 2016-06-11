@@ -17,6 +17,8 @@ custombuild(){
 	triple=`ls /opt/toolchain | grep -- -linux-`
 	sed -i '/sysroot\/usr/s@$@\ "$sysroot/opt/toolchain/'"$triple"'/include",\ @' ext/Errno/Errno_pm.PL
         
+        make -j
+        #make -j check   # test fails because of busybox, test suite hangs anyway
         make install
         ln -sv /opt/$package_fullname /opt/$package_name
         ln -sv /opt/$package_name/bin/* /bin/ || true

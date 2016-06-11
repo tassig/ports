@@ -84,7 +84,6 @@ custombuild(){
 	wget http://port70.net/~nsz/musl/gcc-6.1.0/targetlib-test-fix.diff
 	cd ../
 	for file in patches-gcc-6.1.0/*;do patch -p1 -i $file;done
-	cd ../
 
 	cd ..
 	mkdir gccobjdir

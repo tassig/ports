@@ -3,3 +3,4 @@ package_version=1.4.17
 tarball_suffix=xz
 url=http://mirrors.tassig.com/m4/m4-1.4.17.tar.xz
 build_dependencies=
+no_check=1   # maybe some musl deviation from POSIX with the locale* functions
