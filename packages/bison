@@ -3,3 +3,4 @@ package_version=3.0
 tarball_suffix=xz
 url=http://mirrors.tassig.com/bison/bison-3.0.tar.xz
 build_dependencies=
+no_check=1

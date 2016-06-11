@@ -3,6 +3,7 @@ package_version=3.5.1
 tarball_suffix=xz
 url=http://mirrors.tassig.com/python/Python-3.5.1.tar.xz
 build_dependencies=
+no_check=1   # don't hesitate to fix it
 haspostinstall=1
 
 postinstall() {

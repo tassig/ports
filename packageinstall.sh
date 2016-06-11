@@ -7,7 +7,6 @@
 #
 # TODO: add error management. installpackage() should be a transaction. ex: what do you do when "make install" returns an error? right now, we do nothing, which is incorrect
 # TODO: implement it differently for root and normal users (different --prefix)
-# TODO: more "make check" should be added
 #
 
 packagedirectory=packages   # the directory name where the packages definitions are located
@@ -21,9 +20,11 @@ defaultbuild(){
 	tar xvf archive
 	rm archive
 	cd $package_name*
-	CFLAGS="$configure_cflags" LDFLAGS="$configure_ldflags" ./configure --prefix=/opt/$package_fullname/
+	./configure --prefix=/opt/$package_fullname/
 	make -j
-	# TODO: add make check
+	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
+	then make -j check || make -j test
+	fi
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name
 	ln -sv /opt/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
@@ -49,7 +50,7 @@ installpackage(){
 	# installing the package's dependencies recursively
 	for pkg_name in $build_dependencies
 	do
-		(./packageinstall.sh $pkg_name) # i initially used a recursive call to "installpackage" instead, but it was inheriting the shell variables
+		(./packageinstall.sh $pkg_name) || exit $?   # i initially used a recursive call to "installpackage" instead, but it was inheriting the shell variables
 	done
 	
 	# do a custom build if the package defines custombuild(), otherwise do a default build

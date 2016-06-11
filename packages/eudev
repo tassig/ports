@@ -3,3 +3,6 @@ package_version=3.1.5
 tarball_suffix=gz
 url=http://mirrors.tassig.com/eudev/eudev-3.1.5.tar.gz
 build_dependencies=gperf
+
+# TODO: the make check fails, indicating some serious issue
+
