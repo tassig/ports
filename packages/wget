@@ -13,17 +13,15 @@ custombuild() {
 	
 	# TODO: this whole thing looks pretty nasty
 
-	export ZLIB_CFLAGS="-I/opt/zlib/include"
-	export ZLIB_LIBS="-L/opt/zlib/lib -lz"
-	export OPENSSL_CFLAGS="-I/opt/libressl/include"
-	export OPENSSL_LIBS="-L/opt/libressl/lib -lssl -lcrypto"
+#	export ZLIB_CFLAGS="-I/opt/zlib/include"
+#	export ZLIB_LIBS="-L/opt/zlib/lib -lz"
+#	export OPENSSL_CFLAGS="-I/opt/libressl/include"
+#	export OPENSSL_LIBS="-L/opt/libressl/lib -lssl -lcrypto"
 
-	export CFLAGS="-I/opt/zlib/include -I/opt/libressl/include"
-	export LDFLAGS="-L/opt/zlib/lib -L/opt/libressl/lib"
-
-	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/libressl/lib -Wl,-rpath=/opt/zlib/lib"
+	export LDFLAGS="-Wl,-rpath=/opt/libressl/lib -Wl,-rpath=/opt/zlib/lib"
 	./configure --prefix=/opt/wget-$package_version --with-ssl=openssl
-	make -i   # ignoring all errors
+	make -j -i   # ignoring all errors
+#	make -j check
 	make -i install
 	ln -sv /opt/wget-$package_version /opt/wget
 	ln -sfv /opt/wget/bin/* /bin/
