@@ -3,3 +3,5 @@ package_version=1.2.8
 tarball_suffix=xz
 url=http://mirrors.tassig.com/zlib/zlib-1.2.8.tar.xz
 build_dependencies=
+
+# zlib does not create a .la by default, which makes it significantly more annoying to link against, because we can't use libtool, so we have to path the -rpath to the linker manually
