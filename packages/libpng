@@ -2,7 +2,7 @@ package_name=libpng
 package_version=1.6.21
 tarball_suffix=xz
 url=http://mirrors.tassig.com/libpng/libpng-1.6.21.tar.xz
-build_dependencies=pkgconf
+build_dependencies=
 iscustombuild=1
 
 custombuild(){
@@ -16,11 +16,10 @@ custombuild(){
 	export LDFLAGS=-L/opt/zlib/lib
 	export CPPFLAGS=-I/opt/zlib/include
 	./configure --prefix=/opt/$package_fullname
-	make -j
+	make -j check   # check works fine here
 	make install
-	
 	ln -sv /opt/$package_fullname /opt/$package_name
-	ln -sv /opt/$package_name/bin/* /bin/
+	ln -sv /opt/$package_name/bin/* /bin/ || true
 	ln -svf /opt/libpng/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
 	cd ..
 }

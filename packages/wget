@@ -10,6 +10,8 @@ custombuild() {
 	tar xvf wget-$package_version.tar.$tarball_suffix
 	rm wget-$package_version.tar.$tarball_suffix
 	cd wget-$package_version
+	
+	# TODO: this whole thing looks pretty nasty
 
 	export ZLIB_CFLAGS="-I/opt/zlib/include"
 	export ZLIB_LIBS="-L/opt/zlib/lib -lz"
@@ -21,7 +23,7 @@ custombuild() {
 
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/libressl/lib -Wl,-rpath=/opt/zlib/lib"
 	./configure --prefix=/opt/wget-$package_version --with-ssl=openssl
-	make -i
+	make -i   # ignoring all errors
 	make -i install
 	ln -sv /opt/wget-$package_version /opt/wget
 	ln -sfv /opt/wget/bin/* /bin/

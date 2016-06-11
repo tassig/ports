@@ -1,6 +1,5 @@
 #!/bin/sh
 
-# TODO: it would be better if we were running everything with set -e, but the whole thing has to be tested... so for now i just put some " || exit $?" and " || true" here and there
 # usage: ./packageinstall.sh package_identifier
 # example: ./packageinstall.sh autoconf
 # the script is assuming you're running it in the ports directory (which is a bit stupid, need to be changed later)
@@ -22,8 +21,9 @@ defaultbuild(){
 	tar xvf archive
 	rm archive
 	cd $package_name*
-	CFLAGS="$CFLAGS $configure_cflags" LDFLAGS="$LDFLAGS $configure_ldflags" ./configure --prefix=/opt/$package_fullname/
+	CFLAGS="$configure_cflags" LDFLAGS="$configure_ldflags" ./configure --prefix=/opt/$package_fullname/
 	make -j
+	# TODO: add make check
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name
 	ln -sv /opt/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
@@ -49,7 +49,7 @@ installpackage(){
 	# installing the package's dependencies recursively
 	for pkg_name in $build_dependencies
 	do
-		(./packageinstall.sh $pkg_name) || exit $?   # i initially used a recursive call to "installpackage" instead, but it was inheriting the shell variables
+		(./packageinstall.sh $pkg_name) # i initially used a recursive call to "installpackage" instead, but it was inheriting the shell variables
 	done
 	
 	# do a custom build if the package defines custombuild(), otherwise do a default build
