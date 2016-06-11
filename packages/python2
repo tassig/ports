@@ -2,10 +2,10 @@ package_name=Python
 package_version=2.7.11
 tarball_suffix=xz
 url=http://mirrors.tassig.com/python/Python-2.7.11.tar.xz
-build_dependencies=bzip2   # TODO: justify why it's needed
+build_dependencies=bzip2   # TODO: justify why it's needed, seems like Python is not detecting bzip2 anyway
 iscustombuild=1
                               
-# TODO: if a version of python is needed that has full supports for lots of plugins, we can add a new packages, named "python-full" or something
+# TODO: if a version of python is needed that has full supports for lots of plugins, we can add a new package, named "python-full" or something
 
 custombuild() {
 	package_fullname=$package_name-$package_version
@@ -15,20 +15,21 @@ custombuild() {
 	rm $package_tarball_name
 	cd $package_fullname/
 	
-	# hack to help python to find include files and libraries
+	# hack to help python to find include files
 	mkdir -p /usr/local/include
 	ln -sv /opt/zlib/include/* /usr/local/include/
 	ln -sv /opt/libressl/include/* /usr/local/include/
 	
-	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/libressl/lib -L /opt/libressl/lib -Wl,-rpath=/opt/zlib/lib -L /opt/zlib/lib"
+	export LDFLAGS="-Wl,-rpath=/opt/libressl/lib -L /opt/libressl/lib -Wl,-rpath=/opt/zlib/lib -L /opt/zlib/lib"
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/Python-2.7.11/lib"
 	./configure --prefix=/opt/Python-2.7.11 --with-ensurepip --enable-shared   # shared libraries needed because other programs need them
 	make -j
 	
 	rm -r /usr
 	
+	#make -j test   # TODO: some tests failures
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name
-	ln -sv /opt/$package_name/bin/* /bin/
+	ln -sv /opt/$package_name/bin/* /bin/ || true
 	cd ..
 }
