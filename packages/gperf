@@ -3,3 +3,4 @@ package_version=3.0.4
 tarball_suffix=gz
 url=http://mirrors.tassig.com/gperf/gperf-3.0.4.tar.gz
 build_dependencies=
+no_check=1
