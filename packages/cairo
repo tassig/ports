@@ -16,7 +16,7 @@ custombuild(){
 	patch -p1 < ../packages/cairo-build.patch   # patching the build system so zlib is found TODO: send the patch upstream
 	autoreconf
 	
-	./configure --prefix=/opt/$package_fullname/ 
+	LDFLAGS="-L/opt/zlib/lib -Wl,-rpath=/opt/zlib/lib" ./configure --prefix=/opt/$package_fullname/   TODO: why it doesn't work without LDFLAGS
 	make -j
 	# make check   # we should run make check but there is some slight divergence with the expected values, so we skip it for now
 	make install
