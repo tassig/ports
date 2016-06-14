@@ -2,5 +2,4 @@ package_name=libxml2
 package_version=2.9.4
 tarball_suffix=gz
 url=http://mirrors.tassig.com/$package_name/$package_name-$package_version.tar.$tarball_suffix
-#TODO: maybe disable python bindings?
-configure_ldflags="-L/opt/Python-2.7.11/lib -Wl,-rpath=/opt/Python-2.7.11/lib"
+configure_flags="--without-python"
