@@ -20,7 +20,7 @@ defaultbuild(){
 	tar xvf archive
 	rm archive
 	cd $package_name*
-	./configure --prefix=/opt/$package_fullname/ CFLAGS="$configure_cflags" LDFLAGS="$configure_ldflags"
+	CFLAGS="$configure_cflags" LDFLAGS="$configure_ldflags" ./configure --prefix=/opt/$package_fullname/
 	make -j
 	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
 	then make -j check || make -j test
