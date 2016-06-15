@@ -2,7 +2,7 @@ package_name=openbox
 package_version=3.6.1
 tarball_suffix=xz
 url=http://mirrors.tassig.com/$package_name/$package_name-$package_version.tar.$tarball_suffix
-build_dependencies="glib pango libxml2"
+build_dependencies="glib pango libxml2 librsvg"
 iscustombuild=1
 
 # custom build because xorg headers not found automatically by this build system

@@ -1,0 +1,27 @@
+package_name=librsvg
+package_version=2.40.16
+tarball_suffix=xz
+url=http://mirrors.tassig.com/$package_name/$package_name-$package_version.tar.$tarball_suffix
+build_dependencies="gdk-pixbuf libcroco"
+iscustombuild=1
+
+# custom build in order to disbale gobject-introspection
+custombuild(){
+	package_fullname=$package_name-$package_version
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	cd $package_name*
+	./configure --prefix=/opt/$package_fullname/ --enable-introspection=no
+	make -j
+	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
+	then make -j check || make -j test
+	fi
+	make install
+	ln -sv /opt/$package_fullname /opt/$package_name
+	ln -sv /opt/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
+	if [ -d "/opt/$package_name/lib/pkgconfig" ]; then
+		ln -svf /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # install pkg-config files
+	fi
+	cd ..
+}

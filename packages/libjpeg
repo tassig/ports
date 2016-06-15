@@ -1,0 +1,27 @@
+package_name=libjpeg
+package_version=9b
+tarball_suffix=gz
+url=http://mirrors.tassig.com/$package_name/jpegsrc.v$package_version.tar.$tarball_suffix
+iscustombuild=1
+
+# custom build because name of archive is out-of-order
+custombuild(){
+	package_fullname=$package_name-$package_version
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	mv jpeg-$package_version $package_fullname
+	cd $package_name*
+	./configure --prefix=/opt/$package_fullname/
+	make -j
+	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
+	then make -j check || make -j test
+	fi
+	make install
+	ln -sv /opt/$package_fullname /opt/$package_name
+	ln -sv /opt/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
+	if [ -d "/opt/$package_name/lib/pkgconfig" ]; then
+		ln -svf /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # install pkg-config files
+	fi
+	cd ..
+}

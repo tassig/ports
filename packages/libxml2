@@ -2,4 +2,3 @@ package_name=libxml2
 package_version=2.9.4
 tarball_suffix=gz
 url=http://mirrors.tassig.com/$package_name/$package_name-$package_version.tar.$tarball_suffix
-configure_flags="--without-python"
