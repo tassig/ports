@@ -1,6 +1,7 @@
 package_name=cairo
 package_version=1.14.6
-url=http://mirrors.tassig.com/$package_name/$package_name-$package_version.tar.xz
+tarball_suffix=xz
+url=http://mirrors.tassig.com/$package_name/$package_name-$package_version.tar.$tarball_suffix
 build_dependencies="zlib expat libpng libffi"
 iscustombuild=1
 
