@@ -6,7 +6,6 @@ build_dependencies="python libffi pcre" # python is needed for proper installati
 iscustombuild=1
 
 custombuild(){
-	set -ex
 	package_fullname=$package_name-$package_version
 	wget -O archive $url
 	tar xvf archive
@@ -20,11 +19,10 @@ custombuild(){
 
 	LDFLAGS="-Wl,-rpath=/opt/pcre/lib/ -Wl,-rpath=/opt/libffi/lib64 -Wl,-rpath=/opt/zlib/lib"  ./configure --prefix=/opt/$package_fullname/   # apparently a bug in configure
 	make -j
+	# TODO: make check
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name
 	ln -sv /opt/$package_name/bin/* /bin/ || true
 	ln -svf /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # some packages rely on pkgconf
 	cd ..
-	rm -r $package_name*
-	set +ex
 }

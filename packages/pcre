@@ -13,6 +13,7 @@ custombuild(){
 
 	./configure --prefix=/opt/$package_fullname/ --enable-utf --enable-unicode-properties # needed for successful building of glib
 	make -j
+	# TODO: make check
 	make install
 	ln -sv /opt/$package_fullname /opt/$package_name
 	ln -sv /opt/$package_name/bin/* /bin/ || true

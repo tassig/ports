@@ -5,6 +5,8 @@ url=http://mirrors.tassig.com/bzip2/bzip2-1.0.6.tar.gz
 build_dependencies=
 iscustombuild=1
 
+# TODO: seems buggy
+
 custombuild(){                                                             
         package_fullname=$package_name-$package_version                         
         package_tarball_name=$package_fullname.tar.$tarball_suffix          

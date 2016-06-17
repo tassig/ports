@@ -5,6 +5,8 @@ url=http://mirrors.tassig.com/mercurial/mercurial-3.8.1.tar.gz
 build_dependencies="python2"
 iscustombuild=1
 
+# TODO: strange way to specify prefix
+
 # the function called by default to build a package, works for most packages    
 custombuild(){                                                                 
         package_fullname=$package_name-$package_version                     

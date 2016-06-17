@@ -3,11 +3,9 @@ package_version=1.0.4
 build_dependencies="expat perl"
 iscustombuild=1
 
+# TODO: no package depends on it, remove?
 
 custombuild(){
-	#rm -r $HOME/.cpan/build
-	#export CFLAGS="-I/opt/libressl/include -I/opt/expat/include"
-	#export LDFLAGS="-L/opt/libressl/lib -L/opt/expat/lib"
 	export EXPATINCPATH="/opt/expat/include"
 	export EXPATLIBPATH="/opt/expat/lib"
 	wget http://mirrors.tassig.com/XML-Parser/XML-Parser-2.44.tar.gz
@@ -16,6 +14,7 @@ custombuild(){
 	cd XML-Parser-2.44
 	perl Makefile.PL EXPATINCPATH=$EXPATINCPATH EXPATLIBPATH=$EXPATLIBPATH
 	make
+	# TODO: make check
 	make install
 	cd ..
 	rm -r XML-Parser-2.44

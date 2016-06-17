@@ -15,11 +15,13 @@ set -e
 
 # the function called by default to build a package, works for most packages
 defaultbuild(){
-	package_fullname=$package_name-$package_version
+	mkdir -p builddir   # do everything in builddir for tidiness
+	cd builddir
 	wget -O archive $url
-	tar xvf archive
+	tar xvf archive 
 	rm archive
-	cd $package_name*
+	cd *   # cd into the package directory, there is usually only one, this is a custom build otherwise
+	package_fullname=$package_name-$package_version
 	./configure --prefix=/opt/$package_fullname/
 	make -j
 	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
@@ -31,7 +33,8 @@ defaultbuild(){
 	if [ -d "/opt/$package_name/lib/pkgconfig" ]; then
 		ln -svf /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # install pkg-config files
 	fi
-	cd ..
+	cd ../..
+	rm -r builddir
 }
 
 

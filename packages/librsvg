@@ -5,7 +5,7 @@ url=http://mirrors.tassig.com/$package_name/$package_name-$package_version.tar.$
 build_dependencies="gdk-pixbuf libcroco"
 iscustombuild=1
 
-# custom build in order to disbale gobject-introspection
+# custom build in order to disbale gobject-introspection TODO: feel free to install gobject-introspection
 custombuild(){
 	package_fullname=$package_name-$package_version
 	wget -O archive $url

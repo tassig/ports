@@ -2,7 +2,7 @@ package_name=libtiff
 package_version=4.0.6
 tarball_suffix=gz
 url=http://mirrors.tassig.com/$package_name/tiff-$package_version.tar.$tarball_suffix
-build_dependencies="zlib libjpeg"
+build_dependencies="zlib libjpeg"   # TODO: it is unlikely that these are needed, probably worth removing, or justify the reason
 iscustombuild=1
 
 # custom build in order to enable support of zlib and libjpeg

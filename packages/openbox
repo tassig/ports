@@ -16,7 +16,7 @@ custombuild(){
 	
 	autoreconf
 	
-	./configure --prefix=/opt/$package_fullname/ LDFLAGS="-Wl,-rpath=/opt/zlib/lib"   #TODO: make sure why zlib doesn't end in rpath
+	./configure --prefix=/opt/$package_fullname/
 	make -j
 	make check
 	make install

@@ -2,4 +2,4 @@ package_name=usbutils
 package_version=008
 tarball_suffix=xz
 url=http://mirrors.tassig.com/usbutils/usbutils-008.tar.xz
-build_dependencies="pkgconf libusb"
+build_dependencies="libusb"

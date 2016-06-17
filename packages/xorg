@@ -176,9 +176,8 @@ custombuild(){
 	cp "$pwd"/packages/xorg-20-modules.conf $PREFIX/share/X11/xorg.conf.d/20-modules.conf
 	
 	
-	# copying all the pkgconf files, some of them might be useful for other software
 	ln -sv $PREFIX /opt/$package_name   # link for canonical name
-	ln -svf $PREFIX/lib/pkgconfig/*.pc /opt/pkgconf/lib/pkgconfig/
+	ln -svf $PREFIX/lib/pkgconfig/*.pc /opt/pkgconf/lib/pkgconfig/   # copying all the pkgconf files, some of them might be useful for other software
 	ln -sv $PREFIX/bin/* /bin/
 	rm -r $HOME/src
 	
