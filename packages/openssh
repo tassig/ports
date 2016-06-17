@@ -1,0 +1,26 @@
+package_name=openssh
+package_version=7.2p2
+tarball_suffix=gz
+url=http://mirrors.sonic.net/pub/OpenBSD/OpenSSH/portable/openssh-7.2p2.tar.gz
+iscustombuild=1
+no_check=1
+
+custombuild(){
+        package_fullname=$package_name-$package_version
+        wget -O archive $url
+        tar xvf archive
+        rm archive
+        cd $package_name*
+        CFLAGS="-I/opt/zlib/include -I/opt/libressl/include" LDFLAGS="-L/opt/zlib/lib -Wl,-rpath=/opt/zlib/lib -L/opt/libressl/lib -Wl,-rpath=/opt/libressl/lib" ./configure --prefix=/opt/$package_fullname/
+        make -j
+        if test -z $no_check   # run the make check, unless $no_check is set for this package definition
+        then make -j check || make -j test
+        fi
+        make install
+        ln -sv /opt/$package_fullname /opt/$package_name
+        ln -sv /opt/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
+        if [ -d "/opt/$package_name/lib/pkgconfig" ]; then
+                ln -svf /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # install pkg-config files
+        fi
+        cd ..
+}
