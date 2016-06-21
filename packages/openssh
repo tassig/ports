@@ -1,26 +1,25 @@
 package_name=openssh
 package_version=7.2p2
 tarball_suffix=gz
-url=http://mirrors.sonic.net/pub/OpenBSD/OpenSSH/portable/openssh-7.2p2.tar.gz
+url=http://mirrors.sonic.net/pub/OpenBSD/OpenSSH/portable/openssh-7.2p2.tar.gz   # TODO: put on mirrors.tassig.com
 iscustombuild=1
 no_check=1
 
+# openssh configure script doesn't have much support for pkg-config
 custombuild(){
         package_fullname=$package_name-$package_version
         wget -O archive $url
         tar xvf archive
         rm archive
         cd $package_name*
-        LDFLAGS="-Wl,-rpath=/opt/zlib/lib -Wl,-rpath=/opt/libressl/lib" ./configure --prefix=/opt/$package_fullname/ --with-zlib=/opt/zlib --with-ssl-dir=/opt/libressl # TODO: why configure fails to set rpath
+        LDFLAGS="-Wl,-rpath=/opt/zlib/lib -Wl,-rpath=/opt/libressl/lib" ./configure --prefix=/opt/$package_fullname/ --with-zlib=/opt/zlib --with-ssl-dir=/opt/libressl # rpath needs to be given because of a bug in their configure
         make -j
         if test -z $no_check   # run the make check, unless $no_check is set for this package definition
         then make -j check || make -j test
         fi
         make install
         ln -sv /opt/$package_fullname /opt/$package_name
-        ln -svf /opt/$package_name/bin/* /bin/
-        if [ -d "/opt/$package_name/lib/pkgconfig" ]; then
-                ln -svf /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # install pkg-config files
-        fi
+        ln -sv /opt/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
+        ln -sv /opt/$package_name/sbin/* /bin/ || true   # don't crash if the links are already there
         cd ..
 }
