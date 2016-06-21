@@ -12,6 +12,9 @@ iscustombuild=1
 ##########################
 
 
+# TODO: gcc still has /usr/local/include in the include path and /usr/lib in the lib path
+# see gcc -v and gcc -print-search-dirs
+
 custombuild(){
 	ARCH=`uname -m`
 	packagename=$package_name-$package_version
