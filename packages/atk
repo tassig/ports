@@ -1,0 +1,44 @@
+
+# the list of dependencies is taken from http://www.linuxfromscratch.org/blfs/view/7.8/x/atk.html
+
+package_name=atk
+package_version=2.16.0  
+build_dependencies="glib"
+iscustombuild=1
+
+##########################
+#
+# ATK
+#
+# ATK is required by GTK+2
+# ATK provides the set of accessibility interfaces that are implemented by other toolkits and applications. 
+# Using the ATK interfaces, accessibility tools have full access to view and control running applications. 
+#
+##########################
+
+
+custombuild(){
+	pwd="`pwd`"
+	cd $HOME
+	export PREFIX=/opt/$package_name-$package_version
+	#export PKG_CONFIG_PATH=/opt/pkgconf/lib/pkgconfig #TODO .bashrc setting?
+	export LD_LIBRARY_PATH=/opt/glib/lib
+	mkdir -p $PREFIX
+	
+	# can also be downloaded from http://ftp.gnome.org/pub/gnome/sources/atk/2.16/atk-2.16.0.tar.xz
+	wget http://ftp.gnome.org/pub/gnome/sources/atk/2.16/atk-2.16.0.tar.xz
+	tar -xJ -f $package_name-$package_version.tar.xz
+	cd $package_name-$package_version
+	./configure --prefix=$PREFIX &&	make
+	make install
+
+	# copying all the pkgconf files, some of them might be useful for other software
+	ln -sv $PREFIX /opt/$package_name   # link for canonical name
+	ln -svf $PREFIX/lib/pkgconfig/*.pc /opt/pkgconf/lib/pkgconfig/
+	#ln -sv $PREFIX/bin/* /bin/
+
+	#TODO: should /usr/include/atk-1.0 and /usr/share/gtk-doc/html/atk be installed?
+
+	cd ..
+	rm -rf $package_name-$package_version	
+}

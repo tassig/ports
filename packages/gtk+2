@@ -1,0 +1,59 @@
+
+# Refer http://www.linuxfromscratch.org/blfs/view/7.8/x/gtk2.html
+
+package_name=gtk+
+package_version=2.24.28 
+build_dependencies="atk gdk-pixbuf pango hicolor-icon-theme"
+iscustombuild=1
+haspostinstall=1
+
+########################
+#
+# GTK+2
+#
+# GTK is the one of the important graphical toolkits.
+# 
+# can also be downloaded from http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.28.tar.xz
+##########################
+
+
+custombuild(){
+	pwd="`pwd`"
+	cd ..
+	export PREFIX=/opt/$package_name-$package_version
+	export LD_LIBRARY_PATH=/opt/glib/lib
+	mkdir -p $PREFIX
+	
+	# can also be downloaded from http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.28.tar.xz
+	wget http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.28.tar.xz &&
+	tar -xJ -f $package_name-$package_version.tar.xz &&
+	cd $package_name-$package_version &&
+
+	#sed -e 's#l \(gtk-.*\).sgml#& -o \1#' -i docs/{faq,tutorial}/Makefile.in      &&
+	#sed -e 's#pltcheck.sh#$(NULL)#g' -i gtk/Makefile.in                      &&
+	./configure --prefix=$PREFIX --sysconfdir=$PREFIX/etc &&
+	make &&
+	make install &&
+
+	# copying all the pkgconf files, some of them might be useful for other software
+	ln -sv $PREFIX /opt/$package_name   # link for canonical name
+	ln -svf $PREFIX/lib/pkgconfig/*.pc /opt/pkgconf/lib/pkgconfig/
+	ln -sv $PREFIX/bin/* /bin/
+
+	cd ..
+	rm -rf $package_name-$package_version	
+}
+
+postinstall(){
+cat > ~/.gtkrc-2.0 << "EOF"
+include "/opt/gtk+/share/themes/Glider/gtk-2.0/gtkrc"
+gtk-icon-theme-name = "hicolor"
+EOF
+
+mkdir -p /etc/gtk-2.0
+
+cat > /etc/gtk-2.0/gtkrc << "EOF"
+include "/opt/gtk+/share/themes/Clearlooks/gtk-2.0/gtkrc"
+gtk-icon-theme-name = "elementary"
+EOF
+}

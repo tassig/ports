@@ -1,0 +1,37 @@
+# Refered http://www.linuxfromscratch.org/blfs/view/7.8/general/hicolor-icon-theme.html
+
+package_name=hicolor-icon-theme
+package_version=0.15 
+build_dependencies=""
+iscustombuild=1
+
+##########################
+#
+# hicolor-icon-theme
+#
+# hicolor-icon-theme is required by GTK+2
+# The hicolor-icon-theme package contains a default fallback theme for implementations of the icon theme specification. 
+#
+##########################
+
+custombuild(){
+	pwd="`pwd`"
+	cd $HOME
+	export PREFIX=/opt/$package_name-$package_version
+	mkdir -p $PREFIX
+	
+	# can also be downloaded from http://icon-theme.freedesktop.org/releases/hicolor-icon-theme-0.15.tar.xz
+	wget http://icon-theme.freedesktop.org/releases/hicolor-icon-theme-0.15.tar.xz
+	tar -xJ -f $package_name-$package_version.tar.xz
+	cd $package_name-$package_version
+	./configure --prefix=$PREFIX &&	make
+	make install
+
+	# copying all the pkgconf files, some of them might be useful for other software
+	ln -sv $PREFIX /opt/$package_name   # link for canonical name
+	mkdir -p /usr/share/icons/hicolor
+	ln -sv $PREFIX/share/icons/hicolor/* /usr/share/icons/hicolor/
+
+	cd ..
+	rm -rf $package_name-$package_version	
+}
