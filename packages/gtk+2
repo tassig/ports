@@ -21,7 +21,7 @@ custombuild(){
 	pwd="`pwd`"
 	cd ..
 	export PREFIX=/opt/$package_name-$package_version
-	export LD_LIBRARY_PATH=/opt/glib/lib
+	export LD_LIBRARY_PATH=/opt/glib/lib   # TODO: rewrite as LDFLAGS or whatever
 	mkdir -p $PREFIX
 	
 	# can also be downloaded from http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.28.tar.xz
@@ -44,6 +44,8 @@ custombuild(){
 	rm -rf $package_name-$package_version	
 }
 
+
+# TODO: ok for ~/.gtkrc-2.0 , but not /etc/gtk-2.0/gtkrc , should be in /opt/...
 postinstall(){
 cat > ~/.gtkrc-2.0 << "EOF"
 include "/opt/gtk+/share/themes/Glider/gtk-2.0/gtkrc"

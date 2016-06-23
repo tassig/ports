@@ -17,16 +17,17 @@ iscustombuild=1
 ##########################
 
 
+# TODO: rewrite or make default build
 custombuild(){
 	pwd="`pwd`"
 	cd $HOME
 	export PREFIX=/opt/$package_name-$package_version
 	#export PKG_CONFIG_PATH=/opt/pkgconf/lib/pkgconfig #TODO .bashrc setting?
-	export LD_LIBRARY_PATH=/opt/glib/lib
+	export LD_LIBRARY_PATH=/opt/glib/lib   # TODO: export as LDFLAGS if really needed
 	mkdir -p $PREFIX
 	
 	# can also be downloaded from http://ftp.gnome.org/pub/gnome/sources/atk/2.16/atk-2.16.0.tar.xz
-	wget http://ftp.gnome.org/pub/gnome/sources/atk/2.16/atk-2.16.0.tar.xz
+	wget http://ftp.gnome.org/pub/gnome/sources/atk/2.16/atk-2.16.0.tar.xz   # TODO: move to top of file
 	tar -xJ -f $package_name-$package_version.tar.xz
 	cd $package_name-$package_version
 	./configure --prefix=$PREFIX &&	make
@@ -36,8 +37,6 @@ custombuild(){
 	ln -sv $PREFIX /opt/$package_name   # link for canonical name
 	ln -svf $PREFIX/lib/pkgconfig/*.pc /opt/pkgconf/lib/pkgconfig/
 	#ln -sv $PREFIX/bin/* /bin/
-
-	#TODO: should /usr/include/atk-1.0 and /usr/share/gtk-doc/html/atk be installed?
 
 	cd ..
 	rm -rf $package_name-$package_version	
