@@ -1,8 +1,6 @@
-
-# the list of dependencies is taken from http://www.linuxfromscratch.org/blfs/view/7.8/x/atk.html
-
 package_name=atk
-package_version=2.16.0  
+package_version=2.16.0
+url=http://ftp.gnome.org/pub/gnome/sources/atk/2.16/atk-2.16.0.tar.xz   # TODO: move to tassig
 build_dependencies="glib"
 iscustombuild=1
 
@@ -17,27 +15,26 @@ iscustombuild=1
 ##########################
 
 
-# TODO: rewrite or make default build
+# custom build because glib test program doesn't have rpath
 custombuild(){
-	pwd="`pwd`"
-	cd $HOME
-	export PREFIX=/opt/$package_name-$package_version
-	#export PKG_CONFIG_PATH=/opt/pkgconf/lib/pkgconfig #TODO .bashrc setting?
-	export LD_LIBRARY_PATH=/opt/glib/lib   # TODO: export as LDFLAGS if really needed
-	mkdir -p $PREFIX
-	
-	# can also be downloaded from http://ftp.gnome.org/pub/gnome/sources/atk/2.16/atk-2.16.0.tar.xz
-	wget http://ftp.gnome.org/pub/gnome/sources/atk/2.16/atk-2.16.0.tar.xz   # TODO: move to top of file
-	tar -xJ -f $package_name-$package_version.tar.xz
-	cd $package_name-$package_version
-	./configure --prefix=$PREFIX &&	make
+	mkdir -p builddir   # do everything in builddir for tidiness
+	cd builddir
+	wget -O archive $url
+	tar xvf archive 
+	rm archive
+	cd *   # cd into the package directory, there is usually only one, this is a custom build otherwise
+	package_fullname=$package_name-$package_version
+	LDFLAGS=-Wl,-rpath=/opt/glib/lib ./configure --prefix=/opt/$package_fullname/
+	make -j
+	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
+	then make -j check || make -j test
+	fi
 	make install
-
-	# copying all the pkgconf files, some of them might be useful for other software
-	ln -sv $PREFIX /opt/$package_name   # link for canonical name
-	ln -svf $PREFIX/lib/pkgconfig/*.pc /opt/pkgconf/lib/pkgconfig/
-	#ln -sv $PREFIX/bin/* /bin/
-
-	cd ..
-	rm -rf $package_name-$package_version	
+	ln -sv /opt/$package_fullname /opt/$package_name
+	ln -sv /opt/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
+	if [ -d "/opt/$package_name/lib/pkgconfig" ]; then
+		ln -svf /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # install pkg-config files
+	fi
+	cd ../..
+	rm -r builddir
 }

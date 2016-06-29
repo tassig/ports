@@ -95,7 +95,7 @@ custombuild(){
 	cd ..
 	rm xserver/*.tar.gz # remove the xserver tarball, to make sure the build system is not using it
 	clone xserver xorg-server-1.18.3
-	clone libevdev 7f2fffc0d9fe47a76dcaaa3db9bd758e8433c0b6
+	clone libevdev 7f2fffc0d9fe47a76dcaaa3db9bd758e8433c0b6   # TODO: we should remove the existing tar.gz too
 	cd driver
 	clone xf86-input-synaptics 59e5db025307404fbfbc82f2fb3fe91d6a3005d7
 	clone xf86-video-v4l 95fcc10d962f3ff682cfb8c1bbfd3f14db167a13
