@@ -38,7 +38,9 @@ custombuild(){
 	./configure --prefix=/opt/qt -skip qtwebengine -qt-xcb -opensource -confirm-license -I/opt/xorg/include -L/opt/xorg/lib -R /opt/xorg/lib -R /opt/glib/lib -R /opt/eudev/lib -L /opt/fontconfig/lib -L /opt/freetype/lib -rpath 
 	
 	make -j4
+	make -j4 check
 	make install
+	
 
 
 }
