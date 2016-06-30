@@ -6,7 +6,6 @@ iscustombuild=1
 
 
 # TODO:
-# - this build systems does not use configure.ac, instead it uses a manually written configure in qtbase/configure, so there are some issues with it, for example it uses a bash feature in some place (near line 4600) that needs to be fixed
 # - getting this warning at configure time: WARNING: Could not find XKB config root, use -xkb-config-root to set a path to 
 # XKB configuration data. This is required for keyboard input support.
 
@@ -25,6 +24,9 @@ custombuild(){
 	cd qt-everywhere-opensource-src-5.7.0
 	
 	
+	# this build systems does not use configure.ac, instead it uses a manually written configure in qtbase/configure, so there are some issues with it, for example it uses a bash feature. So remove that
+	patch -p1 < ../packages/qt-build.patch
+
 	# configure seems to support LDFLAGS (probably passed as arguments) and converts them to QMAKE variables, see qtbase/configure. We don't use this below.
 	            
 	         
@@ -32,8 +34,6 @@ custombuild(){
 	# -R : add a runtime path to libraries
 	# -I/opt/xorg/include -L/opt/xorg/lib -R /opt/xorg/lib : used for the configure tests to work properly, for instance to find xrender. The build system should have been using pkg-config for xrender instead. The rpath is actually superfluous, because the build system doesn't test the resulting executables, it just tries to compile them
 	# other -R and -L : used to circumvent bugs in the build system
-	
-	
 	
 	./configure --prefix=/opt/qt -skip qtwebengine -qt-xcb -opensource -confirm-license -I/opt/xorg/include -L/opt/xorg/lib -R /opt/xorg/lib -R /opt/glib/lib -R /opt/eudev/lib -L /opt/fontconfig/lib -L /opt/freetype/lib -rpath 
 	

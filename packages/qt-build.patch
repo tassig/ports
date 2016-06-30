@@ -1,0 +1,17 @@
+--- ./qtbase/configure.orig	2016-06-30 18:36:21.448863204 +0300
++++ ./qtbase/configure	2016-06-30 18:37:20.144864154 +0300
+@@ -4600,13 +4600,7 @@
+         CFG_AVX512=f
+         CFG_AVX512_UPPER=AVX512F
+         for feature in er cd pf dq bw vl ifma vbmi; do
+-            if [ -n "$BASH_VERSION" ] && [ "${BASH_VERSION%%.*}" -gt 3 ]; then
+-                upper=${feature^^*}
+-            elif [ -n "$ZSH_VERSION" ]; then
+-                upper=${(U)feature}
+-            else
+-                upper=`echo $feature | tr a-z A-Z`
+-            fi
++            upper=`echo $feature | tr a-z A-Z`
+             if compileTest common/avx512 "avx512$feature" AVX512=$upper; then
+                 CFG_AVX512="$CFG_AVX512 $feature"
+                 CFG_AVX512_UPPER="$CFG_AVX512_UPPER AVX512$upper"
