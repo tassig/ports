@@ -88,6 +88,10 @@ custombuild(){
 	rm xcb-proto-1.7.1.tar.gz
 	clone libxcb d34785a34f28fa6a00f8ce00d87e3132ff0f6467
 	clone proto 6398e42131eedddde0d98759067dde933191f049
+	clone util-wm 0.4.1 # xcb needs it for support of EWMH
+	# we need to initialized git submodules for util-wm
+	cd util-wm && git submodule update --init && cd ..
+
 	cd ..
 	cd util
 	rm util-macros-1.17.tar.gz
