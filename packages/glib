@@ -2,7 +2,7 @@ package_name=glib
 package_version=2.48.1
 tarball_suffix=xz
 url=http://mirrors.tassig.com/$package_name/$package_name-$package_version.tar.$tarball_suffix
-build_dependencies="python libffi pcre" # python is needed for proper installation
+build_dependencies="python2 libffi pcre" # python is needed for proper installation
 iscustombuild=1
 
 custombuild(){
