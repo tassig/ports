@@ -111,11 +111,6 @@ custombuild(){
 	clone xf86-video-glint 5b22c69898330d2e321596f7061b91362c0e6216
 	clone xf86-video-i128 c87753733a6e1f85d1d037dced0b47ce0cf41658
 	#TODO: past this point I've just added all video drivers, some of them might work without that
-	#no repository found
-	#clone xf86-video-newport
-	#clone xf86-video-openchrome
-	#clone xf86-video-geode
-	#clone xf86-video-glide
 	clone xf86-video-savage de61497415e58a21fa247faf6db180ca47fb5df0
 	clone xf86-video-siliconmotion 647e5a93d9387e3bc8d2c8569e3a5f996acfb169
 	clone xf86-video-sis 328073e46f9b9fcc09e637c94496c90273a0a4f6
