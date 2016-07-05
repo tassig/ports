@@ -5,33 +5,35 @@
 # the script is assuming you're running it in the ports directory (which is a bit stupid, need to be changed later)
 # refer to "package definition specifications.md" for laws and regulations
 #
-# TODO: add error management. installpackage() should be a transaction. ex: what do you do when "make install" returns an error? right now, we do nothing, which is incorrect
-# TODO: implement it differently for root and normal users (different --prefix)
+# TODO: installpackage() should be a transaction to prevent half-installed packages and leftovers. ex: what do you do when "make install" returns an error? right now, we do nothing, which is incorrect
 #
-
-packagedirectory=packages   # the directory name where the packages definitions are located
 
 set -e
 
+packagedirectory=packages   # the directory name where the packages definitions are located
+
+installdirectory="/opt"   # TODO: implement per user installs (with different --prefix)
+
 # the function called by default to build a package, works for most packages
 defaultbuild(){
+	rm -r builddir
 	mkdir -p builddir   # do everything in builddir for tidiness
 	cd builddir
 	wget -O archive $url
 	tar xvf archive 
 	rm archive
-	cd *   # cd into the package directory, there is usually only one, this is a custom build otherwise
+	cd *   # cd into the package directory
 	package_fullname=$package_name-$package_version
-	./configure --prefix=/opt/$package_fullname/
+	./configure --prefix=$installdirectory/$package_fullname/
 	make -j
 	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
 	then make -j check || make -j test
 	fi
 	make install
-	ln -sv /opt/$package_fullname /opt/$package_name
-	ln -sv /opt/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
-	if [ -d "/opt/$package_name/lib/pkgconfig" ]; then
-		ln -svf /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # install pkg-config files
+	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
+	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+		ln -svf $installdirectory/$package_name/lib/pkgconfig/* $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
 	fi
 	cd ../..
 	rm -r builddir
@@ -43,7 +45,7 @@ installpackage(){
 
 	source $packagedirectory/$1
 	
-	if [ -d "/opt/$package_name-$package_version" ]; then
+	if [ -d "$installdirectory/$package_name-$package_version" ]; then
 		echo "package $package_name is already installed, not reinstalling"
 		return 0
 	fi

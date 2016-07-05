@@ -41,7 +41,9 @@ custombuild(){
 	make -j4 check
 	make install
 	
-
+	
+	# ldd /opt/qt/plugins/platforms/libqxcb.so
+	# => fails
 
 }
 
