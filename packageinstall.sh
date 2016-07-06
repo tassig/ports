@@ -16,7 +16,7 @@ installdirectory="/opt"   # TODO: implement per user installs (with different --
 
 # the function called by default to build a package, works for most packages
 defaultbuild(){
-	rm -r builddir
+	rm -rf builddir
 	mkdir -p builddir   # do everything in builddir for tidiness
 	cd builddir
 	wget -O archive $url
