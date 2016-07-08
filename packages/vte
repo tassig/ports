@@ -1,0 +1,49 @@
+
+# the list of dependencies is taken from http://www.linuxfromscratch.org/blfs/view/svn/xfce/vte2.html
+
+package_name=vte
+package_version=0.28.2  
+build_dependencies="gtk+2 python"
+iscustombuild=1
+
+##########################
+#
+# Vte
+#
+# Vte is a library (libvte) implementing a terminal emulator widget for GTK+ 2,
+# and a minimal demonstration application (vte) that uses libvte. 
+#
+##########################
+
+
+custombuild(){
+	cd ..
+	rm -rf builddir
+	mkdir builddir
+	cd builddir
+
+	export PREFIX=/opt/$package_name-$package_version
+	#export PKG_CONFIG_PATH=/opt/pkgconf/lib/pkgconfig #TODO .bashrc setting?
+	export LDFLAGS="-L/opt/ncurses/lib -Wl,-rpath,/opt/ncurses/lib"
+	export CFLAGS="-I/opt/gcc-6.1.0/x86_64-longhorn-linux-musl/include -I/opt/ncurses/include"
+	mkdir -p $PREFIX
+	
+	# can also be downloaded from http://ftp.gnome.org/pub/gnome/sources/vte/0.28/vte-0.28.2.tar.xz
+	wget http://mirrors.tassig.com/vte/vte-0.28.2.tar.xz &&
+	tar -xJ -f $package_name-$package_version.tar.xz &&
+	cd $package_name-$package_version
+	patch -p0 < ../../ports/packages/vte-pty.patch
+	#patch -p1 < ../ports/packages/vte-optional-ncurses.patch
+	./configure --prefix=$PREFIX --libexecdir=$PREFIX/lib/vte --disable-static  &&
+	make &&
+	make install &&
+
+	# copying all the pkgconf files, some of them might be useful for other software
+	ln -sv $PREFIX /opt/$package_name &&  # link for canonical name
+	ln -svf $PREFIX/lib/pkgconfig/*.pc /opt/pkgconf/lib/pkgconfig/ &&
+	ln -sv $PREFIX/bin/* /bin/ &&
+
+	cd ../..
+	rm -rf builddir
+#	rm -rf $package_name-$package_version	
+}

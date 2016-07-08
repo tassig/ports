@@ -1,0 +1,42 @@
+package_name=ncurses
+package_version=6.0
+url=http://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.0.tar.gz
+build_dependencies="expect"
+iscustombuild=1
+
+##########################
+#
+# ncurses
+#
+# The Ncurses package contains libraries for terminal-independent handling of character screens.
+#
+##########################
+
+
+custombuild(){
+	mkdir -p builddir
+	cd builddir
+	wget $url
+	tar xzf $package_name-$package_version.tar.gz
+	cd $package_name-$package_version
+	sed -i '/LIBTOOL_INSTALL/d' c++/Makefile.in
+	./configure --prefix=/opt/$package_name-$package_version \
+            --mandir=/opt/$package_name-$package_version/share/man \
+            --with-shared           \
+            --without-debug         \
+            --without-normal        \
+            --enable-pc-files  &&
+#            --enable-widec &&
+
+	make
+	make install
+
+        ln -sv /opt/$package_name-$package_version /opt/$package_name
+        ln -sv /opt/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
+        if [ -d "/opt/$package_name/lib/pkgconfig" ]; then
+                ln -svf /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # install pkg-config files
+        fi
+        cd ../..
+        rm -r builddir
+
+}
