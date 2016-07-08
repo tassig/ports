@@ -1,10 +1,10 @@
-
-# the list of dependencies is taken from http://www.linuxfromscratch.org/blfs/view/svn/xfce/vte2.html
-
 package_name=vte
 package_version=0.28.2  
-build_dependencies="gtk+2 python"
+build_dependencies="gtk+2 python2 ncurses"   # TODO: ncurses not mentioned by linux from scratch
+url=http://mirrors.tassig.com/vte/vte-0.28.2.tar.xz
 iscustombuild=1
+
+# the list of dependencies is taken from http://www.linuxfromscratch.org/blfs/view/svn/xfce/vte2.html
 
 ##########################
 #
@@ -17,33 +17,30 @@ iscustombuild=1
 
 
 custombuild(){
-	cd ..
 	rm -rf builddir
-	mkdir builddir
+	mkdir -p builddir   # do everything in builddir for tidiness
 	cd builddir
-
-	export PREFIX=/opt/$package_name-$package_version
-	#export PKG_CONFIG_PATH=/opt/pkgconf/lib/pkgconfig #TODO .bashrc setting?
-	export LDFLAGS="-L/opt/ncurses/lib -Wl,-rpath,/opt/ncurses/lib"
-	export CFLAGS="-I/opt/gcc-6.1.0/x86_64-longhorn-linux-musl/include -I/opt/ncurses/include"
-	mkdir -p $PREFIX
+	wget -O archive $url
+	tar xvf archive 
+	rm archive
+	cd *   # cd into the package directory
+	package_fullname=$package_name-$package_version
 	
-	# can also be downloaded from http://ftp.gnome.org/pub/gnome/sources/vte/0.28/vte-0.28.2.tar.xz
-	wget http://mirrors.tassig.com/vte/vte-0.28.2.tar.xz &&
-	tar -xJ -f $package_name-$package_version.tar.xz &&
-	cd $package_name-$package_version
-	patch -p0 < ../../ports/packages/vte-pty.patch
-	#patch -p1 < ../ports/packages/vte-optional-ncurses.patch
-	./configure --prefix=$PREFIX --libexecdir=$PREFIX/lib/vte --disable-static  &&
-	make &&
-	make install &&
-
-	# copying all the pkgconf files, some of them might be useful for other software
-	ln -sv $PREFIX /opt/$package_name &&  # link for canonical name
-	ln -svf $PREFIX/lib/pkgconfig/*.pc /opt/pkgconf/lib/pkgconfig/ &&
-	ln -sv $PREFIX/bin/* /bin/ &&
-
+	patch -p0 < ../../packages/vte-pty.patch   # TODO: need explanation for this patch
+	
+	# work around broken configure script for ncurses
+	CFLAGS="-I/opt/ncurses/include" LDFLAGS="-L/opt/ncurses/lib -Wl,-rpath,/opt/ncurses/lib" ./configure --prefix=$installdirectory/$package_fullname/
+	
+	make -j
+	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
+	then make -j check || make -j test
+	fi
+	make install
+	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
+	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+		ln -svf $installdirectory/$package_name/lib/pkgconfig/* $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+	fi
 	cd ../..
-	rm -rf builddir
-#	rm -rf $package_name-$package_version	
+	rm -r builddir
 }
