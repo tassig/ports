@@ -1,6 +1,6 @@
 package_name=vte
 package_version=0.28.2  
-build_dependencies="gtk+2 python2 ncurses"   # TODO: ncurses not mentioned by linux from scratch
+build_dependencies="gtk+2 python2 ncurses"   # ncurses not mentioned by linux from scratchi, but when building vte, it requires tgetent which is in ncurses library
 url=http://mirrors.tassig.com/vte/vte-0.28.2.tar.xz
 iscustombuild=1
 
@@ -26,7 +26,7 @@ custombuild(){
 	cd *   # cd into the package directory
 	package_fullname=$package_name-$package_version
 	
-	patch -p0 < ../../packages/vte-pty.patch   # TODO: need explanation for this patch
+	patch -p0 < ../../packages/vte-pty.patch   # it uses ptsname_r function which requires _GNU_SOURCE definition.but the source does not have it
 	
 	# work around broken configure script for ncurses
 	CFLAGS="-I/opt/ncurses/include" LDFLAGS="-L/opt/ncurses/lib -Wl,-rpath,/opt/ncurses/lib" ./configure --prefix=$installdirectory/$package_fullname/
