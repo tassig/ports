@@ -19,6 +19,8 @@ iscustombuild=1
 #
 
 custombuild(){
+	export PREFIX=/opt/$package_name-$package_version
+
 	wget $url
 	tar xvf qt-everywhere-opensource-src-5.7.0.tar.gz
 	cd qt-everywhere-opensource-src-5.7.0
@@ -35,22 +37,24 @@ custombuild(){
 	# -R : add a runtime path to libraries
 	# -I/opt/xorg/include -L/opt/xorg/lib -R /opt/xorg/lib : used for the configure tests to work properly, for instance to find xrender. The build system should have been using pkg-config for xrender instead. The rpath is actually superfluous, because the build system doesn't test the resulting executables, it just tries to compile them
 	# other -R and -L : used to circumvent bugs in the build system
+	# send -no-dbus to disable dbus
+
+	export LDFLAGS="-Wl,-rpath,/opt/xorg/lib -Wl,-rpath,/opt/fontconfig/lib -Wl,-rpath,/opt/freetype/lib -Wl,-rpath,/opt/mtdev/lib"
 	
-	./configure --prefix=/opt/qt -skip qtwebengine -qt-xcb -opensource -confirm-license -I/opt/xorg/include -L/opt/xorg/lib -R /opt/xorg/lib -R /opt/glib/lib -R /opt/eudev/lib -L /opt/fontconfig/lib -L /opt/freetype/lib -rpath 
+	./configure --prefix=$PREFIX -skip qtwebengine -qt-xcb -no-dbus -opensource -confirm-license -I/opt/xorg/include -L/opt/xorg/lib -R /opt/xorg/lib -R /opt/glib/lib -R /opt/eudev/lib -L/opt/fontconfig/lib -L/opt/freetype/lib -rpath 
 	
 	make -j4
 	make -j4 check
 	make install
 	
-	
-	# TODO: create the symlinks
-	
-	# TODO: clean up
-	
-	
-	# TODO: 
-	# ldd /opt/qt/plugins/platforms/libqxcb.so
-	# => fails
+	#link
+	ln -sv $PREFIX /opt/$package_name   # link for canonical name
+	ln -svf $PREFIX/lib/pkgconfig/*.pc /opt/pkgconf/lib/pkgconfig/
+	ln -sv $PREFIX/bin/* /bin/
+
+	#cleanup	
+	cd ..
+	rm -rf qt-everywhere*
 	
 	
 	# TODO:
@@ -60,7 +64,6 @@ custombuild(){
 	# QMAKE_INCDIR_X11=/opt/xorg/include QMAKE_LIBDIR_X11=/opt/xorg/lib QMAKE_RPATHDIR=/opt/xorg/lib QMAKE_LFLAGS=-L/opt/xorg/lib
 
 }
-
 
 
 
