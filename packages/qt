@@ -13,13 +13,14 @@ iscustombuild=1
 #
 # Requirements: http://doc.qt.io/qt-5/linux-requirements.html
 #
-# you need to use -qt-xcb to configure so qt uses its own xcb, or you would need to use Longhorn xcb we would need to add 'xcb-image', 'xcb-keysyms', 'xcb-icccm' during the x.org build.
+# you need to use -qt-xcb to configure so qt uses its own xcb, or you would need to use Longhorn's xcb we would need to add 'xcb-image', 'xcb-keysyms', 'xcb-icccm' during the x.org build.
+# TODO: it's probably to install these xcb packages and make Qt use Longhorn's xcb instead of its own xcb
 #
 # -skip qtwebengine can be used to reduced the build size
 #
 
 custombuild(){
-	export PREFIX=/opt/$package_name-$package_version
+	PREFIX=/opt/$package_name-$package_version
 
 	wget $url
 	tar xvf qt-everywhere-opensource-src-5.7.0.tar.gz
@@ -39,20 +40,21 @@ custombuild(){
 	# other -R and -L : used to circumvent bugs in the build system
 	# send -no-dbus to disable dbus
 
-	export LDFLAGS="-Wl,-rpath,/opt/xorg/lib -Wl,-rpath,/opt/fontconfig/lib -Wl,-rpath,/opt/freetype/lib -Wl,-rpath,/opt/mtdev/lib"
 	
 	./configure --prefix=$PREFIX -skip qtwebengine -qt-xcb -no-dbus -opensource -confirm-license -I/opt/xorg/include -L/opt/xorg/lib -R /opt/xorg/lib -R /opt/glib/lib -R /opt/eudev/lib -L/opt/fontconfig/lib -L/opt/freetype/lib -rpath 
 	
-	make -j4
+	# TODO: these -rpath will end up on all Qt libraries, even on the ones that don't need them. This will have the consequence of making startup time of Qt application slow
+	# that's why we have to look for a better way to put the -rpath more selectively
+	LDFLAGS="-Wl,-rpath,/opt/xorg/lib -Wl,-rpath,/opt/fontconfig/lib -Wl,-rpath,/opt/freetype/lib -Wl,-rpath,/opt/mtdev/lib" make -j4
 	make -j4 check
 	make install
 	
-	#link
+	# links
 	ln -sv $PREFIX /opt/$package_name   # link for canonical name
 	ln -svf $PREFIX/lib/pkgconfig/*.pc /opt/pkgconf/lib/pkgconfig/
 	ln -sv $PREFIX/bin/* /bin/
 
-	#cleanup	
+	# cleanup	
 	cd ..
 	rm -rf qt-everywhere*
 	
