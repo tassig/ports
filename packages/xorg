@@ -160,7 +160,8 @@ custombuild(){
 
 	
 	# set CFLAGS and LDFLAGS
-	export CFLAGS="-D_GNU_SOURCE -I/opt/zlib/include -I/opt/eudev/include -I/opt/mtdev/include"   # TODO: comments needed - D_GNU_SOURCE a bit funny in our context
+	# TODO: what exactly requires _GNU_SOURCE ?
+	export CFLAGS="-D_GNU_SOURCE -I/opt/zlib/include -I/opt/eudev/include -I/opt/mtdev/include"   
 	export CFLAGS="$CFLAGS -I/opt/libressl/include"   # TODO: mesa needs it
 	
 	# TODO: all these -rpath will end up in every binary and library that we build here, see if we can find a cleaner solution
