@@ -10,13 +10,25 @@ custombuild(){
 	wget $url
 	tar xvf glibc-2.23.tar.xz
 	cd glibc-2.23/
+	
+	# must be configured in a separate build directory
 	mkdir build
 	cd build
-	../configure --prefix=/opt/glibc-2.23 --enable-kernel=2.6.32
-	make
+	
+	# we tell the build to use the linux kernel headers, otherwise it would use the compiler headers, which are the musl headers, and this doesn't work because of redefinitions errors
+	# TODO: why does it work with linux headers but not musl headers?
+	../configure --prefix=/opt/glibc-2.23 --enable-kernel=2.6.32 --with-headers=/opt/linux/include
+	
+	# TODO: setenv.c and nis_call.c needs patching, this is probably a gcc 6.1 error
+	# TODO: patches for sunrpc needed too, see http://dev.cacaoweb.org/#contents/documentation%20GCC%20toolchain.md for glibc patches
+	make -j4
+	
+	#make check   # TODO: does not work
 	make install
 	
-	ln -sfv /opt/glibc-2.23 /opt/glibc
+	ln -sv /opt/glibc-2.23 /opt/glibc
 	#ln -sv /opt/glibc/bin/* /bin/
-	ln -sv /opt/glibc/lib/* /lib/
+	
+	cd ../..
+	rm -r glibc*
 }
