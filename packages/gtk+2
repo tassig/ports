@@ -25,8 +25,8 @@ custombuild(){
 	rm archive
 	cd *   # cd into the package directory, there is usually only one, this is a custom build otherwise
 	package_fullname=$package_name-$package_version
-	LDFLAGS=-Wl,-rpath=/opt/glib/lib ./configure --prefix=/opt/$package_fullname/   # bug in configure
-	make -j
+	LDFLAGS="-Wl,-rpath=/opt/glib/lib" ./configure --prefix=/opt/$package_fullname/   # bug in configure
+	make -j4   # too much memory otherwise
 	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
 	then make -j check || make -j test
 	fi
