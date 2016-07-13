@@ -3,6 +3,7 @@ package_version=2.24.28
 build_dependencies="atk gdk-pixbuf pango hicolor-icon-theme"   # TODO: add gobject-introspection
 url=http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.28.tar.xz   # TODO: move to tassig
 iscustombuild=1
+no_check=1
 
 ########################
 #
