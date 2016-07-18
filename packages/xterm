@@ -1,0 +1,75 @@
+package_name=xterm
+package_version=325
+url=http://mirrors.tassig.com/xterm/xterm-325.tgz
+build_dependencies="ncurses"   # there are many
+iscustombuild=1
+
+
+custombuild(){
+        export PREFIX=/opt/$package_name-$package_version
+
+        cd ..
+        rm -rf builddir
+        mkdir -p builddir
+        cd builddir
+
+        wget $url
+        tar xvf $package_name-$package_version.tgz
+        cd $package_name-$package_version
+
+        patch -p0 < ../../ports/packages/xterm-xtermcfg.hin.patch
+	patch -p0 < ../../ports/packages/xterm-main.patch
+
+        export CFLAGS="-I/opt/ncurses/include"
+        export LDFLAGS="-Wl,-rpath,/opt/xorg/lib -Wl,-rpath,/opt/ncurses/lib -Wl,-rpath,/opt/freetype/lib -Wl,-rpath,/opt/fontconfig/lib -L/opt/ncurses/lib"
+        export LD_LIBRARY_PATH="/opt/ncurses/lib"
+
+        sed -i '/v0/{n;s/new:/new:kb=^?:/}' termcap &&
+        printf '\tkbs=\\177,\n' >> terminfo &&
+        TERMINFO=/opt/ncurses/share/terminfo \
+        ./configure \
+	        --prefix=$PREFIX \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--localstatedir=/var \
+		--with-x \
+		--disable-full-tgetent \
+		--disable-imake \
+		--enable-ansi-color \
+		--enable-88-color \
+		--enable-256-color \
+		--enable-broken-osc \
+		--enable-broken-st \
+		--enable-load-vt-fonts \
+		--enable-i18n \
+		--enable-wide-chars \
+		--enable-doublechars \
+		--enable-warnings \
+		--enable-tcap-query \
+		--enable-logging \
+		--enable-dabbrev \
+		--enable-freetype \
+		--enable-luit \
+		--enable-mini-luit \
+		--enable-narrowproto \
+		--enable-exec-xterm \
+		--with-tty-group=tty \
+		--with-utempter || return 1
+
+        make || return 1
+
+        make install || return 1
+        make install-ti || return 1
+
+        #link
+        ln -sv $PREFIX /opt/$package_name   # link for canonical name
+        ln -svf $PREFIX/lib/pkgconfig/*.pc /opt/pkgconf/lib/pkgconfig/
+        ln -sv $PREFIX/bin/* /bin/
+
+        #cleanup
+        cd ../..
+        rm -rf builddir
+
+}
+

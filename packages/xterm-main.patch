@@ -1,0 +1,22 @@
+--- main.org.c
++++ main.c
+@@ -2661,7 +2661,8 @@
+ 	close(opened_tty);
+ 	opened_tty = -1;
+     }
+-#elif defined(HAVE_POSIX_OPENPT) && defined(HAVE_PTSNAME) && defined(HAVE_GRANTPT_PTY_ISATTY)
++//#elif defined(HAVE_POSIX_OPENPT) && defined(HAVE_PTSNAME) && defined(HAVE_GRANTPT_PTY_ISATTY)
++#elif defined(HAVE_POSIX_OPENPT) && defined(HAVE_PTSNAME)
+     if ((*pty = posix_openpt(O_RDWR)) >= 0) {
+ 	char *name = ptsname(*pty);
+ 	if (name != 0) {
+@@ -3742,7 +3743,8 @@
+ 	    /*
+ 	     * now in child process
+ 	     */
+-#if defined(_POSIX_SOURCE) || defined(SVR4) || defined(__convex__) || defined(__SCO__) || defined(__QNX__)
++//#if defined(_POSIX_SOURCE) || defined(SVR4) || defined(__convex__) || defined(__SCO__) || defined(__QNX__)
++#if defined(_POSIX_VERSION) || defined(SVR4) || defined(__convex__) || defined(__SCO__) || defined(__QNX__)
+ 	    int pgrp = setsid();	/* variable may not be used... */
+ #else
+ 	    int pgrp = getpid();

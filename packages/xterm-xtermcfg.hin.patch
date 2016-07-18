@@ -1,0 +1,24 @@
+--- xtermcfg.org.hin
++++ xtermcfg.hin
+@@ -55,7 +55,7 @@
+ #undef HAVE_GETLOGIN		/* AC_CHECK_FUNCS(getlogin) */
+ #undef HAVE_GRANTPT		/* CF_FUNC_GRANTPT */
+ #undef HAVE_GRANTPT_PTY_ISATTY	/* CF_FUNC_GRANTPT */
+-#undef HAVE_INITGROUPS		/* AC_CHECK_FUNCS(initgroups) */
++/*#undef HAVE_INITGROUPS*/		/* AC_CHECK_FUNCS(initgroups) */
+ #undef HAVE_LANGINFO_CODESET	/* AM_LANGINFO_CODESET */
+ #undef HAVE_LASTLOG_H		/* CF_LASTLOG */
+ #undef HAVE_LIBXPM		/* CF_WITH_XPM */
+@@ -67,8 +67,10 @@
+ #undef HAVE_LIB_XAWPLUS		/* CF_X_ATHENA(--with-XawPlus) */
+ #undef HAVE_LIB_XCURSOR		/* AC_CHECK_LIB(Xcursor) */
+ #undef HAVE_MKDTEMP		/* AC_CHECK_FUNCS(mkdtemp) */
+-#undef HAVE_NCURSES_CURSES_H	/* AC_CHECK_HEADERS(ncurses/curses.h) */
+-#undef HAVE_NCURSES_TERM_H	/* AC_CHECK_HEADERS(ncurses/term.h) */
++/*#undef HAVE_NCURSES_CURSES_H*/	/* AC_CHECK_HEADERS(ncurses/curses.h) */
++#define HAVE_NCURSES_CURSES_H	/* AC_CHECK_HEADERS(ncurses/curses.h) */
++#define HAVE_NCURSES_TERM_H	/* AC_CHECK_HEADERS(ncurses/term.h) */
++/*#undef HAVE_NCURSES_TERM_H*/	/* AC_CHECK_HEADERS(ncurses/term.h) */
+ #undef HAVE_PATHS_H		/* CF_LASTLOG */
+ #undef HAVE_PCREPOSIX_H		/* CF_WITH_PCRE */
+ #undef HAVE_POSIX_OPENPT	/* CF_FUNC_GRANTPT */
