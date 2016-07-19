@@ -1,0 +1,5 @@
+package_name=sshpass
+package_version=1.06
+tarball_suffix=gz
+url=http://mirrors.tassig.com/sshpass/sshpass-1.06.tar.gz
+build_dependencies=
