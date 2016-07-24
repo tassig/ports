@@ -1,6 +1,6 @@
 package_name=gtk+
 package_version=2.24.28 
-build_dependencies="atk gdk-pixbuf pango hicolor-icon-theme"   # TODO: add gobject-introspection
+build_dependencies="atk gdk-pixbuf pango"   # TODO: add gobject-introspection
 url=http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.28.tar.xz   # TODO: move to tassig
 iscustombuild=1
 no_check=1
@@ -9,7 +9,7 @@ no_check=1
 #
 # GTK+2
 #
-# GTK is an important graphical toolkit
+# GTK (Gimp Graphical Toolkit) is a graphical toolkit
 # 
 ##########################
 
@@ -39,11 +39,3 @@ custombuild(){
 	cd ../..
 	rm -r builddir
 }
-
-
-#postinstall(){
-#cat > ~/.gtkrc-2.0 << "EOF"
-#include "/opt/gtk+/share/themes/Glider/gtk-2.0/gtkrc"
-#gtk-icon-theme-name = "hicolor"
-#EOF
-#}
