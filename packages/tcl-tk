@@ -1,0 +1,34 @@
+package_name=tcl-tk
+package_version=8.6.5
+tarball_suffix=gz
+url=http://downloads.sourceforge.net/tcl/tk8.6.5-src.tar.gz   # TODO
+iscustombuild=1
+
+
+custombuild(){
+	wget http://mirrors.tassig.com/tcl/tcl-core8.6.5-src.tar.gz
+	tar xvf tcl-core8.6.5-src.tar.gz
+	cd tcl8.6.5/unix/
+	./configure --prefix=/opt/tcl-tk-8.6.5
+	make -j
+	make install
+	cd ../..
+	
+	
+	wget $url
+	tar xvf tk8.6.5-src.tar.gz
+	cd tk8.6.5/unix/
+	./configure --prefix=/opt/tcl-tk-8.6.5 --with-x --x-includes=/opt/xorg/include --x-libraries=/opt/xorg/lib
+	make -j
+	make install
+	cd ../..
+	
+	ln -sv /opt/tcl-tk-8.6.5 /opt/tcl-tk
+	ln -sv /opt/tcl-tk/bin/* /bin/
+	ln -sv /bin/wish8.6 /bin/wish
+	
+	ln -sv /opt/tk-tcl/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
+}
+
+
+
