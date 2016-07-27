@@ -79,7 +79,7 @@ custombuild(){
 	clone twm c5abcb619eb0b01f074fd9acb9128f19af774834
 	clone xclock 4697248c5a3e2aa505eceadd45f17554d4424aff
 	cd ..
-	cp -v everything/xkeyboard-config-2.6.tar.gz .
+	cp -v everything/xkeyboard-config-2.6.tar.gz .   # TODO: how come we can't find it on the filesystem? it seems it's not installed
 
 	
 	# replacements of the 7.7 packages with newer versions
@@ -173,6 +173,11 @@ custombuild(){
 	./util/modular/build.sh --autoresume resumefile   # --check
 	
 	
+	# making sure we can't use startx or xinitrc too easily
+	mv $PREFIX/bin/startx $PREFIX/bin/startx.bak
+	mv $PREFIX/etc/X11/xinit/xinitrc $PREFIX/etc/X11/xinit/xinitrc.bak
+	
+	# symlinks
 	ln -sv $PREFIX /opt/$package_name   # link for canonical name
 	ln -svf $PREFIX/lib/pkgconfig/*.pc /opt/pkgconf/lib/pkgconfig/   # copying all the pkgconf files, some of them might be useful for other software
 	ln -sv $PREFIX/bin/* /bin/
