@@ -1,5 +1,8 @@
 package_name=gcc
 package_version=6.1.0
+#musl's related vars
+musl_version=1.1.15
+musl_fullname=musl-$musl_version
 build_dependencies="make linux-kernel-headers"
 iscustombuild=1
 
@@ -19,8 +22,7 @@ custombuild(){
 	ARCH=`uname -m`
 	packagename=$package_name-$package_version
 	target_triple=$ARCH-longhorn-linux-musl
-	
-	
+    
 	# do binutils
 	
 	wget http://mirrors.tassig.com/binutils/binutils-2.26.tar.bz2
@@ -42,9 +44,9 @@ custombuild(){
 	
 	# do musl libc
 	
-	wget http://mirrors.tassig.com/musl/musl-1.1.14.tar.gz
-	tar xvf musl-1.1.14.tar.gz
-	cd musl-1.1.14
+	wget http://mirrors.tassig.com/musl/$musl_fullname.tar.gz
+	tar xvf $musl_fullname.tar.gz
+	cd $musl_fullname
 	./configure --prefix=/opt/$packagename/$target_triple
 	make -j
 	make install
@@ -75,7 +77,7 @@ custombuild(){
 	cp -f config.sub gmp/config.sub
 	cp -f config.sub mpfr/config.sub
 	
-	NOTE: can also add the unofficial gcc patches for advanced features
+	# NOTE: can also add the unofficial gcc patches for advanced features
 	mkdir patches-gcc-6.1.0
 	cd patches-gcc-6.1.0
 	wget http://port70.net/~nsz/musl/gcc-6.1.0/0001-cilkrts.patch
@@ -116,15 +118,14 @@ custombuild(){
 	
 	# do musl libc again, this time it will use the new compiler
 	
-	wget http://mirrors.tassig.com/musl/musl-1.1.14.tar.gz
-	tar xvf musl-1.1.14.tar.gz
-	cd musl-1.1.14
+	wget http://mirrors.tassig.com/musl/$musl_fullname.tar.gz
+	tar xvf $musl_fullname.tar.gz
+	cd $musl_fullname
 	./configure --prefix=/opt/$packagename/$target_triple
 	make -j
 	make install
 	cp /opt/$packagename/$target_triple/lib/libc.so /lib/ld-musl-$ARCH.so.1
 	cd ..
 	rm -r musl*
-	
-	
 }
+
