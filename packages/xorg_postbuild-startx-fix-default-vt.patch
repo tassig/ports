@@ -1,0 +1,12 @@
+--- a/bin/startx
++++ b/bin/startx
+@@ -106,7 +106,8 @@
+     # "https://bugzilla.redhat.com/show_bug.cgi?id=806491"
+     tty=$(tty)
+     if expr "$tty" : '/dev/tty[0-9][0-9]*$' > /dev/null; then
+-        tty_num=$(echo "$tty" | grep -oE '[0-9]+$')
++        #tty_num=$(echo "$tty" | grep -oE '[0-9]+$')
++        tty_num=7
+         vtarg="vt$tty_num -keeptty"
+     fi
+ 
