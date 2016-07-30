@@ -172,6 +172,7 @@ custombuild(){
 	# running the main build and installation script
 	./util/modular/build.sh --autoresume resumefile   # --check
 	
+
 	
 	# making sure we can't use startx or xinitrc too easily
 	mv $PREFIX/bin/startx $PREFIX/bin/startx.bak
@@ -182,5 +183,10 @@ custombuild(){
 	ln -svf $PREFIX/lib/pkgconfig/*.pc /opt/pkgconf/lib/pkgconfig/   # copying all the pkgconf files, some of them might be useful for other software
 	ln -sv $PREFIX/bin/* /bin/
 	rm -r $HOME/src
-	
+
+    cd $PREFIX
+	# apply post build patches
+    for p in "$pwd"/packages/xorg_postbuild-*.patch; do
+        patch -p1 < $p
+    done
 }
