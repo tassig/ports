@@ -29,7 +29,7 @@ custombuild(){
 	make install
 	
 	ln -sv /opt/glibc-2.23 /opt/glibc
-	#ln -sv /opt/glibc/bin/* /bin/
+	ln -sv /opt/glibc/bin/* /bin/
 	
 	cd ../..
 	rm -r glibc*
