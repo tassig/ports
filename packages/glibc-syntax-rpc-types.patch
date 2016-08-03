@@ -1,0 +1,83 @@
+diff --git a/nis/nis_call.c b/nis/nis_call.c
+index 3fa37e4..0cbab9c 100644
+--- a/nis/nis_call.c
++++ b/nis/nis_call.c
+@@ -680,6 +680,7 @@ nis_server_cache_add (const_nis_name name, int search_parent,
+   /* Choose which entry should be evicted from the cache.  */
+   loc = &nis_server_cache[0];
+   if (*loc != NULL)
++  {
+     for (i = 1; i < 16; ++i)
+       if (nis_server_cache[i] == NULL)
+ 	{
+@@ -690,6 +691,7 @@ nis_server_cache_add (const_nis_name name, int search_parent,
+ 	       || ((*loc)->uses == nis_server_cache[i]->uses
+ 		   && (*loc)->expires > nis_server_cache[i]->expires))
+ 	loc = &nis_server_cache[i];
++  }
+   old = *loc;
+   *loc = new;
+ 
+diff --git a/stdlib/setenv.c b/stdlib/setenv.c
+index da61ee0..5c7e96c 100644
+--- a/stdlib/setenv.c
++++ b/stdlib/setenv.c
+@@ -277,6 +277,7 @@ unsetenv (const char *name)
+ 
+   ep = __environ;
+   if (ep != NULL)
++  {
+     while (*ep != NULL)
+       if (!strncmp (*ep, name, len) && (*ep)[len] == '=')
+ 	{
+@@ -290,6 +291,7 @@ unsetenv (const char *name)
+ 	}
+       else
+ 	++ep;
++  }
+ 
+   UNLOCK;
+ 
+diff --git a/sunrpc/rpc_clntout.c b/sunrpc/rpc_clntout.c
+index ce4d2a4..d66b263 100644
+--- a/sunrpc/rpc_clntout.c
++++ b/sunrpc/rpc_clntout.c
+@@ -31,11 +31,15 @@
+  */
+ #include <stdio.h>
+ #include <string.h>
+-#include "rpc/types.h"
++/*#include "rpc/types.h"*/
+ #include "rpc_parse.h"
+ #include "rpc_util.h"
+ #include "proto.h"
+ 
++typedef int bool_t;
++#define TRUE 1
++#define FALSE 0
++
+ #define DEFAULT_TIMEOUT 25	/* in seconds */
+ static const char RESULT[] = "clnt_res";
+ 
+diff --git a/sunrpc/rpc_parse.c b/sunrpc/rpc_parse.c
+index 1a1df6d..1e44b1c 100644
+--- a/sunrpc/rpc_parse.c
++++ b/sunrpc/rpc_parse.c
+@@ -36,12 +36,16 @@
+  */
+ #include <stdio.h>
+ #include <string.h>
+-#include "rpc/types.h"
++/*#include "rpc/types.h"*/
+ #include "rpc_scan.h"
+ #include "rpc_parse.h"
+ #include "rpc_util.h"
+ #include "proto.h"
+ 
++typedef int bool_t;
++#define TRUE 1
++#define FALSE 0
++
+ #define ARGNAME "arg"
+ 
+ static void isdefined (definition * defp);
