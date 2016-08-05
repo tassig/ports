@@ -1,0 +1,22 @@
+package_name=valgrind
+package_version=3.11.0
+tarball_suffix=bz2
+url=http://valgrind.org/downloads
+build_dependencies=glibc
+iscustombuild=1
+
+custombuild(){
+	package_fullname=$package_name-$package_version
+	package_tarball_name=$package_fullname.tar.$tarball_suffix
+	wget $url/$package_tarball_name
+	tar xvf $package_fullname.tar.$tarball_suffix
+	cd $package_fullname/
+	# Specify GLIBC_VERSION in configure
+	sed -i -e 's/case "${GLIBC_VERSION}" in/GLIBC_VERSION=2.2\n\ncase "${GLIBC_VERSION}" in/g' configure
+	LDFLAGS="-L/opt/glibc/lib" ./configure --prefix=/opt/$package_fullname
+	make
+	make install
+	ln -sv /opt/$package_fullname /opt/$package_name
+	ln -sv /opt/$package_name/bin/* /bin/
+	cd ..
+}
