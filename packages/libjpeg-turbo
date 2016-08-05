@@ -3,18 +3,3 @@ package_version=1.5.0
 tarball_suffix=gz
 build_dependencies="nasm"
 url=http://mirrors.tassig.com/$package_name/$package_name-$package_version.tar.$tarball_suffix
-haspostinstall=1
-
-#postinstall because we should delete nasm compile time dependency
-
-set -e
-
-postinstall() {
-    # delete symlinks
-    for p in $(ls -1 /opt/nasm/bin/)
-    do
-        rm /bin/$p
-    done
-
-    rm -rf /opt/nasm*
-}
