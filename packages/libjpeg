@@ -1,4 +1,1 @@
-package_name=libjpeg
-package_version=9b
-tarball_suffix=gz
-url=http://mirrors.tassig.com/$package_name/jpegsrc.v$package_version.tar.$tarball_suffix
+libjpeg-turbo

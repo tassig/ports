@@ -3,3 +3,9 @@ package_version=1.5.0
 tarball_suffix=gz
 build_dependencies="nasm"
 url=http://mirrors.tassig.com/$package_name/$package_name-$package_version.tar.$tarball_suffix
+haspostinstall=1
+
+# create symlink to /opt/libjpeg to be compatible with client libs
+postinstall(){
+    ln -s /opt/$package_name-$package_version /opt/libjpeg
+}
