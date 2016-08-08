@@ -9,12 +9,6 @@ Another criteria is: can this application work in isolation or not?
 
 
 
-Add:
-sysstat (http://sebastien.godard.pagesperso-orange.fr/)
-
-
-
-
 TO FIX:
 - wget has failed with: wget: bad address 'mirrors.tassig.com'
 
