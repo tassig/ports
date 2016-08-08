@@ -1,0 +1,29 @@
+# sysstat is a performance monitoring tool
+
+package_name=sysstat
+package_version=11.3.5
+package_fullname=$package_name-$package_version
+package_suffix=gz
+url=http://mirrors.tassig.com/sysstat/$package_name-$package_version.tar.$package_suffix
+iscustombuild=1
+
+# we need --disable-nls flag to configure
+
+set -e
+
+custombuild(){
+    rm -rf ./builddir || true
+    mkdir builddir
+    cd builddir
+    wget -O archive $url
+    tar xf archive
+    cd $package_fullname
+    
+    # --isable-nls needed because we don't have "Native Language Support" yet
+    ./configure --prefix=$installdirectory/$package_fullname --disable-nls
+    make -j
+    make install
+
+    ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+    ln -sv $installdirectory/$package_name/bin/* /bin/
+}
