@@ -1,13 +1,12 @@
 package_name=tcpdump
 package_version=4.7.4
 package_suffix=gz
-iscustomconfigure=1
 build_dependencies="libpcap"
-no_check=1 # TODO: tests failed with message "./TESTrun.sh: line 61: ./TESTonce: not found", 1 of 156 passed
+no_check=1
+haspostinstall=1
 
-# configure will not automatically detects libpcap location and will use internal 'minimal' version instead
-customconfigure(){
-    CFLAGS="-I/opt/libpcap/include" ./configure --prefix=$installdirectory/$package_fullname \
-        --sbindir=$installdirectory/$package_fullname/bin # by default tcpdump will be installed not in sbin
+postinstall(){
+    ln -sv $installdirectory/$package_name/sbin/* /bin # by default, tcpdump installed in sbin dir
 }
+
 
