@@ -63,7 +63,10 @@ installpackage(){
 		return 0
 	fi
     package_fullname=$package_name-$package_version 
-    rel_url=$package_name/$package_fullname.tar.$package_suffix # default URL, relative to $mirror_prefix
+    if [ "$rel_url" == "" ]; then
+        # if there is no defined rel_url, then define it by default
+        rel_url=$package_name/$package_fullname.tar.$package_suffix # default URL, relative to $mirror_prefix
+    fi
     echo "build dependencies of $1: $build_dependencies"
 	
 	# installing the package's dependencies recursively
