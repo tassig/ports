@@ -1,6 +1,6 @@
 package_name=atk
 package_version=2.16.0
-url=http://ftp.gnome.org/pub/gnome/sources/atk/2.16/atk-2.16.0.tar.xz   # TODO: move to tassig
+url=http://mirrors.tassig.com/atk/atk-2.16.0.tar.xz
 build_dependencies="glib"
 iscustombuild=1
 
