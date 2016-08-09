@@ -6,7 +6,15 @@
 # refer to "package definition specifications.md" for laws and regulations
 #
 # TODO: installpackage() should be a transaction to prevent half-installed packages and leftovers. ex: what do you do when "make install" returns an error? right now, we do nothing, which is incorrect
-# TODO: make all url relative to mirrors.tassig.com
+# TODO: make all url relative to mirrors.tassig.com. dambaev: added support of relative urls.
+
+# version 1.1
+#
+# history
+# - 1.1: Aug 09 2016 dambaev <ice.redmine@gmail.com> 
+#        added support of relative urls by expecting rel_url to be suffix to "http://mirrors.tassig.com/" url iff
+#        there is no url defined
+# - 1.0 initial version
 
 set -e
 
@@ -14,11 +22,18 @@ packagedirectory=packages   # the directory name where the packages definitions 
 
 installdirectory="/opt"   # TODO: implement per user installs (with different --prefix)
 
+mirror_prefix=http://mirrors.tassig.com # this is for relative URLs. If $url is empty, then 
+                                        # url=$mirror_prefix/$rel_url
+
 # the function called by default to build a package, works for most packages
 defaultbuild(){
 	rm -rf builddir
 	mkdir -p builddir   # do everything in builddir for tidiness
 	cd builddir
+    if [ "$url" == "" ]; then
+        # if no absolute $url defined, then assume, that we have relative url $rel_url
+        url=$mirror_prefix/$rel_url
+    fi
 	wget -O archive $url
 	tar xvf archive 
 	rm archive
