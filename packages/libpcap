@@ -1,11 +1,34 @@
 package_name=libpcap
 package_version=1.7.4
 package_suffix=gz
-iscustomconfigure=1
+iscustombuild=1
 no_check=1 # libpcap does not contains check and test targets
 
 # configure will not detect capture type automatically, so we need to tell it --with-pcap=linux
-customconfigure(){
-    ./configure --prefix=$installdirectory/$package_fullname --with-pcap=linux
+custombuild(){
+    rm -rf builddir || true
+    mkdir builddir
+    cd builddir
+    
+    wget -O archive $mirror_prefix/$rel_url
+    tar xvf archive
+    rm -rf archive
+    cd *
+
+
+    ./configure --prefix=$installdirectory/$package_fullname \
+        --with-pcap=linux # it is not worth to fix capture type detection, because it detects type=linux by testing
+                          # existence of /usr/include/linux/packet.h which is part of linux headers.
+                          # until we patch linux-kernel-headers to produce pkg-config files, we can only
+                          # patch configure.in to receive another argument like "--with-kernel-headers", but
+                          # this is just changing one parameter to another one, so it is pointless
+    make -j
+    make install
+
+    ln -sv $installdirectory/$package_fullname $installdirectory/$package_name || true
+    ln -sv $installdirectory/$package_name/bin/* /bin/ || true
+
+    cd ..
+    rm -rf builddir
 }
 
