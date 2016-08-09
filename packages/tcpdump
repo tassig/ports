@@ -1,0 +1,12 @@
+package_name=tcpdump
+package_version=4.7.4
+package_suffix=gz
+build_dependencies="libpcap"
+no_check=1
+haspostinstall=1
+
+postinstall(){
+    ln -sv $installdirectory/$package_name/sbin/* /bin # by default, tcpdump installed in sbin dir
+}
+
+

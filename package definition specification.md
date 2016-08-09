@@ -15,12 +15,13 @@ A package definition is a file in the directory `packages/`
 These variables are mandatory and can be used without restrictions, by internal or external scripts.
 
 `package_name`: internal name used by the package. NB: This is *not* the unique identifier of the package
-`package_version`
-`url`: the url of the package
-`build_dependencies`: a list of packages unique identifiers separated by spaces and quoted, representing the packages needed by this package at build time. Empty if there are no build build_dependencies. example: build_dependencies="m4 perl"
+`package_version`: package version
+`package_suffix`: suffix of tar archive. Example: for strace-4.0.tar.gz, `package_suffix` is `gz`
 
 ### Public, optional variables
 
+`build_dependencies`: a list of packages unique identifiers separated by spaces and quoted, representing the packages needed by this package at build time. Empty if there are no build build_dependencies. example: build_dependencies="m4 perl"
+`url`: the absolute url of the package. If not defined, then URL `http://mirrors.tassig.com/$package_name/$package_fullname.tar.$package_suffix` will be used.
 `iscustombuild`: `0` or `1`, if `1` then a function `custombuild()` needs to be provided, such function will be called in place of the `defaultbuild()` function
 `haspostinstall`: `0` or `1`, if `1` then a function `haspostinstall()` needs to be provided, such function will be called after the `defaultbuild()` has completed
 `no_check`: `0` or `1`, if `1` then the `make check` won't be run for this package. This is useful if a test suite is buggy or if we want to temporarily work around a bug in our system

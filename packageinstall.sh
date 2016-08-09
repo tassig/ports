@@ -6,7 +6,15 @@
 # refer to "package definition specifications.md" for laws and regulations
 #
 # TODO: installpackage() should be a transaction to prevent half-installed packages and leftovers. ex: what do you do when "make install" returns an error? right now, we do nothing, which is incorrect
-# TODO: make all url relative to mirrors.tassig.com
+# TODO: make all url relative to mirrors.tassig.com. dambaev: added support of relative urls.
+
+# version 1.1
+#
+# history
+# - 1.1: Aug 09 2016 dambaev <ice.redmine@gmail.com> 
+#        added support of relative urls by expecting rel_url to be suffix to
+#        "http://mirrors.tassig.com/" url iff there is no url defined;
+# - 1.0 initial version
 
 set -e
 
@@ -14,31 +22,36 @@ packagedirectory=packages   # the directory name where the packages definitions 
 
 installdirectory="/opt"   # TODO: implement per user installs (with different --prefix)
 
+mirror_prefix=http://mirrors.tassig.com # this is for relative URLs. If $url is empty, then 
+                                        # url=$mirror_prefix/$rel_url
+
 # the function called by default to build a package, works for most packages
 defaultbuild(){
-	rm -rf builddir
-	mkdir -p builddir   # do everything in builddir for tidiness
-	cd builddir
-	wget -O archive $url
-	tar xvf archive 
-	rm archive
-	cd *   # cd into the package directory
-	package_fullname=$package_name-$package_version
-	./configure --prefix=$installdirectory/$package_fullname/
-	make -j
-	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
-	then make -j check || make -j test
-	fi
-	make install
-	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
-	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
-	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
-		ln -svf $installdirectory/$package_name/lib/pkgconfig/* $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
-	fi
-	cd ../..
-	rm -r builddir
+    rm -rf builddir
+    mkdir -p builddir   # do everything in builddir for tidiness
+    cd builddir
+    if [ "$url" == "" ]; then
+        # if no absolute $url defined, then assume, that we have relative url $rel_url
+        url=$mirror_prefix/$rel_url
+    fi
+    wget -O archive $url
+    tar xvf archive
+    rm archive
+    cd *   # cd into the package directory
+    ./configure --prefix=$installdirectory/$package_fullname/
+    make -j
+    if test -z $no_check   # run the make check, unless $no_check is set for this package definition
+    then make -j check || make -j test
+    fi
+    make install
+    ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+    ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
+    if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+        ln -svf $installdirectory/$package_name/lib/pkgconfig/* $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+    fi
+    cd ../..
+    rm -r builddir
 }
-
 
 installpackage(){
 	echo "installing package $1"
@@ -49,8 +62,9 @@ installpackage(){
 		echo "package $package_name is already installed, not reinstalling"
 		return 0
 	fi
-	
-	echo "build dependencies of $1: $build_dependencies"
+    package_fullname=$package_name-$package_version 
+    rel_url=$package_name/$package_fullname.tar.$package_suffix # default URL, relative to $mirror_prefix
+    echo "build dependencies of $1: $build_dependencies"
 	
 	# installing the package's dependencies recursively
 	for pkg_name in $build_dependencies
