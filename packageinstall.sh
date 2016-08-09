@@ -38,7 +38,7 @@ defaultbuild(){
 	tar xvf archive 
 	rm archive
 	cd *   # cd into the package directory
-	package_fullname=$package_name-$package_version
+	package_fullname=$package_name-$package_version # TODO: PROPOSAL: we can move that difinition to installpackage.It can be used to form default relative rel_url=$package_name-$package_version.tar.$package_suffix. This allows to get rid of defining simple urls in ports
 	./configure --prefix=$installdirectory/$package_fullname/
 	make -j
 	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
