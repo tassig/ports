@@ -19,7 +19,7 @@ custombuild(){
     tar xf archive
     cd $package_fullname
     
-    # --isable-nls needed because we don't have "Native Language Support" yet
+    # --disable-nls needed because we don't have "Native Language Support" yet
     ./configure --prefix=$installdirectory/$package_fullname --disable-nls
     make -j
     make install
