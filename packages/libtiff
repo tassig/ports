@@ -2,7 +2,6 @@ package_name=libtiff
 package_version=4.0.6
 tarball_suffix=gz
 url=http://mirrors.tassig.com/$package_name/tiff-$package_version.tar.$tarball_suffix
-build_dependencies="zlib libjpeg"   # TODO: it is unlikely that these are needed, probably worth removing, or justify the reason
 iscustombuild=1
 
 # custom build in order to enable support of zlib and libjpeg
@@ -14,8 +13,6 @@ custombuild(){
 	mv tiff-$package_version $package_fullname
 	cd $package_name*
 	./configure --prefix=/opt/$package_fullname/ \
-	--with-zlib-include-dir=/opt/zlib/include --with-zlib-lib-dir=/opt/zlib/lib \
-	--with-jpeg-include-dir=/opt/libjpeg/include --with-jpeg-lib-dir=/opt/libjpeg/lib
 	make -j
 	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
 	then make -j check || make -j test
