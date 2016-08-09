@@ -2,6 +2,7 @@ package_name=libpcap
 package_version=1.7.4
 package_suffix=gz
 iscustomconfigure=1
+no_check=1 # libpcap does not contains check and test targets
 
 # configure will not detect capture type automatically, so we need to tell it --with-pcap=linux
 customconfigure(){
