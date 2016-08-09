@@ -1,0 +1,10 @@
+package_name=libpcap
+package_version=1.7.4
+package_suffix=gz
+iscustomconfigure=1
+
+# configure will not detect capture type automatically, so we need to tell it --with-pcap=linux
+customconfigure(){
+    ./configure --prefix=$installdirectory/$package_fullname --with-pcap=linux
+}
+
