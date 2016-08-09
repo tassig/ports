@@ -7,5 +7,7 @@ no_check=1 # TODO: tests failed with message "./TESTrun.sh: line 61: ./TESTonce:
 
 # configure will not automatically detects libpcap location and will use internal 'minimal' version instead
 customconfigure(){
-    CFLAGS="-I/opt/libpcap/include" ./configure --prefix=$installdirectory/$package_name
+    CFLAGS="-I/opt/libpcap/include" ./configure --prefix=$installdirectory/$package_name \
+        --sbindir=$installdirectory/$package_name/bin # by default tcpdump will be installed not in sbin
 }
+
