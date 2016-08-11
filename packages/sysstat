@@ -2,9 +2,7 @@
 
 package_name=sysstat
 package_version=11.3.5
-package_fullname=$package_name-$package_version
-package_suffix=gz
-url=http://mirrors.tassig.com/sysstat/$package_name-$package_version.tar.$package_suffix
+tarball_suffix=gz
 iscustombuild=1
 
 # we need --disable-nls flag to configure
@@ -15,7 +13,7 @@ custombuild(){
     rm -rf ./builddir || true
     mkdir builddir
     cd builddir
-    wget -O archive $url
+    wget -O archive $rel_url
     tar xf archive
     cd $package_fullname
     
