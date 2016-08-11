@@ -1,6 +1,6 @@
 package_name=libpcap
 package_version=1.7.4
-package_suffix=gz
+tarball_suffix=gz
 iscustombuild=1
 no_check=1 # libpcap does not contains check and test targets
 
