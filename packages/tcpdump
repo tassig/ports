@@ -1,6 +1,6 @@
 package_name=tcpdump
 package_version=4.7.4
-package_suffix=gz
+tarball_suffix=gz
 build_dependencies="libpcap"
 no_check=1
 haspostinstall=1
