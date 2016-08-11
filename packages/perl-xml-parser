@@ -3,8 +3,6 @@ package_version=1.0.4
 build_dependencies="expat perl"
 iscustombuild=1
 
-# TODO: no package depends on it, remove?
-
 custombuild(){
 	export EXPATINCPATH="/opt/expat/include"
 	export EXPATLIBPATH="/opt/expat/lib"
