@@ -2,7 +2,7 @@ package_name=Python
 package_version=2.7.11
 tarball_suffix=xz
 url=http://mirrors.tassig.com/python/Python-2.7.11.tar.xz
-build_dependencies=bzip2   # TODO: justify why it's needed, seems like Python is not detecting bzip2 anyway
+build_dependencies=bzip2   # used by nothing but nacl of Chrome, which we should get rid of anyway TODO: bzip2 and this dependency can go away once we get rid of nacl
 iscustombuild=1
                               
 # TODO: if a version of python is needed that has full supports for lots of plugins, we can add a new package, named "python-full" or something
@@ -18,9 +18,10 @@ custombuild() {
 	# hack to help python to find include files
 	mkdir -p /usr/local/include
 	ln -sv /opt/zlib/include/* /usr/local/include/
+	ln -sv /opt/bzip2/include/* /usr/local/include/
 	ln -sv /opt/libressl/include/* /usr/local/include/
 	
-	export LDFLAGS="-Wl,-rpath=/opt/libressl/lib -L /opt/libressl/lib -Wl,-rpath=/opt/zlib/lib -L /opt/zlib/lib"
+	export LDFLAGS="-Wl,-rpath=/opt/libressl/lib -L /opt/libressl/lib -Wl,-rpath=/opt/zlib/lib -L /opt/zlib/lib -Wl,-rpath=/opt/bzip2/lib -L /opt/bzip2/lib"
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/Python-2.7.11/lib"
 	./configure --prefix=/opt/Python-2.7.11 --with-ensurepip --enable-shared   # shared libraries needed because other programs need them TODO: not completely sure about that, if i remember, mesa or llvm might need them, check if it's really the case
 	make -j4

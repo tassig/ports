@@ -5,7 +5,7 @@ url=http://mirrors.tassig.com/bzip2/bzip2-1.0.6.tar.gz
 build_dependencies=
 iscustombuild=1
 
-# TODO: seems buggy
+# does not use GNU build system
 
 custombuild(){                                                             
         package_fullname=$package_name-$package_version                         
@@ -18,7 +18,7 @@ custombuild(){
         make -j -f Makefile-libbz2_so
         make -j
         make install PREFIX=/opt/$package_fullname
-	cp -v *.so* /opt/$package_fullname/lib/
+	cp -v *.so* /opt/$package_fullname/lib/   # TODO: what is this?
         ln -sv /opt/$package_fullname /opt/$package_name       
         ln -sv /opt/$package_name/bin/* /bin/                                   
         cd ..                                               
