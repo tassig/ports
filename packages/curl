@@ -1,27 +1,5 @@
 package_name=curl
-package_version=7.47.1   # 7.48.0 was tested, it does *not* compile
+package_version=7.50.1
 tarball_suffix=bz2
-url=http://mirrors.tassig.com/curl/curl-7.47.1.tar.bz2
 build_dependencies="zlib libressl perl"
 no_check=1   # TODO: try to fix
-iscustombuild=1
-
-custombuild(){
-        rm -rf builddir || true
-        mkdir builddir
-        cd builddir
-        wget -O archive $url
-        tar xf archive
-        rm -rf archive
-        cd *
-        ./configure --prefix=$installdirectory/$package_fullname --with-zlib=$installdirectory/zlib
-        make -j
-        make install
-
-        ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
-        ln -sv $installdirectory/$package_name/bin/* /bin/ || true
-        if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
-            ln -svf $installdirectory/$package_name/lib/pkgconfig/* $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
-        fi
-}
-
