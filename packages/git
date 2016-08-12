@@ -1,3 +1,4 @@
+# WARNING: do not forget to update http://longhorn.tassig.com/downloads/ports.tar.xz after git port update
 package_name=git
 package_version=2.7.3
 tarball_suffix=xz

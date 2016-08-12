@@ -1,3 +1,4 @@
+# WARNING: do not forget to update http://longhorn.tassig.com/downloads/ports.tar.xz after zlib port update
 package_name=zlib
 package_version=1.2.8
 tarball_suffix=xz

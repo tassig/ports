@@ -1,3 +1,4 @@
+# WARNING: do not forget to update http://longhorn.tassig.com/downloads/ports.tar.xz after curl port update
 package_name=curl
 package_version=7.50.1
 tarball_suffix=bz2
