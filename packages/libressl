@@ -1,3 +1,4 @@
+# WARNING: do not forget to update http://longhorn.tassig.com/downloads/ports.tar.xz after libressl port update
 package_name=libressl
 package_version=2.3.4
 tarball_suffix=gz

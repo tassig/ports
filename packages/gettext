@@ -1,3 +1,4 @@
+# WARNING: do not forget to update http://longhorn.tassig.com/downloads/ports.tar.xz after gettext port update
 package_name=gettext
 package_version=0.19
 tarball_suffix=gz

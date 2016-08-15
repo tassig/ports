@@ -1,3 +1,4 @@
+# WARNING: do not forget to update http://longhorn.tassig.com/downloads/ports.tar.xz after perl port update
 package_name=perl
 package_version=5.22.1
 tarball_suffix=xz

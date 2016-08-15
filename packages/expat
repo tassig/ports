@@ -1,3 +1,4 @@
+# WARNING: do not forget to update http://longhorn.tassig.com/downloads/ports.tar.xz after expat port update
 package_name=expat
 package_version=2.1.1
 tarball_suffix=bz2
