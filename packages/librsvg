@@ -5,7 +5,13 @@ url=http://mirrors.tassig.com/$package_name/$package_name-$package_version.tar.$
 build_dependencies="gdk-pixbuf libcroco"
 iscustombuild=1
 
-# custom build in order to disbale gobject-introspection TODO: feel free to install gobject-introspection
+# custom build in order to disbale gobject-introspection
+# ivan: feel free to install gobject-introspection
+# dambaev (Aug 15, 2016): gobject-introspection does not worth building, because
+# after patching gobject-introspection/m4/python.m4 and executing
+# CC=gcc make (because it needs CC variable) and its still failes with
+# /opt/gcc-6.1.0/x86_64-longhorn-linux-musl/include/pthread.h:79: syntax error,
+# unexpected identifier in '_Noreturn void pthread_exit(void *);' at '_Noreturn'
 custombuild(){
 	package_fullname=$package_name-$package_version
 	wget -O archive $url
