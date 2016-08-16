@@ -1,0 +1,8 @@
+--- a/doc/texi2pod.pl
++++ b/doc/texi2pod.pl
+@@ -1,4 +1,4 @@
+-#! /usr/bin/env perl
++#!/bin/perl
+ 
+ #   Copyright (C) 1999, 2000, 2001, 2003, 2007, 2009, 2010, 2011, 2015
+ #   Free Software Foundation, Inc.
