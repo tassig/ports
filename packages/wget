@@ -2,8 +2,7 @@ package_name=wget
 package_version=1.18
 tarball_suffix=xz
 iscustombuild=1
-no_check=1 # TODO:
-575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757 checks will fail
+no_check=1 # TODO: 9 checks will fail
 
 custombuild() {
     rm -rf builddir                                                              
