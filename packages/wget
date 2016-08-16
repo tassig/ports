@@ -1,23 +1,47 @@
 package_name=wget
-package_version=1.17
+package_version=1.18
 tarball_suffix=xz
-url=http://mirrors.tassig.com/wget/wget-1.17.tar.xz
-build_dependencies=
 iscustombuild=1
+no_check=1 # TODO: more than 50 checks will fail
 
-# TODO: wget being a GNU project, it's surprising that flags for libressl are needed, since libressl supports pkg-config and libtool. Check the configure.ac script of wget to see what's going on, possibly fix
 custombuild() {
-	wget $url
-	tar xvf wget-$package_version.tar.$tarball_suffix
-	rm wget-$package_version.tar.$tarball_suffix
-	cd wget-$package_version
-
-	export LDFLAGS="-Wl,-rpath=/opt/libressl/lib -Wl,-rpath=/opt/zlib/lib"
-	./configure --prefix=/opt/wget-$package_version --with-ssl=openssl
-	make -j -i   # ignoring all errors
-#	make -j check
-	make -i install
-	ln -sv /opt/wget-$package_version /opt/wget
-	ln -sfv /opt/wget/bin/* /bin/
-	cd ..
+    rm -rf builddir                                                              
+    mkdir -p builddir   # do everything in builddir for tidiness                 
+    cd builddir                                                                  
+    if [ "$url" == "" ]; then                                                    
+        # if no absolute $url defined, then assume, that we have relative url    
+        # $rel_url                                                               
+        url=$mirror_prefix/$rel_url                                              
+    fi                                                                           
+    wget -O archive $url                                                         
+    tar xvf archive                                                              
+    rm archive                                                                   
+    cd *   # cd into the package directory                                       
+    patch < ../../packages/$package_fullname-configure.ac.patch # TODO:  
+                                          # Aug 16, 2016 this patch was sent to 
+                                          # upstream mailing list check if it 
+                                          # is applied
+    cd doc
+    patch < ../../../packages/$package_fullname-doc-texi2pod.pl.patch # this 
+                                              # patch will not go to upstream
+                                              # because it is longhorn-only
+    cd ..
+    libtoolize
+    autoreconf
+    ./configure --prefix=$installdirectory/$package_fullname/                    
+    make -j                                                                      
+    if test -z $no_check   # run the make check, unless $no_check is set for     
+                           # this package definition                             
+    then make -j check || make -j test                                           
+    fi                                                                           
+    make install                                                                 
+    ln -sv $installdirectory/$package_fullname $installdirectory/$package_name   
+    ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash   
+                                            # if the links are already there     
+    if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then              
+        ln -svf $installdirectory/$package_name/lib/pkgconfig/* \                
+        $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files    
+    fi                                                                           
+    cd ../..                                                                     
+    rm -r builddir
 }

@@ -1,22 +1,23 @@
 package_name=make
 package_version=4.1
 tarball_suffix=bz2
-url=http://mirrors.tassig.com/make/
 build_dependencies=
 iscustombuild=1
 
 # make is definitely not going to call make, so it's a custom build
-# TODO: build a statically linked version of make
+# this is statically linked version
 custombuild(){
-	package_fullname=$package_name-$package_version
-	package_tarball_name=$package_fullname.tar.$tarball_suffix
-	wget $url/$package_tarball_name
-	tar xvf $package_fullname.tar.$tarball_suffix
-	cd $package_fullname/
-	./configure --prefix=/opt/$package_fullname
+    rm -rf builddir || true
+    mkdir builddir
+    cd builddir
+	wget -O archive $mirror_prefix/$rel_url # mirror_prefix and rel_url are generated in installpackage
+	tar xvf archive
+    rm archive
+	cd *
+	CFLAGS="-static --static" ./configure --prefix=/opt/$package_fullname
 	./build.sh
 	./make install
 	ln -sv /opt/$package_fullname /opt/$package_name
 	ln -sv /opt/$package_name/bin/* /bin/
-	cd ..
+	cd ../..
 }
