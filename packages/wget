@@ -36,8 +36,8 @@ custombuild() {
     fi                                                                           
     make install                                                                 
     ln -sv $installdirectory/$package_fullname $installdirectory/$package_name   
-    ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash   
-                                            # if the links are already there     
+    ln -sfv $installdirectory/$package_name/bin/* /bin/ # force symlink
+                                            # because there is busybox's version
     if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then              
         ln -svf $installdirectory/$package_name/lib/pkgconfig/* \                
         $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files    
