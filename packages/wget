@@ -2,7 +2,8 @@ package_name=wget
 package_version=1.18
 tarball_suffix=xz
 iscustombuild=1
-no_check=1 # TODO: more than 50 checks will fail
+no_check=1 # TODO:
+575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757575757 checks will fail
 
 custombuild() {
     rm -rf builddir                                                              
@@ -29,7 +30,9 @@ custombuild() {
     libtoolize
     autoreconf
     ./configure --prefix=$installdirectory/$package_fullname/                    
-    make -j                                                                      
+    make -j                                                                     
+    # echo | cpan HTTP::Daemon # this string solves 48 test errors, but 9 still
+    # remains and related to python's --with-ssl option absence
     if test -z $no_check   # run the make check, unless $no_check is set for     
                            # this package definition                             
     then make -j check || make -j test                                           
