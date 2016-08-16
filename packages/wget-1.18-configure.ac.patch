@@ -1,4 +1,4 @@
---- ./configure.ac
+--- configure.ac
 +++ ../configure.ac
 @@ -172,6 +172,9 @@
  AM_PROG_CC_C_O
@@ -108,7 +108,7 @@
        ])
      fi
      if [test x"$ssl_found" != xyes]; then
-@@ -435,17 +368,95 @@
+@@ -435,17 +368,99 @@
        if test x"$LIBGNUTLS" != x
        then
          ssl_found=yes
@@ -147,7 +147,11 @@
 +        AC_DEFINE([HAVE_LIBSSL], [1], [Define if using openssl.])                                            
 +        ssl_found=yes
 +        with_ssl=openssl
-+      ])                                                                                                     
++      ], [
++        AS_IF([test x"$with_ssl" = xopenssl], [
++          AC_MSG_ERROR([OpenSSL requested but not found])
++        ])
++      ])
 +    fi                                                                                                       
 +    if [test x"$ssl_found" != xyes]; then                                                                  
 +      dnl As of this writing (OpenSSL 0.9.6), the libcrypto shared library                                 
@@ -202,7 +206,7 @@
 +          AC_LIBOBJ([openssl])                                                                               
 +          LIBS="$LIBSSL $LIBS"                                                                               
 +          AC_CHECK_FUNCS([RAND_egd])                                                                         
-+        elif test x"$with_ssl" != x                                                                          
++        elif test x"$with_ssl" = xopenssl
 +        then                                                                                                 
 +          AC_MSG_ERROR([--with-ssl=openssl was given, but SSL is not available.])                            
 +        fi                                                                                                   
