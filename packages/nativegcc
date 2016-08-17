@@ -99,7 +99,8 @@ custombuild(){
 	                       --disable-multilib \
 	                       --disable-nls \
 	                       --disable-libsanitizer \
-	                       --disable-libcilkrts
+	                       --disable-libcilkrts \
+	                       --disable-gnu-indirect-function
 	ln -sv /opt/$packagename/$target_triple/lib/*.o /lib/   # hack to pass the bootstrap stage, some configure scripts probably incorrect TODO: could be patched
 	make --debug -j4
 	rm /lib/*.o   # previous hack clean up
