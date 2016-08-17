@@ -1,0 +1,50 @@
+--- Makefile.in
++++ ../Makefile.in
+@@ -32,9 +32,10 @@
+ 
+ STATICLIB=libz.a
+ SHAREDLIB=libz.so
++LTLIB=libz.la
+ SHAREDLIBV=libz.so.1.2.8
+ SHAREDLIBM=libz.so.1
+-LIBS=$(STATICLIB) $(SHAREDLIBV)
++LIBS=$(STATICLIB) $(SHAREDLIBV) $(LTLIB)
+ 
+ AR=ar
+ ARFLAGS=rc
+@@ -158,21 +159,25 @@
+ 	-@mkdir objs 2>/dev/null || test -d objs
+ 	$(CC) $(SFLAGS) -DPIC -c -o objs/$*.o $<
+ 	-@mv objs/$*.o $@
++	libtool --mode=compile $(CC) $(SFLAGS) -DPIC -c -o objs/$*.o $<
+ 
+ placebo $(SHAREDLIBV): $(PIC_OBJS) libz.a
+ 	$(LDSHARED) $(SFLAGS) -o $@ $(PIC_OBJS) $(LDSHAREDLIBC) $(LDFLAGS)
+ 	rm -f $(SHAREDLIB) $(SHAREDLIBM)
+ 	ln -s $@ $(SHAREDLIB)
+ 	ln -s $@ $(SHAREDLIBM)
+-	-@rmdir objs
++	#-@rmdir objs
+ 
++placebo $(LTLIB): $(PIC_OBJS)
++	libtool --mode=link gcc -g -O -o libz.la ./objs/*.lo -rpath $(DESTDIR)$(libdir) -version-info `echo $(SHAREDLIBM) | sed "s/$(SHAREDLIB)\.//"`
++	
+ example$(EXE): example.o $(STATICLIB)
+ 	$(CC) $(CFLAGS) -o $@ example.o $(TEST_LDFLAGS)
+ 
+ minigzip$(EXE): minigzip.o $(STATICLIB)
+ 	$(CC) $(CFLAGS) -o $@ minigzip.o $(TEST_LDFLAGS)
+ 
+-examplesh$(EXE): example.o $(SHAREDLIBV)
++examplesh$(EXE): example.o $(SHAREDLIBV) $(LTLIB)
+ 	$(CC) $(CFLAGS) -o $@ example.o -L. $(SHAREDLIBV)
+ 
+ minigzipsh$(EXE): minigzip.o $(SHAREDLIBV)
+@@ -195,6 +200,7 @@
+ 	-@($(RANLIB) $(DESTDIR)$(libdir)/libz.a || true) >/dev/null 2>&1
+ 	-@if test -n "$(SHAREDLIBV)"; then \
+ 	  cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir); \
++	  libtool --mode=install cp $(LTLIB) $(DESTDIR)$(sharedlibdir); \
+ 	  echo "cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir)"; \
+ 	  chmod 755 $(DESTDIR)$(sharedlibdir)/$(SHAREDLIBV); \
+ 	  echo "chmod 755 $(DESTDIR)$(sharedlibdir)/$(SHAREDLIBV)"; \
