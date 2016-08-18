@@ -2,6 +2,7 @@
 package_name=zlib
 package_version=1.2.8
 tarball_suffix=xz
+build_dependencies=libtool
 iscustombuild=1
 
 # custom build becasue we need to patch Makefile.in for libtool support
