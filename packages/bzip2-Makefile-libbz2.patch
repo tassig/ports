@@ -1,0 +1,20 @@
+--- Makefile-libbz2_so
++++ ../../Makefile-libbz2_so
+@@ -25,6 +25,7 @@
+ CC=gcc
+ BIGFILES=-D_FILE_OFFSET_BITS=64
+ CFLAGS=-fpic -fPIC -Wall -Winline -O2 -g $(BIGFILES)
++PREFIX=/usr/local/
+ 
+ OBJS= blocksort.o  \
+       huffman.o    \
+@@ -57,3 +58,9 @@
+ 	$(CC) $(CFLAGS) -c decompress.c
+ bzlib.o: bzlib.c
+ 	$(CC) $(CFLAGS) -c bzlib.c
++
++install: all
++	mkdir -p $(PREFIX)/lib
++	cp libbz2.so.1.0 $(PREFIX)/lib
++	cp libbz2.so.1.0.6 $(PREFIX)/lib
++
