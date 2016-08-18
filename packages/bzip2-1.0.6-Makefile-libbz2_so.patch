@@ -1,6 +1,6 @@
---- ./Makefile-libbz2_so
+--- Makefile-libbz2_so
 +++ ../ports/Makefile-libbz2_so
-@@ -25,35 +25,45 @@
+@@ -25,35 +25,61 @@
  CC=gcc
  BIGFILES=-D_FILE_OFFSET_BITS=64
  CFLAGS=-fpic -fPIC -Wall -Winline -O2 -g $(BIGFILES)
@@ -34,7 +34,7 @@
 +.c.o:
 +	$(CC) $(CFLAGS) -c -o $@ $<
 +
-+all: $(OBJS) libbz2.la
++all: $(OBJS) libbz2.la libbz2.pc
  	$(CC) -shared -Wl,-soname -Wl,libbz2.so.1.0 -o libbz2.so.1.0.6 $(OBJS)
  	$(CC) $(CFLAGS) -o bzip2-shared bzip2.c libbz2.so.1.0.6
  	rm -f libbz2.so.1.0
@@ -45,7 +45,7 @@
 +
  clean: 
 -	rm -f $(OBJS) bzip2.o libbz2.so.1.0.6 libbz2.so.1.0 bzip2-shared
-+	rm -f $(OBJS) bzip2.o libbz2.so.1.0.6 libbz2.so.1.0 bzip2-shared $(LOBJS) libbz2.la
++	rm -f $(OBJS) bzip2.o libbz2.so.1.0.6 libbz2.so.1.0 bzip2-shared $(LOBJS) libbz2.la libbz2.pc
 +	rm -rf .libs
  
 -blocksort.o: blocksort.c
@@ -64,8 +64,24 @@
 -	$(CC) $(CFLAGS) -c bzlib.c
 +
 +install: all
-+	mkdir -p $(PREFIX)/lib
++	mkdir -p $(PREFIX)/lib/pkgconfig/
 +	cp libbz2.so.1.0 $(PREFIX)/lib
 +	cp libbz2.so.1.0.6 $(PREFIX)/lib
 +	libtool --mode=install cp libbz2.la $(PREFIX)/lib
++	cp libbz2.pc $(PREFIX)/lib/pkgconfig/
++
++
++libbz2.pc:
++	echo "prefix=$(PREFIX)" >> libbz2.pc
++	echo 'exec_prefix=$${prefix}' >> libbz2.pc
++	echo 'libdir=$${prefix}/lib' >> libbz2.pc
++	echo 'includedir=$${prefix}/include' >> libbz2.pc
++	echo '' >> libbz2.pc
++	echo 'Name: bzip2' >> libbz2.pc
++	echo 'Description: bzip2' >> libbz2.pc
++	echo 'URL: bzip.org' >> libbz2.pc
++	echo 'Version: 1.0.6' >> libbz2.pc
++	echo 'Requires: ' >> libbz2.pc
++	echo 'Libs: -L$${libdir} -lbz2' >> libbz2.pc
++	echo 'Cflags: -I$${includedir}' >> libbz2.pc
 +
