@@ -1,5 +1,4 @@
 package_name=file
 package_version=5.26
 tarball_suffix=gz
-url=http://mirrors.tassig.com/file/file-5.26.tar.gz
 build_dependencies=zlib
