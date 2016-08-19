@@ -20,7 +20,7 @@ custombuild(){
 	mkdir llvm-build
 	cd llvm-build
 	
-	# TODO: see if the build with configure works, to remove the dependency on cmake
+	# ./configure is deprecated AND failes to compile after successfully configuring
 	#../$package_fullname.src/configure --prefix=/opt/$package_fullname/
 	cmake -DCMAKE_INSTALL_PREFIX=/opt/$package_fullname/ -DBUILD_SHARED_LIBS=ON ../$package_fullname.src/   # shared libs needed by mesa
 
