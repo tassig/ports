@@ -1,12 +1,11 @@
 package_name=autoconf
 package_version=2.69
 tarball_suffix=xz
-url=http://mirrors.tassig.com/autoconf/autoconf-2.69.tar.xz
 build_dependencies="m4 perl"
 haspostinstall=1
 no_check=1
 
 postinstall(){
 	patch -p0 < packages/autoconf-xorg-path.patch   # patching the paths of xorg headers
-	autom4te --language=autoconf --freeze --output=/opt/$package_name/share/autoconf/autoconf/autoconf.m4f
+	autom4te --language=autoconf --freeze --output=$installdirectory/$package_name/share/autoconf/autoconf/autoconf.m4f
 }
