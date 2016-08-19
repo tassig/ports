@@ -1,12 +1,12 @@
 package_name=qt
 package_version=5.7.0
-url=http://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.tar.gz   # TODO: move to tassig
+rel_url=qt/qt-everywhere-opensource-src-5.7.0.tar.gz # custom relative url
 build_dependencies=   # there are many
 iscustombuild=1
 
 
 # TODO:
-# - getting this warning at configure time: WARNING: Could not find XKB config root, use -xkb-config-root to set a path to 
+# - getting this warning at configure time: WARNING: Could not find XKB config root, use -xkb-config-root to set a path to
 # XKB configuration data. This is required for keyboard input support.
 
 
@@ -20,55 +20,50 @@ iscustombuild=1
 #
 
 custombuild(){
-	PREFIX=/opt/$package_name-$package_version
-
-	wget $url
-	tar xvf qt-everywhere-opensource-src-5.7.0.tar.gz
-	cd qt-everywhere-opensource-src-5.7.0
-	
-	
+    rm -rf builddir
+    mkdir -p builddir   # do everything in builddir for tidiness
+    cd builddir
+    if [ "$url" == "" ]; then
+        # if no absolute $url defined, then assume, that we have relative url
+        # $rel_url
+        url=$mirror_prefix/$rel_url
+    fi
+    wget -O archive $url
+    tar xvf archive
+    rm archive
+    cd *   # cd into the package directory
 	# this build systems does not use configure.ac, instead it uses a manually written configure in qtbase/configure, so there are some issues with it, for example it uses a bash feature, so we have to patch
-	patch -p1 < ../packages/qt-build.patch
-	
-	
+	patch -p1 < ../../packages/qt-build.patch
 	# configure seems to support LDFLAGS (probably passed as arguments) and converts them to QMAKE variables, see qtbase/configure. We don't use this below.
-	            
-	         
 	# -I/opt/xorg/include -L/opt/xorg/lib : used for the configure tests to work properly, for instance to find xrender. The build system should have been using pkg-config for xrender instead.
 	# -R : add a runtime path to libraries. The -R option adds an explicit runtime path to all Qt libraries, it would be better if it was added selectively, because it will make loading of executable and libraries slow.
 	# -rpath : add qt path to libraries runtime paths TODO: check if needed
 	# -no-dbus : to disable dbus
 	# -L/opt/fontconfig/lib -L/opt/freetype/lib : needed when linking libQt5XcbQpa.so.5.7.0 , TODO: find a way to circumvent that
 	# -R/opt/fontconfig/lib -R/opt/freetype/lib -R/opt/xorg-X11R7.7/lib -R/opt/mtdev/lib : to correctly link libraries such as libqxcb.so
-	
-	
 	# the following is enough to make it build, but then some runtime paths are missing in the libraries, which will prevent some software to run without LD_LIBRARY_PATH
-	./configure --prefix=$PREFIX -skip qtwebengine -qt-xcb -no-dbus -opensource -confirm-license -I/opt/xorg-X11R7.7/include -L/opt/xorg-X11R7.7/lib -R /opt/glib/lib -R /opt/eudev/lib -L/opt/fontconfig/lib -L/opt/freetype/lib -R/opt/fontconfig/lib -R/opt/freetype/lib -R/opt/xorg-X11R7.7/lib -R/opt/mtdev/lib # -rpath
-	
-	make -j4
-	make -j4 check   # but it seems Qt has no test suite
-	make install
-	
-	# links
-	ln -sv $PREFIX /opt/$package_name   # link for canonical name
-	ln -svf $PREFIX/lib/pkgconfig/*.pc /opt/pkgconf/lib/pkgconfig/
-	ln -sv $PREFIX/bin/* /bin/
-
-	# cleanup	
-	cd ..
-	rm -rf qt-everywhere*
-	
-	
+	./configure --prefix=$installdirectory/$package_fullname/ -skip qtwebengine -qt-xcb -no-dbus -opensource -confirm-license -I/opt/xorg-X11R7.7/include -L/opt/xorg-X11R7.7/lib -R /opt/glib/lib -R /opt/eudev/lib -L/opt/fontconfig/lib -L/opt/freetype/lib -R/opt/fontconfig/lib -R/opt/freetype/lib -R/opt/xorg-X11R7.7/lib -R/opt/mtdev/lib # -rpath
+    make -j4
+    if test -z $no_check   # run the make check, unless $no_check is set for
+                           # this package definition
+    then make -j check || make -j test
+    fi
+    make install
+    ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+    ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash
+                                            # if the links are already there
+    if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+        ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+        $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+    fi
+    cd ../..
+    rm -r builddir
 	# TODO:
 	# qmake variables need to be changed in /opt/qt/mkspecs/linux-g++/qmake.conf
 	# otherwise they would need to be passed by argument to qmake everytime:
 	# QMAKE_INCDIR=/opt/xorg/include
 	# i'm surprised this isn't done during build time, investigate more
-	
-	
+
+
 	# TODO: go through all qt libraries and check if their linkage is correct (ldd %name_of_the_library%)
 }
-
-
-
-
