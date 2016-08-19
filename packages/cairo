@@ -7,23 +7,34 @@ iscustombuild=1
 
 # custom build because zlib not found automatically by this build system
 custombuild(){
-	set -ex
-	package_fullname=$package_name-$package_version
-	wget -O archive $url
-	tar xvf archive
-	rm archive
-	cd $package_name*
-	
-	patch -p1 < ../packages/cairo-build.patch   # patching the build system so zlib is found TODO: send the patch upstream
-	autoreconf
-	
-	LDFLAGS="-L/opt/zlib/lib -Wl,-rpath=/opt/zlib/lib" ./configure --prefix=/opt/$package_fullname/   # TODO: why it doesn't work without LDFLAGS
-	make -j
-	# make check   # we should run make check but there is some slight divergence with the expected values, so we skip it for now
-	make install
-	ln -sv /opt/$package_fullname /opt/$package_name
-	ln -sv /opt/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
-	ln -sv /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   || true
-	cd ..
-	set +ex
+    rm -rf builddir
+    mkdir -p builddir   # do everything in builddir for tidiness
+    cd builddir
+    if [ "$url" == "" ]; then
+        # if no absolute $url defined, then assume, that we have relative url 
+        # $rel_url
+        url=$mirror_prefix/$rel_url
+    fi
+    wget -O archive $url
+    tar xvf archive
+    rm archive
+    cd *   # cd into the package directory
+    patch -p1 < ../../packages/cairo-build.patch   # patching the build system so zlib is found TODO: send the patch upstream
+    autoreconf
+    LDFLAGS="-L/opt/zlib/lib -Wl,-rpath=/opt/zlib/lib" ./configure --prefix=/opt/$package_fullname/   # TODO: why it doesn't work without LDFLAGS
+    make -j
+    if test -z $no_check   # run the make check, unless $no_check is set for 
+                           # this package definition
+    then make -j check || make -j test
+    fi
+    make install
+    ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+    ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash 
+                                            # if the links are already there
+    if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+        ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+        $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+    fi
+    cd ../..
+    rm -r builddir
 }
