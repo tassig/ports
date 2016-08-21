@@ -1,5 +1,9 @@
 package_name=dejagnu
 package_version=1.6
 tarball_suffix=gz
-url=http://mirrors.tassig.com/dejagnu/dejagnu-1.6.tar.gz
 build_dependencies=expect
+
+#TODO: while checking relative URL support, found out, that dejugnu is not 
+# configurable, because: 
+# checking for expect... no
+# configure: error: unable to locate expect
