@@ -1,22 +1,38 @@
 package_name=libxml2
 package_version=2.9.4
 tarball_suffix=gz
-url=http://mirrors.tassig.com/$package_name/$package_name-$package_version.tar.$tarball_suffix
 iscustombuild=1
 
 custombuild(){
-        package_fullname=$package_name-$package_version
-        package_tarball_name=$package_fullname.tar.$tarball_suffix
-        wget $url
-        tar xvf $package_tarball_name
-        rm $package_tarball_name
-        cd $package_fullname/
+    rm -rf builddir
+    mkdir -p builddir   # do everything in builddir for tidiness
+    cd builddir
+    if [ "$url" == "" ]; then
+        # if no absolute $url defined, then assume, that we have relative url 
+        # $rel_url
+        url=$mirror_prefix/$rel_url
+    fi
+    wget -O archive $url
+    tar xvf archive
+    rm archive
+    cd *   # cd into the package directory
 
-        ./configure --prefix=/opt/$package_fullname --without-python   # TODO: need fixing, in python
-        make -j
-        make install
-        ln -sv /opt/$package_fullname /opt/$package_name
-        ln -svf /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
-        cd ..
+    ./configure --prefix=$installdirectory/$package_fullname --without-python   # TODO: need fixing, in python
+    make -j
+    if test -z $no_check   # run the make check, unless $no_check is set for 
+                           # this package definition
+    then make -j check || make -j test
+    fi
+    make install
+    ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+    ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash 
+                                            # if the links are already there
+    if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+        ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+        $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+    fi
+    cd ../..
+    rm -r builddir
+
 }
 
