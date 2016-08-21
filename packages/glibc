@@ -1,19 +1,27 @@
 package_name=glibc
 package_version=2.23
 tarball_suffix=xz
-url=http://mirrors.tassig.com/glibc/glibc-2.23.tar.xz
 build_dependencies=gawk
 iscustombuild=1
-
+no_check=1 # TODO: does not work
 
 custombuild(){
-	wget $url
-	tar xvf glibc-2.23.tar.xz
-	cd glibc-2.23/
+    rm -rf builddir
+    mkdir -p builddir   # do everything in builddir for tidiness
+    cd builddir
+    if [ "$url" == "" ]; then
+        # if no absolute $url defined, then assume, that we have relative url 
+        # $rel_url
+        url=$mirror_prefix/$rel_url
+    fi
+    wget -O archive $url
+    tar xvf archive
+    rm archive
+    cd *   # cd into the package directory
 
 	# setenv.c and nis_call.c needs patching, this is probably a gcc 6.1 error
 	# patches for sunrpc needed too, see http://dev.cacaoweb.org/#contents/documentation%20GCC%20toolchain.md for glibc patches
-	patch -p1 < ../packages/glibc-syntax-rpc-types.patch
+	patch -p1 < ../../packages/glibc-syntax-rpc-types.patch
 
 	# must be configured in a separate build directory
 	mkdir build
@@ -21,16 +29,21 @@ custombuild(){
 	
 	# we tell the build to use the linux kernel headers, otherwise it would use the compiler headers, which are the musl headers, and this doesn't work because of redefinitions errors
 	# TODO: why does it work with linux headers but not musl headers?
-	../configure --prefix=/opt/glibc-2.23 --enable-kernel=2.6.32 --with-headers=/opt/linux/include
+	../configure --prefix=$installdirectory/glibc-2.23 --enable-kernel=2.6.32 --with-headers=$installdirectory/linux/include
 	
 	make -j4
-	
-	#make check   # TODO: does not work
-	make install
-	
-	ln -sv /opt/glibc-2.23 /opt/glibc
-	ln -sv /opt/glibc/bin/* /bin/
-	
-	cd ../..
-	rm -r glibc*
+    if test -z $no_check   # run the make check, unless $no_check is set for 
+                           # this package definition
+    then make -j check || make -j test
+    fi
+    make install
+    ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+    ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash 
+                                            # if the links are already there
+    if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+        ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+        $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+    fi
+    cd ../../..
+    rm -r builddir
 }
