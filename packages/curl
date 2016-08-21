@@ -29,7 +29,7 @@ custombuild(){
     rm archive
     cd *   # cd into the package directory
     patch < ../../packages/$package_fullname-configure-use-pkg-config.patch 
-        # TODO: remove this patch after releasing curl's version with applied 
+        # remove this patch after releasing curl's version with applied 
         # pull request https://github.com/curl/curl/pull/956
     autoreconf
     ./configure --prefix=$installdirectory/$package_fullname/
