@@ -1,12 +1,11 @@
 package_name=pkgconf
 package_version=0.9.9
 tarball_suffix=gz
-url=http://mirrors.tassig.com/pkgconf/pkgconf-0.9.9.tar.gz
 build_dependencies=automake
 haspostinstall=1
 
 postinstall(){
-	ln -sv /opt/pkgconf/share/aclocal/* `aclocal --print-ac-dir`/
+	ln -sv $installdirectory/pkgconf/share/aclocal/* `aclocal --print-ac-dir`/
 	ln -sv /bin/pkgconf /bin/pkg-config
-	mkdir -p /opt/pkgconf-0.9.9/lib/pkgconfig
+	mkdir -p $installdirectory/pkgconf-0.9.9/lib/pkgconfig
 }
