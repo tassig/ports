@@ -1,6 +1,7 @@
 package_name=atk
 package_version=2.16.0
 build_dependencies="glib"
+tarball_suffix=xz
 iscustombuild=1
 
 ##########################
@@ -28,7 +29,7 @@ custombuild(){
     tar xvf archive
     rm archive
     cd *   # cd into the package directory
-    LDFLAGS=-Wl,-rpath=/opt/glib/lib ./configure --prefix=$installdirectory/$package_fullname/
+    LDFLAGS=-Wl,-rpath=$installdirectory/glib/lib ./configure --prefix=$installdirectory/$package_fullname/
     make -j
     if test -z $no_check   # run the make check, unless $no_check is set for 
                            # this package definition
