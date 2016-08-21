@@ -1,36 +1,52 @@
 package_name=Python
 package_version=2.7.11
 tarball_suffix=xz
-url=http://mirrors.tassig.com/python/Python-2.7.11.tar.xz
+rel_url=python/Python-2.7.11.tar.xz # custom relative URL
 build_dependencies=bzip2   # used by nothing but nacl of Chrome, which we should get rid of anyway TODO: bzip2 and this dependency can go away once we get rid of nacl
 iscustombuild=1
+no_check=1 # TODO: some test will fail
                               
 # TODO: if a version of python is needed that has full supports for lots of plugins, we can add a new package, named "python-full" or something
 
 custombuild() {
-	package_fullname=$package_name-$package_version
-	package_tarball_name=$package_fullname.tar.$tarball_suffix
-	wget $url
-	tar xvf $package_tarball_name
-	rm $package_tarball_name
-	cd $package_fullname/
-	
+    rm -rf builddir
+    mkdir -p builddir   # do everything in builddir for tidiness
+    cd builddir
+    if [ "$url" == "" ]; then
+        # if no absolute $url defined, then assume, that we have relative url 
+        # $rel_url
+        url=$mirror_prefix/$rel_url
+    fi
+    wget -O archive $url
+    tar xvf archive
+    rm archive
+    cd *   # cd into the package directory
+
 	# hack to help python to find include files
 	mkdir -p /usr/local/include
-	ln -sv /opt/zlib/include/* /usr/local/include/
-	ln -sv /opt/bzip2/include/* /usr/local/include/
-	ln -sv /opt/libressl/include/* /usr/local/include/
+	ln -sv $installdirectory/zlib/include/* /usr/local/include/
+	ln -sv $installdirectory/bzip2/include/* /usr/local/include/
+	ln -sv $installdirectory/libressl/include/* /usr/local/include/
 	
-	export LDFLAGS="-Wl,-rpath=/opt/libressl/lib -L /opt/libressl/lib -Wl,-rpath=/opt/zlib/lib -L /opt/zlib/lib -Wl,-rpath=/opt/bzip2/lib -L /opt/bzip2/lib"
-	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/Python-2.7.11/lib"
-	./configure --prefix=/opt/Python-2.7.11 --with-ensurepip --enable-shared   # shared libraries needed because other programs need them TODO: not completely sure about that, if i remember, mesa might need them, check if it's really the case
+	export LDFLAGS="-Wl,-rpath=$installdirectory/libressl/lib -L $installdirectory/libressl/lib -Wl,-rpath=$installdirectory/zlib/lib -L $installdirectory/zlib/lib -Wl,-rpath=$installdirectory/bzip2/lib -L $installdirectory/bzip2/lib"
+	export LDFLAGS="$LDFLAGS -Wl,-rpath=$installdirectory/Python-2.7.11/lib"
+	./configure --prefix=$installdirectory/Python-2.7.11 --with-ensurepip --enable-shared   # shared libraries needed because other programs need them TODO: not completely sure about that, if i remember, mesa might need them, check if it's really the case
 	make -j4
 	
 	rm -r /usr
-	
-	#make -j test   # TODO: some tests failures
-	make install
-	ln -sv /opt/$package_fullname /opt/$package_name
-	ln -sv /opt/$package_name/bin/* /bin/ || true
-	cd ..
+
+    if test -z $no_check   # run the make check, unless $no_check is set for 
+                           # this package definition
+    then make -j check || make -j test
+    fi
+    make install
+    ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+    ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash 
+                                            # if the links are already there
+    if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+        ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+        $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+    fi
+    cd ../..
+    rm -r builddir
 }
