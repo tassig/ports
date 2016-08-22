@@ -36,7 +36,7 @@ custombuild(){
 	patch -p0 < ../../packages/vte-pty.patch   
 	
 	# work around broken configure script for ncurses
-	CFLAGS="-I/opt/ncurses/include" LDFLAGS="-L/opt/ncurses/lib -Wl,-rpath,/opt/ncurses/lib" ./configure --prefix=$installdirectory/$package_fullname/
+	CFLAGS="-I$installdirectory/ncurses/include" LDFLAGS="-L$installdirectory/ncurses/lib -Wl,-rpath,$installdirectory/ncurses/lib" ./configure --prefix=$installdirectory/$package_fullname/
 	
     make -j
     if test -z $no_check   # run the make check, unless $no_check is set for 
