@@ -4,3 +4,4 @@ url=http://ftp.gnome.org/pub/gnome/sources/gobject-introspection/1.48/gobject-in
 build_dependencies=python2
 
 # TODO: seems to need patching
+# TODO: maybe we can just forget about gobject-introspection, at least for now. It's not useful for us at the moment.

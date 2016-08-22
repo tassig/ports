@@ -7,3 +7,4 @@ build_dependencies=expect
 # configurable, because: 
 # checking for expect... no
 # configure: error: unable to locate expect
+# Ivan: this is strange, i remember having installed dejagnu in the past to run gcc test suite
