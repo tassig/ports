@@ -4,6 +4,7 @@ tarball_suffix=xz
 rel_url=llvm/llvm-3.8.0.src.tar.xz # relative URL
 build_dependencies="cmake python"
 iscustombuild=1
+no_check=1 # too long to run
 
 custombuild(){
     rm -rf builddir
