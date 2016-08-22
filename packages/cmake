@@ -1,6 +1,5 @@
 package_name=cmake
 package_version=3.5.2
 tarball_suffix=gz
-url=http://mirrors.tassig.com/cmake/cmake-3.5.2.tar.gz
 build_dependencies=
 no_check=1   # this would take too long otherwise
