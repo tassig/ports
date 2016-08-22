@@ -1,4 +1,4 @@
 package_name=libusb
 package_version=1.0.20
-url=http://mirrors.tassig.com/libusb/libusb-1.0.20.tar.bz2
+tarball_suffix=bz2
 build_dependencies=eudev
