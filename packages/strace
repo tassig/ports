@@ -8,4 +8,4 @@ build_dependencies=m4
 # it uses { instead of \{ for regular expression, which is not standard
 no_check=1
 
-# TODO: statically linked version is better
+# TODO: statically linked version is better because sometimes you want to strace without have the libc available
