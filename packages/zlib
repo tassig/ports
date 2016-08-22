@@ -2,14 +2,43 @@
 package_name=zlib
 package_version=1.2.8
 tarball_suffix=xz
-url=http://mirrors.tassig.com/zlib/zlib-1.2.8.tar.xz
-build_dependencies=
-haspostinstall=1
+build_dependencies=libtool
+iscustombuild=1
 
-# zlib does not create a .la by default, which makes it significantly more annoying to link against, because we can't use libtool, so we have to path the -rpath to the linker manually
-# a problematic package would be fontconfig, which uses libtool, thus ignoring your LDFLAGS
-# as a result, we still put the shared lib into the dynamic linker path
-# TODO: another alternative would be to add libtool support for zlib, which is not too hard
-postinstall(){
-	ln -svf /opt/zlib/lib/libz.so* /lib/
+# custom build becasue we need to patch Makefile.in for libtool support
+
+custombuild(){
+    rm -rf builddir
+    mkdir -p builddir   # do everything in builddir for tidiness
+    cd builddir
+    if [ "$url" == "" ]; then
+        # if no absolute $url defined, then assume, that we have relative url
+        # $rel_url
+        url=$mirror_prefix/$rel_url
+    fi
+    wget -O archive $url
+    tar xvf archive
+    rm archive
+    cd *   # cd into the package directory
+    patch < ../../packages/zlib-1.2.8-Makefile.in.patch # libtool support
+    ./configure --prefix=$installdirectory/$package_fullname
+    make -j
+    if test -z $no_check   # run the make check, unless $no_check is set for
+                           # this package definition
+    then make -j check || make -j test
+    fi
+    make install
+    ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+    ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash
+                                            # if the links are already there
+    if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+        ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+        $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+    fi
+    ln -svf $installdirectory/$package_name/lib/*.so* /lib/ # unfortunatly
+                      # too many client libraries are checking presence
+                      # of libz.so at runtime without linking with
+                      # libtool. For example: curl, libfontenc.
+    cd ../..
+    rm -r builddir
 }
