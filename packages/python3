@@ -1,12 +1,12 @@
 package_name=Python
 package_version=3.5.1
 tarball_suffix=xz
-url=http://mirrors.tassig.com/python/Python-3.5.1.tar.xz
+rel_url=python/Python-$package_version.tar.$tarball_suffix
 build_dependencies=
 no_check=1   # don't hesitate to fix it
 haspostinstall=1
 
 postinstall() {
 	# not the default Python, so has to be done manually
-	ln -s /opt/$package_name-$package_version/bin/* /bin/ || true
+	ln -s $installdirectory/$package_fullname/bin/* /bin/ || true
 }
