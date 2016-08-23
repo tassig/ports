@@ -2,28 +2,43 @@
 package_name=perl
 package_version=5.22.1
 tarball_suffix=xz
-url=http://mirrors.tassig.com/perl/perl-5.22.1.tar.xz
 build_dependencies=
 iscustombuild=1
+no_check=1
 
 custombuild(){
-	set -e
-	package_fullname=$package_name-$package_version
-        wget $url
-        tar xvf $package_fullname.tar.$tarball_suffix
-        cd $package_fullname/
-        
-        sh Configure -Dprefix=/opt/$package_fullname/ -Dcc=gcc -de 
-        
-        # a hack to make errno.h available to perl build system, perl looks for the system headers in /usr/include , we should fix perl but we don't care
-        mkdir -p /usr/include
-        cp `find /opt/gcc* -name errno.h | head -n 1` /usr/include/
-        make -j
-        rm -r /usr
-        
-        #make -j check   # test fails because of busybox, test suite hangs anyway
-        make install
-        ln -sv /opt/$package_fullname /opt/$package_name
-        ln -sv /opt/$package_name/bin/* /bin/ || true
-        cd ..
+    rm -rf builddir
+    mkdir -p builddir   # do everything in builddir for tidiness
+    cd builddir
+    if [ "$url" == "" ]; then
+        # if no absolute $url defined, then assume, that we have relative url 
+        # $rel_url
+        url=$mirror_prefix/$rel_url
+    fi
+    wget -O archive $url
+    tar xvf archive
+    rm archive
+    cd *   # cd into the package directory
+
+    sh Configure -Dprefix=/opt/$package_fullname/ -Dcc=gcc -de 
+    # a hack to make errno.h available to perl build system, perl looks for the system headers in /usr/include , we should fix perl but we don't care
+    mkdir -p /usr/include
+    cp `find /opt/gcc* -name errno.h | head -n 1` /usr/include/
+    make -j
+    rm -r /usr
+
+    if test -z $no_check   # run the make check, unless $no_check is set for 
+                           # this package definition
+    then make -j check || make -j test
+    fi
+    make install
+    ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+    ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash 
+                                            # if the links are already there
+    if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+        ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+        $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+    fi
+    cd ../..
+    rm -r builddir
 }
