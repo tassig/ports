@@ -29,7 +29,7 @@ custombuild(){
 	tar xvf binutils-2.26.tar.bz2
 	mkdir objdir
 	cd objdir                  
-	../binutils-2.26/configure --prefix=/opt/$packagename \
+	../binutils-2.26/configure --prefix=$installdirectory/$packagename \
 	                           --with-lib-path=/lib \
 	                           --build=$target_triple \
 	                           --disable-werror \
@@ -47,12 +47,12 @@ custombuild(){
 	wget http://mirrors.tassig.com/musl/$musl_fullname.tar.gz
 	tar xvf $musl_fullname.tar.gz
 	cd $musl_fullname
-	./configure --prefix=/opt/$packagename/$target_triple
+	./configure --prefix=$installdirectory/$packagename/$target_triple
 	make -j
 	make install
-	cp /opt/$packagename/$target_triple/lib/libc.so /lib/ld-musl-$ARCH.so.1
-	echo "/opt/$packagename/$target_triple/lib/" > /etc/ld-musl-$ARCH.path
-	echo "/opt/$packagename/lib64" >> /etc/ld-musl-$ARCH.path
+	cp $installdirectory/$packagename/$target_triple/lib/libc.so /lib/ld-musl-$ARCH.so.1
+	echo "$installdirectory/$packagename/$target_triple/lib/" > /etc/ld-musl-$ARCH.path
+	echo "$installdirectory/$packagename/lib64" >> /etc/ld-musl-$ARCH.path
 	echo "/lib" >> /etc/ld-musl-$ARCH.path
 	cd ..
 	rm -r musl*
@@ -93,15 +93,15 @@ custombuild(){
 	cd ..
 	mkdir gccobjdir
 	cd gccobjdir
-	../gcc-6.1.0/configure --prefix=/opt/$packagename \
+	../gcc-6.1.0/configure --prefix=$installdirectory/$packagename \
 	                       --enable-languages=c,c++ \
-	                       --with-native-system-header-dir=/opt/$packagename/$target_triple/include \
+	                       --with-native-system-header-dir=$installdirectory/$packagename/$target_triple/include \
 	                       --disable-multilib \
 	                       --disable-nls \
 	                       --disable-libsanitizer \
 	                       --disable-libcilkrts \
 	                       --disable-gnu-indirect-function
-	ln -sv /opt/$packagename/$target_triple/lib/*.o /lib/   # hack to pass the bootstrap stage, some configure scripts probably incorrect TODO: could be patched
+	ln -sv $installdirectory/$packagename/$target_triple/lib/*.o /lib/   # hack to pass the bootstrap stage, some configure scripts probably incorrect TODO: could be patched
 	make --debug -j4
 	rm /lib/*.o   # previous hack clean up
 	#make -k check -j
@@ -112,8 +112,8 @@ custombuild(){
 	
 	# final links
 	
-	ln -svf /opt/$packagename/bin/* /bin/
-	ln -svf /opt/linux-kernel-headers/include/* /opt/$packagename/$target_triple/include/   # linux headers into system headers location
+	ln -svf $installdirectory/$packagename/bin/* /bin/
+	ln -svf $installdirectory/linux-kernel-headers/include/* $installdirectory/$packagename/$target_triple/include/   # linux headers into system headers location
 	
 	
 	
@@ -122,10 +122,10 @@ custombuild(){
 	wget http://mirrors.tassig.com/musl/$musl_fullname.tar.gz
 	tar xvf $musl_fullname.tar.gz
 	cd $musl_fullname
-	./configure --prefix=/opt/$packagename/$target_triple
+	./configure --prefix=$installdirectory/$packagename/$target_triple
 	make -j
 	make install
-	cp /opt/$packagename/$target_triple/lib/libc.so /lib/ld-musl-$ARCH.so.1
+	cp $installdirectory/$packagename/$target_triple/lib/libc.so /lib/ld-musl-$ARCH.so.1
 	cd ..
 	rm -r musl*
 }
