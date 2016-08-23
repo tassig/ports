@@ -1,4 +1,3 @@
 package_name=libffi
 package_version=3.2
 tarball_suffix=gz
-url=http://mirrors.tassig.com/$package_name/$package_name-$package_version.tar.$tarball_suffix
