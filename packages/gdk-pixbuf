@@ -1,7 +1,6 @@
 package_name=gdk-pixbuf
 package_version=2.35.1
 tarball_suffix=xz
-url=http://mirrors.tassig.com/$package_name/$package_name-$package_version.tar.$tarball_suffix
 build_dependencies="glib libjpeg libtiff"
 iscustombuild=1
 no_check=1 # temporarily disable check TODO: is the test suite buggy or is our installation buggy?
@@ -9,22 +8,35 @@ no_check=1 # temporarily disable check TODO: is the test suite buggy or is our i
 # custom build in order to set path to glib, libjpeg and libtiff
 # TODO: in the future, instead, fix configure.ac to use pkg-config for libtiff and libjpeg, like it's doing already with all other packages, like libpng. I'm sure the package maintainer would love that.
 custombuild(){
-	package_fullname=$package_name-$package_version
-	wget -O archive $url
-	tar xvf archive
-	rm archive
-	cd $package_name*
-	CPPFLAGS="-I/opt/libtiff/include -I/opt/libjpeg/include" LDFLAGS="-L/opt/libtiff/lib -L/opt/libjpeg/lib -Wl,-rpath=/opt/glib/lib" \
-	./configure --prefix=/opt/$package_fullname/   # TODO: the -Wl,-rpath=/opt/glib/lib is a bug in configure, the rpath should have been added automatically
-	make -j
-	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
-	then make -j check || make -j test
-	fi
-	make install
-	ln -sv /opt/$package_fullname /opt/$package_name
-	ln -sv /opt/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
-	if [ -d "/opt/$package_name/lib/pkgconfig" ]; then
-		ln -svf /opt/$package_name/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/   # install pkg-config files
-	fi
-	cd ..
+    rm -rf builddir
+    mkdir -p builddir   # do everything in builddir for tidiness
+    cd builddir
+    if [ "$url" == "" ]; then
+        # if no absolute $url defined, then assume, that we have relative url 
+        # $rel_url
+        url=$mirror_prefix/$rel_url
+    fi
+    wget -O archive $url
+    tar xvf archive
+    rm archive
+    cd *   # cd into the package directory
+
+	CPPFLAGS="-I$installdirectory/libtiff/include -I$installdirectory/libjpeg/include" LDFLAGS="-L$installdirectory/libtiff/lib -L$installdirectory/libjpeg/lib -Wl,-rpath=$installdirectory/glib/lib" \
+	./configure --prefix=$installdirectory/$package_fullname/   # TODO: the -Wl,-rpath=/opt/glib/lib is a bug in configure, the rpath should have been added automatically
+
+    make -j
+    if test -z $no_check   # run the make check, unless $no_check is set for 
+                           # this package definition
+    then make -j check || make -j test
+    fi
+    make install
+    ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+    ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash 
+                                            # if the links are already there
+    if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+        ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+        $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+    fi
+    cd ../..
+    rm -r builddir
 }
