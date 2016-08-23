@@ -1,6 +1,6 @@
 package_name=gobject-introspection
 package_version=1.48.0
-url=http://ftp.gnome.org/pub/gnome/sources/gobject-introspection/1.48/gobject-introspection-1.48.0.tar.xz
+tarball_suffix=xz
 build_dependencies=python2
 
 # TODO: seems to need patching
