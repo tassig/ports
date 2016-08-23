@@ -27,6 +27,15 @@ These variables are mandatory and can be used without restrictions, by internal 
 `haspostinstall`: `0` or `1`, if `1` then a function `haspostinstall()` needs to be provided, such function will be called after the `defaultbuild()` has completed
 `no_check`: `0` or `1`, if `1` then the `make check` won't be run for this package. This is useful if a test suite is buggy or if we want to temporarily work around a bug in our system
 
+### Autodefined variables
+
+packageinstall.sh script provides some variables, that can be used in custombuild function:
+
+* `package_fullname` = `$package_name-$package_version` - variable contains package name and version
+* `installdirectory` = contains path to destination (prefix) directory
+* `url` = the ABSOLUTE url of the package. If not defined in port, then URL `$mirror_prefix/$rel_url` will be used
+* `rel_url`: the RELATIVE suffix-part of URL to package. Default value is `$package_name/$package_fullname.tar.$tarball_suffix`.
+* `mirror_prefix` = URL prefix. By default = `http://mirrors.tassig.com`
 
 ## Policies
 
