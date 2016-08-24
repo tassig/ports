@@ -1,5 +1,5 @@
 package_name=XML-Parser
-package_version=1.0.4
+package_version=2.44
 tarball_suffix=gz
 rel_url=perl/$package_name-$package_version.tar.$tarball_suffix
 build_dependencies="expat perl"
