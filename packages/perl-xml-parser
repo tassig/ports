@@ -1,20 +1,31 @@
 package_name=XML-Parser
 package_version=1.0.4
+tarball_suffix=gz
+rel_url=perl/$package_name-$package_version.tar.$tarball_suffix
 build_dependencies="expat perl"
 iscustombuild=1
 
 custombuild(){
-	export EXPATINCPATH="/opt/expat/include"
-	export EXPATLIBPATH="/opt/expat/lib"
-	wget http://mirrors.tassig.com/XML-Parser/XML-Parser-2.44.tar.gz
-	tar xvf XML-Parser-2.44.tar.gz
-	rm XML-Parser-2.44.tar.gz
-	cd XML-Parser-2.44
+    rm -rf builddir
+    mkdir -p builddir   # do everything in builddir for tidiness
+    cd builddir
+    if [ "$url" == "" ]; then
+        # if no absolute $url defined, then assume, that we have relative url 
+        # $rel_url
+        url=$mirror_prefix/$rel_url
+    fi
+    wget -O archive $url
+    tar xvf archive
+    rm archive
+    cd *   # cd into the package directory
+
+	export EXPATINCPATH="$installdirectory/expat/include"
+	export EXPATLIBPATH="$installdirectory/expat/lib"
 	perl Makefile.PL EXPATINCPATH=$EXPATINCPATH EXPATLIBPATH=$EXPATLIBPATH
 	make
 	# TODO: make check
 	make install
-	cd ..
-	rm -r XML-Parser-2.44
-	#cpan XML::Parser
+    cd ../..
+    rm -r builddir
+
 }
