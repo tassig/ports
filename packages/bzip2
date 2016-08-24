@@ -21,14 +21,14 @@ custombuild(){
     rm archive
     cd *   # cd into the package directory
     patch < ../../packages/bzip2-1.0.6-Makefile-libbz2_so.patch
-    make -j -f Makefile-libbz2_so PREFIX=/opt/$package_fullname
-    make -j PREFIX=/opt/$package_fullname
+    make -j -f Makefile-libbz2_so PREFIX=$installdirectory/$package_fullname
+    make -j PREFIX=$installdirectory/$package_fullname
     if test -z $no_check   # run the make check, unless $no_check is set for
                            # this package definition
     then make -j check || make -j test
     fi
-    make install PREFIX=/opt/$package_fullname
-    make install PREFIX=/opt/$package_fullname -f Makefile-libbz2_so
+    make install PREFIX=$installdirectory/$package_fullname
+    make install PREFIX=$installdirectory/$package_fullname -f Makefile-libbz2_so
     ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
     ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash
                                             # if the links are already there
