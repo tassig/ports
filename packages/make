@@ -14,10 +14,10 @@ custombuild(){
 	tar xvf archive
     rm archive
 	cd *
-	CFLAGS="-static --static" ./configure --prefix=/opt/$package_fullname
+	CFLAGS="-static --static" ./configure --prefix=$installdirectory/$package_fullname
 	./build.sh
 	./make install
-	ln -sv /opt/$package_fullname /opt/$package_name
-	ln -sv /opt/$package_name/bin/* /bin/
+	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+	ln -sv $installdirectory/$package_name/bin/* /bin/
 	cd ../..
 }
