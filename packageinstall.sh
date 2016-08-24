@@ -9,8 +9,6 @@
 # TODO: installpackage() should be a transaction to prevent half-installed 
 #   packages and leftovers. ex: what do you do when "make install" returns an 
 #   error? right now, we do nothing, which is incorrect
-# TODO: make all url relative to mirrors.tassig.com. dambaev: added support of 
-#   relative urls.
 
 # version 1.1
 #
