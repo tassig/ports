@@ -20,18 +20,13 @@ iscustombuild=1
 #
 
 custombuild(){
-    rm -rf builddir
-    mkdir -p builddir   # do everything in builddir for tidiness
-    cd builddir
-    if [ "$url" == "" ]; then
-        # if no absolute $url defined, then assume, that we have relative url
-        # $rel_url
-        url=$mirror_prefix/$rel_url
-    fi
-    wget -O archive $url
-    tar xvf archive
-    rm archive
-    cd *   # cd into the package directory
+	rm -rf builddir
+	mkdir -p builddir   # do everything in builddir for tidiness
+	cd builddir
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	cd *   # cd into the package directory
 	# this build systems does not use configure.ac, instead it uses a manually written configure in qtbase/configure, so there are some issues with it, for example it uses a bash feature, so we have to patch
 	patch -p1 < ../../packages/qt-build.patch
 	# configure seems to support LDFLAGS (probably passed as arguments) and converts them to QMAKE variables, see qtbase/configure. We don't use this below.
@@ -43,21 +38,21 @@ custombuild(){
 	# -R/opt/fontconfig/lib -R/opt/freetype/lib -R/opt/xorg-X11R7.7/lib -R/opt/mtdev/lib : to correctly link libraries such as libqxcb.so
 	# the following is enough to make it build, but then some runtime paths are missing in the libraries, which will prevent some software to run without LD_LIBRARY_PATH
 	./configure --prefix=$installdirectory/$package_fullname/ -skip qtwebengine -qt-xcb -no-dbus -opensource -confirm-license -I$installdirectory/xorg-X11R7.7/include -L$installdirectory/xorg-X11R7.7/lib -R $installdirectory/glib/lib -R $installdirectory/eudev/lib -L$installdirectory/fontconfig/lib -L$installdirectory/freetype/lib -R$installdirectory/fontconfig/lib -R$installdirectory/freetype/lib -R$installdirectory/xorg-X11R7.7/lib -R$installdirectory/mtdev/lib # -rpath
-    make -j4
-    if test -z $no_check   # run the make check, unless $no_check is set for
-                           # this package definition
-    then make -j check || make -j test
-    fi
-    make install
-    ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
-    ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash
-                                            # if the links are already there
-    if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
-        ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
-        $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
-    fi
-    cd ../..
-    rm -r builddir
+	make -j4
+	if test -z $no_check   # run the make check, unless $no_check is set for
+						   # this package definition
+	then make -j check || make -j test
+	fi
+	make install
+	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash
+											# if the links are already there
+	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+	fi
+	cd ../..
+	rm -r builddir
 	# TODO:
 	# qmake variables need to be changed in /opt/qt/mkspecs/linux-g++/qmake.conf
 	# otherwise they would need to be passed by argument to qmake everytime:

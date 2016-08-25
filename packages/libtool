@@ -8,5 +8,5 @@ haspostinstall=1
 postinstall(){
 	# symlink the m4 macros into aclocal directory
 	# NOTE: autoconf says using aclocal --print-ac-dir *is today discouraged* http://www.gnu.org/software/automake/manual/html_node/aclocal-Options.html#aclocal-Options
-        ln -sf $installdirectory/libtool/share/aclocal/* `aclocal --print-ac-dir`/
+		ln -sf $installdirectory/libtool/share/aclocal/* `aclocal --print-ac-dir`/
 }

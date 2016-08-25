@@ -6,5 +6,5 @@ haspostinstall=1
 
 # create symlink to /opt/libjpeg to be compatible with client libs
 postinstall(){
-    ln -s $installdirectory/$package_name-$package_version $installdirectory/libjpeg
+	ln -s $installdirectory/$package_name-$package_version $installdirectory/libjpeg
 }

@@ -7,18 +7,18 @@ iscustombuild=1
 no_check=1 # too long to run
 
 custombuild(){
-    rm -rf builddir
-    mkdir -p builddir   # do everything in builddir for tidiness
-    cd builddir
-    if [ "$url" == "" ]; then
-        # if no absolute $url defined, then assume, that we have relative url 
-        # $rel_url
-        url=$mirror_prefix/$rel_url
-    fi
-    wget -O archive $url
-    tar xvf archive
-    rm archive
-    cd *   # cd into the package directory
+	rm -rf builddir
+	mkdir -p builddir   # do everything in builddir for tidiness
+	cd builddir
+	if [ "$url" == "" ]; then
+		# if no absolute $url defined, then assume, that we have relative url 
+		# $rel_url
+		url=$mirror_prefix/$rel_url
+	fi
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	cd *   # cd into the package directory
 
 	for p in ../../packages/llvm-*.patch; do
 		patch -p1 < $p
@@ -29,23 +29,22 @@ custombuild(){
 	
 	# ./configure is deprecated AND failes to compile after successfully configuring
 	#../$package_fullname.src/configure --prefix=/opt/$package_fullname/
-    # -DLLVM_INSTALL_UTILS=ON - enables building of llvm utils. Will be helpfull for building for example - Rust
+	# -DLLVM_INSTALL_UTILS=ON - enables building of llvm utils. Will be helpfull for building for example - Rust
 	cmake -DCMAKE_INSTALL_PREFIX=$installdirectory/$package_fullname/ -DBUILD_SHARED_LIBS=ON -DLLVM_INSTALL_UTILS=ON ../$package_fullname.src/   # shared libs needed by mesa
-    make -j4
-    if test -z $no_check   # run the make check, unless $no_check is set for 
-                           # this package definition
-    then make -j check || make -j test
-    fi
-    make install
-    ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
-    ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash 
-                                            # if the links are already there
-    if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
-        ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
-        $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
-    fi
-    cd ../..
-    rm -r builddir
-
+	make -j4
+	if test -z $no_check   # run the make check, unless $no_check is set for 
+						   # this package definition
+	then make -j check || make -j test
+	fi
+	make install
+	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash 
+											# if the links are already there
+	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+	fi
+	cd ../..
+	rm -r builddir
 }
 

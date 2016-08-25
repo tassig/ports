@@ -5,47 +5,42 @@ package_version=7.50.1
 tarball_suffix=bz2
 build_dependencies="zlib libressl perl"
 no_check=1   # dambaev (Aug 15, 2016): there are 2 main reasons why tests are 
-             # failes:
-             # 1. curl's test suit must be patched (1. runtests.pl modifies HOME
-             #      variable and then executes $SHELL which relies on $HOME; 
-             #      2. number of tests contains "#!/usr/bin/env perl");
-             # 2. 1026 test case is failed because it checks "curl --manual", to
-             # solve this, man-db must be installed, which requires to install
-             # libpipeline, groff, gdbm and patch configure.ac to search for
-             # zlib, because build will be failed due to missing zlib.h
+			 # failes:
+			 # 1. curl's test suit must be patched (1. runtests.pl modifies HOME
+			 #	  variable and then executes $SHELL which relies on $HOME; 
+			 #	  2. number of tests contains "#!/usr/bin/env perl");
+			 # 2. 1026 test case is failed because it checks "curl --manual", to
+			 # solve this, man-db must be installed, which requires to install
+			 # libpipeline, groff, gdbm and patch configure.ac to search for
+			 # zlib, because build will be failed due to missing zlib.h
 iscustombuild=1
 
 custombuild(){
-    rm -rf builddir
-    mkdir -p builddir   # do everything in builddir for tidiness
-    cd builddir
-    if [ "$url" == "" ]; then
-        # if no absolute $url defined, then assume, that we have relative url 
-        # $rel_url
-        url=$mirror_prefix/$rel_url
-    fi
-    wget -O archive $url
-    tar xvf archive
-    rm archive
-    cd *   # cd into the package directory
-    patch < ../../packages/$package_fullname-configure-use-pkg-config.patch 
-        # remove this patch after releasing curl's version with applied 
-        # pull request https://github.com/curl/curl/pull/956
-    autoreconf
-    ./configure --prefix=$installdirectory/$package_fullname/
-    make -j
-    if test -z $no_check   # run the make check, unless $no_check is set for 
-                           # this package definition
-    then make -j check || make -j test
-    fi
-    make install
-    ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
-    ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash 
-                                                # if the links are already there
-    if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
-        ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
-            $installdirectory/pkgconf/lib/pkgconfig/   # inst
-    fi
-    cd ../..
-    rm -r builddir
+	rm -rf builddir
+	mkdir -p builddir   # do everything in builddir for tidiness
+	cd builddir
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	cd *   # cd into the package directory
+	patch < ../../packages/$package_fullname-configure-use-pkg-config.patch 
+		# remove this patch after releasing curl's version with applied 
+		# pull request https://github.com/curl/curl/pull/956
+	autoreconf
+	./configure --prefix=$installdirectory/$package_fullname/
+	make -j
+	if test -z $no_check   # run the make check, unless $no_check is set for 
+						   # this package definition
+	then make -j check || make -j test
+	fi
+	make install
+	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash 
+												# if the links are already there
+	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+			$installdirectory/pkgconf/lib/pkgconfig/   # inst
+	fi
+	cd ../..
+	rm -r builddir
 }

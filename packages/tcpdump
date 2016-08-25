@@ -6,7 +6,7 @@ no_check=1
 haspostinstall=1
 
 postinstall(){
-    ln -sv $installdirectory/$package_name/sbin/* /bin # by default, tcpdump installed in sbin dir
+	ln -sv $installdirectory/$package_name/sbin/* /bin # by default, tcpdump installed in sbin dir
 }
 
 

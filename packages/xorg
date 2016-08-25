@@ -33,11 +33,11 @@ custombuild(){
 	pwd="`pwd`"
 	mkdir $HOME/src
 	cd $HOME/src
-	export PREFIX=/opt/$package_name-$package_version
+	export PREFIX=$installdirectory/$package_name-$package_version
 	mkdir -p $PREFIX
 	
 	# get the tarballs of the 7.7 release as a tree
-	wget -r --no-parent -A.tar.gz http://mirrors.tassig.com/xorg/src/
+	wget -r --no-parent -A.tar.gz $mirror_prefix/xorg/src/
 	mv mirrors.tassig.com/xorg/src/* ./
 	
 	# get the build.sh script
@@ -48,7 +48,7 @@ custombuild(){
 	
 	# for some dependencies, X.org does not distribute the tarballs, so we get the code ourselves
 	# get a stable release of pixman, MESA - projects external to X.org
-	wget http://mirrors.tassig.com/pixman/pixman-0.34.0.tar.gz
+	wget $mirror_prefix/pixman/pixman-0.34.0.tar.gz
 	mkdir -p mesa
 	cd mesa
 	#wget http://mirrors.tassig.com/mesa/MesaLib-10.4.7.tar.gz  # a version released approximately at the same time as X.org 7.7
@@ -161,12 +161,12 @@ custombuild(){
 	
 	# set CFLAGS and LDFLAGS
 	# TODO: what exactly requires _GNU_SOURCE ?
-	export CFLAGS="-D_GNU_SOURCE -I/opt/zlib/include -I/opt/eudev/include -I/opt/mtdev/include"   
-	export CFLAGS="$CFLAGS -I/opt/libressl/include"   # TODO: mesa needs it
+	export CFLAGS="-D_GNU_SOURCE -I$installdirectory/zlib/include -I$installdirectory/eudev/include -I$installdirectory/mtdev/include"   
+	export CFLAGS="$CFLAGS -I$installdirectory/libressl/include"   # TODO: mesa needs it
 	
 	# TODO: all these -rpath will end up in every binary and library that we build here, see if we can find a cleaner solution
-	export LDFLAGS="-Wl,-rpath=$PREFIX/lib -Wl,-rpath=/opt/freetype/lib -Wl,-rpath=/opt/zlib/lib,-rpath=/opt/llvm/lib"
-	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/fontconfig/lib -Wl,-rpath=/opt/expat/lib -Wl,-rpath=/opt/libpng/lib"
+	export LDFLAGS="-Wl,-rpath=$PREFIX/lib -Wl,-rpath=$installdirectory/freetype/lib -Wl,-rpath=$installdirectory/zlib/lib,-rpath=$installdirectory/llvm/lib"
+	export LDFLAGS="$LDFLAGS -Wl,-rpath=$installdirectory/fontconfig/lib -Wl,-rpath=$installdirectory/expat/lib -Wl,-rpath=$installdirectory/libpng/lib"
 
 	
 	# running the main build and installation script
@@ -178,8 +178,8 @@ custombuild(){
 	mv $PREFIX/etc/X11/xinit/xinitrc $PREFIX/etc/X11/xinit/xinitrc.bak
 	
 	# symlinks
-	ln -sv $PREFIX /opt/$package_name   # link for canonical name
-	ln -svf $PREFIX/lib/pkgconfig/*.pc /opt/pkgconf/lib/pkgconfig/   # copying all the pkgconf files, some of them might be useful for other software
+	ln -sv $PREFIX $installdirectory/$package_name   # link for canonical name
+	ln -svf $PREFIX/lib/pkgconfig/*.pc $installdirectory/pkgconf/lib/pkgconfig/   # copying all the pkgconf files, some of them might be useful for other software
 	ln -sv $PREFIX/bin/* /bin/
 	rm -r $HOME/src
 	

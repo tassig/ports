@@ -5,45 +5,40 @@ iscustombuild=1
 no_check=1 # TODO: 9 checks will fail
 
 custombuild() {
-    rm -rf builddir                                                              
-    mkdir -p builddir   # do everything in builddir for tidiness                 
-    cd builddir                                                                  
-    if [ "$url" == "" ]; then                                                    
-        # if no absolute $url defined, then assume, that we have relative url    
-        # $rel_url                                                               
-        url=$mirror_prefix/$rel_url                                              
-    fi                                                                           
-    wget -O archive $url                                                         
-    tar xvf archive                                                              
-    rm archive                                                                   
-    cd *   # cd into the package directory                                       
-    patch < ../../packages/$package_fullname-configure.ac.patch # TODO:  
-                                          # Aug 16, 2016 this patch was sent to 
-                                          # upstream mailing list check if it 
-                                          # is applied
-    cd doc
-    patch < ../../../packages/$package_fullname-doc-texi2pod.pl.patch # this 
-                                              # patch will not go to upstream
-                                              # because it is longhorn-only
-    cd ..
-    libtoolize
-    autoreconf
-    ./configure --prefix=$installdirectory/$package_fullname/                    
-    make -j                                                                     
-    # echo | cpan HTTP::Daemon # this string solves 48 test errors, but 9 still
-    # remains and related to python's --with-ssl option absence
-    if test -z $no_check   # run the make check, unless $no_check is set for     
-                           # this package definition                             
-    then make -j check || make -j test                                           
-    fi                                                                           
-    make install                                                                 
-    ln -sv $installdirectory/$package_fullname $installdirectory/$package_name   
-    ln -sfv $installdirectory/$package_name/bin/* /bin/ # force symlink
-                                            # because there is busybox's version
-    if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then              
-        ln -svf $installdirectory/$package_name/lib/pkgconfig/* \                
-        $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files    
-    fi                                                                           
-    cd ../..                                                                     
-    rm -r builddir
+	rm -rf builddir															  
+	mkdir -p builddir   # do everything in builddir for tidiness				 
+	cd builddir																  
+	wget -O archive $url														 
+	tar xvf archive															  
+	rm archive																   
+	cd *   # cd into the package directory									   
+	patch < ../../packages/$package_fullname-configure.ac.patch # TODO:  
+										  # Aug 16, 2016 this patch was sent to 
+										  # upstream mailing list check if it 
+										  # is applied
+	cd doc
+	patch < ../../../packages/$package_fullname-doc-texi2pod.pl.patch # this 
+											  # patch will not go to upstream
+											  # because it is longhorn-only
+	cd ..
+	libtoolize
+	autoreconf
+	./configure --prefix=$installdirectory/$package_fullname/					
+	make -j																	 
+	# echo | cpan HTTP::Daemon # this string solves 48 test errors, but 9 still
+	# remains and related to python's --with-ssl option absence
+	if test -z $no_check   # run the make check, unless $no_check is set for	 
+						   # this package definition							 
+	then make -j check || make -j test										   
+	fi																		   
+	make install																 
+	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name   
+	ln -sfv $installdirectory/$package_name/bin/* /bin/ # force symlink
+											# because there is busybox's version
+	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then			  
+		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \				
+		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files	
+	fi																		   
+	cd ../..																	 
+	rm -r builddir
 }

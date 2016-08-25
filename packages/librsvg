@@ -12,34 +12,28 @@ iscustombuild=1
 # /opt/gcc-6.1.0/x86_64-longhorn-linux-musl/include/pthread.h:79: syntax error,
 # unexpected identifier in '_Noreturn void pthread_exit(void *);' at '_Noreturn'
 custombuild(){
-    rm -rf builddir                                                              
-    mkdir -p builddir   # do everything in builddir for tidiness                 
-    cd builddir                                                                  
-    if [ "$url" == "" ]; then                                                    
-        # if no absolute $url defined, then assume, that we have relative url
-        # $rel_url
-        url=$mirror_prefix/$rel_url                                              
-    fi                                                                           
-    wget -O archive $url                                                         
-    tar xvf archive                                                              
-    rm archive                                                                   
-    cd *   # cd into the package directory                                       
-    ./configure --prefix=$installdirectory/$package_fullname/ \
-        --enable-introspection=no
-    make -j                                                                      
-    if test -z $no_check   # run the make check, unless $no_check is set for
-                           # this package definition
-    then make -j check || make -j test                                           
-    fi                                                                           
-    make install                                                                 
-    ln -sv $installdirectory/$package_fullname $installdirectory/$package_name   
-    ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash
-                                                # if the links are already there
-    if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then              
-        ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
-        $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
-    fi                                                                           
-    cd ../..                                                                     
-    rm -r builddir                                                               
-
+	rm -rf builddir															  
+	mkdir -p builddir   # do everything in builddir for tidiness				 
+	cd builddir																  
+	wget -O archive $url														 
+	tar xvf archive															  
+	rm archive																   
+	cd *   # cd into the package directory									   
+	./configure --prefix=$installdirectory/$package_fullname/ \
+		--enable-introspection=no
+	make -j																	  
+	if test -z $no_check   # run the make check, unless $no_check is set for
+						   # this package definition
+	then make -j check || make -j test										   
+	fi																		   
+	make install																 
+	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name   
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash
+												# if the links are already there
+	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then			  
+		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+	fi																		   
+	cd ../..																	 
+	rm -r builddir															   
 }
