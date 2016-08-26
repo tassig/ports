@@ -5,6 +5,7 @@ build_dependencies=
 iscustombuild=1
 no_check=1 # TODO: str_tester-str_tester.o: In function `test_rawmemchr':
 		   # /root/ports/builddir/valgrind-3.11.0/memcheck/tests/str_tester.c:513: undefined reference to `rawmemchr'
+		   # why?
 
 custombuild(){
 	rm -rf builddir

@@ -3,7 +3,7 @@ package_version=2.23
 tarball_suffix=xz
 build_dependencies=gawk
 iscustombuild=1
-no_check=1 # TODO: does not work
+no_check=1 # we are not surprised that it does not work
 
 custombuild(){
 	rm -rf builddir
