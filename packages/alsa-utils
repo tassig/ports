@@ -18,7 +18,7 @@ custombuild(){
     tar xvf archive
     rm archive
     cd *   # cd into the package directory
-    CFLAGS="-I/opt/alsa-lib/include" LDFLAGS="-L/opt/alsa-lib/lib" ./configure --prefix=$installdirectory/$package_fullname/
+    CFLAGS="-I/opt/alsa-lib/include" LDFLAGS="-L/opt/alsa-lib/lib -Wl,-rpath=/opt/alsa-lib/lib -Wl,-rpath=/opt/ncurses/lib" ./configure --prefix=$installdirectory/$package_fullname/ --disable-xmlto
     make -j
     if test -z $no_check   # run the make check, unless $no_check is set for 
                            # this package definition
