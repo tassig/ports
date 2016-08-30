@@ -20,7 +20,7 @@
 
 set -e
 
-packagedirectory=packages   # the directory name where the packages definitions
+packagedirectory="packages"   # the directory name where the packages definitions
 							# are located
 
 installdirectory="/opt"   # TODO: implement per user installs (with different 
