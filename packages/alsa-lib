@@ -2,9 +2,11 @@ package_name=alsa-lib
 package_version=1.1.2
 tarball_suffix=bz2
 url=ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.1.2.tar.bz2
-build_dependencies="python2"
-hascustombuild=1
+build_dependencies=
+iscustombuild=1
 
+# using --disable-mixer, which depends on python and is probably useless
+# we could add it by using --with-pythonlibs=
 custombuild(){
     rm -rf builddir
     mkdir -p builddir   # do everything in builddir for tidiness
@@ -18,7 +20,7 @@ custombuild(){
     tar xvf archive
     rm archive
     cd *   # cd into the package directory
-    LDFLAGS="-Wl,-rpath=/opt/Python/lib" ./configure --prefix=$installdirectory/$package_fullname/
+    ./configure --prefix=$installdirectory/$package_fullname --disable-mixer
     make -j
     if test -z $no_check   # run the make check, unless $no_check is set for 
                            # this package definition

@@ -3,7 +3,7 @@ package_version=1.1.2
 tarball_suffix=bz2
 url=ftp://ftp.alsa-project.org/pub/utils/alsa-utils-1.1.2.tar.bz2
 build_dependencies="alsa-lib"
-hascustombuild=1
+iscustombuild=1
 
 custombuild(){
     rm -rf builddir
@@ -18,8 +18,7 @@ custombuild(){
     tar xvf archive
     rm archive
     cd *   # cd into the package directory
-    #TODO: why alsa-lib CFLAGS don't work
-    LDFLAGS="-L/opt/alsa-lib/lib -Wl,-rpath=/opt/alsa-lib/lib" ./configure --prefix=$installdirectory/$package_fullname/ ALSA_CFLAGS="-I/opt/alsa-lib/include"
+    CFLAGS="-I/opt/alsa-lib/include" LDFLAGS="-L/opt/alsa-lib/lib" ./configure --prefix=$installdirectory/$package_fullname/
     make -j
     if test -z $no_check   # run the make check, unless $no_check is set for 
                            # this package definition
