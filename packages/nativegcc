@@ -93,6 +93,8 @@ custombuild(){
 	cd ..
 	mkdir gccobjdir
 	cd gccobjdir
+	
+	# --disable-gnu-indirect-function: this is used by some code that replaces c library functions like malloc(), for example gn of chromium, but this is not support by musl
 	../gcc-6.1.0/configure --prefix=$installdirectory/$packagename \
 						   --enable-languages=c,c++ \
 						   --with-native-system-header-dir=$installdirectory/$packagename/$target_triple/include \
