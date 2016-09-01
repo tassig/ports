@@ -201,19 +201,5 @@ custombuild(){
 	ln -svf $PREFIX/lib/pkgconfig/*.pc $installdirectory/pkgconf/lib/pkgconfig/   # copying all the pkgconf files, some of them might be useful for other software
 	ln -sv $PREFIX/bin/* /bin/
 	rm -r $HOME/src
-
-	######################
-	#                    #
-	#  install xcb-util  #
-        #                    #
-	######################
-
-	wget http://xcb.freedesktop.org/dist/xcb-util-0.4.0.tar.bz2
-	tar xvf xcb-util-0.4.0.tar.bz2
-	cd xcb-util-0.4.0
-	./configure --prefix=/opt/xorg
-	make
-	make install
-	cd ..
-	rm -rf xcb-util-0.4.0*
+	
 }
