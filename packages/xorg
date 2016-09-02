@@ -46,8 +46,17 @@ custombuild(){
 	git clone $freedesktop_url/modular util/modular
 	cd util/modular && git checkout 2749b723a0225ae70e0b0d26b6b68727d397d607 && cd ../..
 	
+	
+	
+	
+	###################################################################################
+	#
+	# get some additional modules
+	#
 	# for some dependencies, X.org does not distribute the tarballs, so we get the code ourselves
 	# get a stable release of pixman, MESA - projects external to X.org
+	###################################################################################
+	
 	wget $mirror_prefix/pixman/pixman-0.34.0.tar.gz
 	mkdir -p mesa
 	cd mesa
@@ -74,31 +83,37 @@ custombuild(){
 	clone imake 4063190bf2fd7e3c61b80e98d72e134609612bf8   # is needed by autoconf, later
 	cd ..
 	cd app
-	# these aren't needed but are small and good for testing
-	clone xinit 72160c42bea2073bf95c01aca59a12f0ca7ab707
+	# these aren't needed but are small and good for testing TODO: it's time to remove them
+	clone xinit 72160c42bea2073bf95c01aca59a12f0ca7ab707   
 	clone twm c5abcb619eb0b01f074fd9acb9128f19af774834
 	clone xclock 4697248c5a3e2aa505eceadd45f17554d4424aff
+	cd xcb
+	clone util-wm 0.4.1   # xcb needs it for support of EWMH
+	cd util-wm && git submodule update --init && cd ..   # we need to initialized git submodules for util-wm
 	cd ..
 	cp -v everything/xkeyboard-config-2.6.tar.gz .   # TODO: how come we can't find it on the filesystem? it seems it's not installed
 
 	
-	# replacements of the 7.7 packages with newer versions
+	
+	
+	########################################################
+	#                                                      #
+	# replacements of the 7.7 packages with newer versions #
+	#                                                      #
+	########################################################
+	
 	cd xcb
 	rm libxcb-1.8.1.tar.gz
 	rm xcb-proto-1.7.1.tar.gz
 	clone libxcb d34785a34f28fa6a00f8ce00d87e3132ff0f6467
 	clone proto 6398e42131eedddde0d98759067dde933191f049
-	clone util-wm 0.4.1 # xcb needs it for support of EWMH
-	# we need to initialized git submodules for util-wm
-	cd util-wm && git submodule update --init && cd ..
-
 	cd ..
 	cd util
 	rm util-macros-1.17.tar.gz
 	clone macros d7acec2d3a3abe79814ceb72e2c0d4d95ed31d37  # wanted by build.sh and the latest version of libxcb
 	cd ..
 	rm xserver/*.tar.gz # remove the xserver tarball, to make sure the build system is not using it
-	clone xserver xorg-server-1.18.3
+	clone xserver xorg-server-1.18.3   # we use a recent version of x.org server
 	clone libevdev 7f2fffc0d9fe47a76dcaaa3db9bd758e8433c0b6   # TODO: we should remove the existing tar.gz too
 	cd driver
 	clone xf86-input-synaptics 59e5db025307404fbfbc82f2fb3fe91d6a3005d7
@@ -132,6 +147,10 @@ custombuild(){
 	rm -r xf86-video-nv*
 	rm -r xf86-video-r128*
 	cd ..
+	
+	
+	
+	
 	
 
 	# unpack the parts to be patched
