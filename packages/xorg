@@ -80,17 +80,19 @@ custombuild(){
 	clone libxtrans 3810e026323210df6ec6cf818f01832a63e9fbb9  # xserver needs it
 	cd ..
 	cd util
-	clone imake 4063190bf2fd7e3c61b80e98d72e134609612bf8   # is needed by autoconf, later
+	clone imake 4063190bf2fd7e3c61b80e98d72e134609612bf8   # is needed by autoconf, later TODO: see if we can remove
 	cd ..
 	cd app
 	# these aren't needed but are small and good for testing TODO: it's time to remove them
 	clone xinit 72160c42bea2073bf95c01aca59a12f0ca7ab707   
-	clone twm c5abcb619eb0b01f074fd9acb9128f19af774834
-	clone xclock 4697248c5a3e2aa505eceadd45f17554d4424aff
+	#clone twm c5abcb619eb0b01f074fd9acb9128f19af774834
+	#clone xclock 4697248c5a3e2aa505eceadd45f17554d4424aff
 	cd ..
 	cd xcb
 	clone util-wm 0.4.1   # xcb needs it for support of EWMH
-	cd util-wm && git submodule update --init && cd ..   # we need to initialized git submodules for util-wm
+	cd util-wm && git submodule update --init && cd ..   # we need to initialize git submodules for util-wm
+	clone util 0.4.0   # needed for obconf (openbox)
+	cd util && git submodule update --init && cd ..
 	cd ..
 	cp -v everything/xkeyboard-config-2.6.tar.gz .   # TODO: how come we can't find it on the filesystem? it seems it's not installed
 
