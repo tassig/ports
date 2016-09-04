@@ -87,6 +87,7 @@ custombuild(){
 	clone xinit 72160c42bea2073bf95c01aca59a12f0ca7ab707   
 	clone twm c5abcb619eb0b01f074fd9acb9128f19af774834
 	clone xclock 4697248c5a3e2aa505eceadd45f17554d4424aff
+	cd ..
 	cd xcb
 	clone util-wm 0.4.1   # xcb needs it for support of EWMH
 	cd util-wm && git submodule update --init && cd ..   # we need to initialized git submodules for util-wm
