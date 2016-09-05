@@ -3,33 +3,4 @@
 package_name=sysstat
 package_version=11.3.5
 tarball_suffix=gz
-iscustombuild=1
-
-# we need --disable-nls flag to configure
-
-set -e
-
-custombuild(){
-	rm -rf builddir
-	mkdir -p builddir   # do everything in builddir for tidiness
-	cd builddir
-	wget -O archive $url
-	tar xvf archive
-	rm archive
-	cd *   # cd into the package directory
- 
-	# --disable-nls needed because we don't have "Native Language Support" yet
-	./configure --prefix=$installdirectory/$package_fullname --disable-nls
-	make -j
-	make install
-
-	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
-	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash 
-											# if the links are already there
-	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
-		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
-		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
-	fi
-	cd ../..
-	rm -r builddir
-}
+no_check=1 # there is no tests suite
