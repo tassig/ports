@@ -27,7 +27,7 @@ custombuild(){
 		# remove this patch after releasing curl's version with applied 
 		# pull request https://github.com/curl/curl/pull/956
 	autoreconf
-	./configure --prefix=$installdirectory/$package_fullname/ --with-zlib=$installdirectory/zlib
+	./configure --prefix=$installdirectory/$package_fullname/
 	make -j
 	if test -z $no_check   # run the make check, unless $no_check is set for 
 						   # this package definition

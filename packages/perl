@@ -18,8 +18,7 @@ custombuild(){
 	sh Configure -Dprefix=$installdirectory/$package_fullname/ -Dcc=gcc -de 
 	# a hack to make errno.h available to perl build system, perl looks for the system headers in /usr/include , we should fix perl but we don't care
 	mkdir -p /usr/include
-	# TODO: we have to unify toolchain names under /opt
-	cp `find $installdirectory/* -name errno.h | head -n 1` /usr/include/
+	cp `find $installdirectory/gcc* -name errno.h | head -n 1` /usr/include/
 	make -j
 	rm -r /usr
 
