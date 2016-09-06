@@ -35,4 +35,7 @@ custombuild(){
     fi
     cd ../..
     rm -r builddir
+    
+    
+    addgroup audio   # speaker-test needs group audio, see if we can remove later
 }
