@@ -2,7 +2,7 @@ package_name=alsa-utils
 package_version=1.1.2
 tarball_suffix=bz2
 url=ftp://ftp.alsa-project.org/pub/utils/alsa-utils-1.1.2.tar.bz2   # TODO
-build_dependencies="alsa-lib"
+build_dependencies="alsa-lib ncurses"
 iscustombuild=1
 
 custombuild(){
