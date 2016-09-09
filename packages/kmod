@@ -28,7 +28,7 @@ custombuild() {
 	liblzma_CFLAGS="-I $installdirectory/xz/include" \
 	liblzma_LIBS="-llzma" \
 	./configure --prefix=$prefix $KMOD_CONFIGURE_OPTIONS
-	make -j CFLAGS="-I $installdirectory/xz/include" LDFLAGS=$KMOD_MAKELDFLAGS
+	make CFLAGS="-I $installdirectory/xz/include" LDFLAGS="$KMOD_MAKELDFLAGS"
 	make install
 
 	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
