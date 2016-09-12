@@ -59,7 +59,12 @@ defaultbuild(){
 	fi
 	if [ -d $installdirectory/$package_name/share/icons ]; then
         	mkdir -p ~/.icons/
-	        cp -r $installdirectory/$package_name/share/icons/* /root/.icons/
+		# ~/.icons/ contains symlinks, so cp -r will failed. to walkaround,
+		# we will look deeper
+		for p in $(ls -1 $installdirectory/$package_name/share/icons/); do 
+			mkdir -p /root/.icons/$p/
+			cp -r $installdirectory/$package_name/share/icons/$p/* /root/.icons/$p/
+		done
 	fi
 
 	cd ../..
