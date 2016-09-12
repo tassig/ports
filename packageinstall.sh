@@ -53,15 +53,6 @@ defaultbuild(){
 		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
 		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
 	fi
-	if [ -d $installdirectory/$package_name/share/applications ]; then
-		mkdir -p $installdirectory/applications
-		ln -svf $installdirectory/$package_name/share/applications/*.desktop $installdirectory/applications/
-	fi
-	if [ -d $installdirectory/$package_name/share/icons ]; then
-        	mkdir -p ~/.icons/
-	        cp -r $installdirectory/$package_name/share/icons/* /root/.icons/
-	fi
-
 	cd ../..
 	rm -r builddir
 }
