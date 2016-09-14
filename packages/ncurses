@@ -22,7 +22,8 @@ custombuild(){
 	tar xvf archive
 	rm archive
 	cd *   # cd into the package directory
-	
+
+	LDFLAGS="-s -static" \
 	./configure --prefix=$installdirectory/$package_name-$package_version \
 			--with-shared		   \
 			--enable-pc-files	   \
