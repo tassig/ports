@@ -31,7 +31,7 @@ custombuild(){
 	#../$package_fullname.src/configure --prefix=/opt/$package_fullname/
 	# -DLLVM_INSTALL_UTILS=ON - enables building of llvm utils. Will be helpfull for building for example - Rust
 	cmake -DCMAKE_INSTALL_PREFIX=$installdirectory/$package_fullname/ -DBUILD_SHARED_LIBS=ON -DLLVM_INSTALL_UTILS=ON ../$package_fullname.src/   # shared libs needed by mesa
-	make -j4
+	make -j8
 	if test -z $no_check   # run the make check, unless $no_check is set for 
 						   # this package definition
 	then make -j check || make -j test
