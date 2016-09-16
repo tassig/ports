@@ -1,6 +1,7 @@
 package_name=libxml2
 package_version=2.9.4
 tarball_suffix=gz
+dependencies="python2"
 iscustombuild=1
 
 custombuild(){
@@ -12,7 +13,8 @@ custombuild(){
 	rm archive
 	cd *   # cd into the package directory
 
-	./configure --prefix=$installdirectory/$package_fullname --without-python   # TODO: need fixing, in python
+	# LDFLAGS to go through libtool, necessary because no libtool support in Python-2
+	LDFLAGS="-L/opt/Python/lib" ./configure --prefix=$installdirectory/$package_fullname
 	make -j
 	if test -z $no_check   # run the make check, unless $no_check is set for 
 						   # this package definition
