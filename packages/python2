@@ -26,7 +26,7 @@ custombuild() {
 	export LDFLAGS="-Wl,-rpath=$installdirectory/libressl/lib -L $installdirectory/libressl/lib -Wl,-rpath=$installdirectory/zlib/lib -L $installdirectory/zlib/lib -Wl,-rpath=$installdirectory/bzip2/lib -L $installdirectory/bzip2/lib"
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=$installdirectory/Python-2.7.11/lib"
 	./configure --prefix=$installdirectory/Python-2.7.11 --with-ensurepip --enable-shared   # shared libraries needed because other programs need them TODO: not completely sure about that, if i remember, mesa might need them, check if it's really the case
-	make -j4
+	make -j8
 	
 	rm -r /usr
 
