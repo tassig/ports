@@ -14,7 +14,7 @@ custombuild(){
 	cd *   # cd into the package directory
 
 	# LDFLAGS to go through libtool, necessary because no libtool support in Python-2
-	LDFLAGS="-L/opt/Python/lib" ./configure --prefix=$installdirectory/$package_fullname
+	LDFLAGS="-L/opt/Python/lib" ./configure --prefix=$installdirectory/$package_fullname --with-python
 	make -j
 	if test -z $no_check   # run the make check, unless $no_check is set for 
 						   # this package definition
