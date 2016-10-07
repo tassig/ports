@@ -192,6 +192,8 @@ custombuild(){
 	# TODO: all these -rpath will end up in every binary and library that we build here, see if we can find a cleaner solution
 	export LDFLAGS="-Wl,-rpath=$PREFIX/lib -Wl,-rpath=$installdirectory/freetype/lib -Wl,-rpath=$installdirectory/zlib/lib,-rpath=$installdirectory/llvm/lib"
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=$installdirectory/fontconfig/lib -Wl,-rpath=$installdirectory/expat/lib -Wl,-rpath=$installdirectory/libpng/lib"
+	# add support for libudev
+	export LDFLAGS="$LDFLAGS -L$installdirectory/eudev/lib -Wl,-rpath=$installdirectory/eudev/lib"
 
 	
 	# running the main build and installation script
