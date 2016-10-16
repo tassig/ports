@@ -4,6 +4,7 @@ tarball_suffix=gz
 dependencies="python2"
 iscustombuild=1
 
+# because of no libtool support in Python2
 custombuild(){
 	rm -rf builddir
 	mkdir -p builddir   # do everything in builddir for tidiness
@@ -13,8 +14,10 @@ custombuild(){
 	rm archive
 	cd *   # cd into the package directory
 
-	# LDFLAGS to go through libtool, necessary because no libtool support in Python-2
-	LDFLAGS="-L/opt/Python/lib" ./configure --prefix=$installdirectory/$package_fullname
+	# LDFLAGS to go through libtool, necessary because no libtool support in Python2
+	# also adding  --without-lzma because some problems with the builds with xz
+	# we have the following: libtool: warning: relinking 'libxml2mod.la'
+	LDFLAGS="-L/opt/Python/lib" ./configure --prefix=$installdirectory/$package_fullname --without-lzma
 	make -j
 	if test -z $no_check   # run the make check, unless $no_check is set for 
 						   # this package definition
@@ -22,8 +25,7 @@ custombuild(){
 	fi
 	make install
 	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
-	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash 
-											# if the links are already there
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash # if the links are already there
 	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
 		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
 		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
