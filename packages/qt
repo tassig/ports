@@ -41,7 +41,7 @@ custombuild(){
 	# -R/opt/fontconfig/lib -R/opt/freetype/lib -R/opt/xorg-X11R7.7/lib -R/opt/mtdev/lib : to correctly link libraries such as libqxcb.so
 	# the following is enough to make it build, but then some runtime paths are missing in the libraries, which will prevent some software to run without LD_LIBRARY_PATH
 	./configure --prefix=$installdirectory/$package_fullname/ -skip qtwebengine -qt-xcb -no-dbus -opensource -confirm-license -I$installdirectory/xorg-X11R7.7/include -L$installdirectory/xorg-X11R7.7/lib -R $installdirectory/glib/lib -R $installdirectory/eudev/lib -L$installdirectory/fontconfig/lib -L$installdirectory/freetype/lib -R$installdirectory/fontconfig/lib -R$installdirectory/freetype/lib -R$installdirectory/xorg-X11R7.7/lib -R$installdirectory/mtdev/lib # -rpath
-	make -j4
+	make -j8
 	if test -z $no_check   # run the make check, unless $no_check is set for
 						   # this package definition
 	then make -j4 check || make -j4 test
