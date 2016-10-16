@@ -44,7 +44,7 @@ custombuild(){
 	make -j4
 	if test -z $no_check   # run the make check, unless $no_check is set for
 						   # this package definition
-	then make -j check || make -j test
+	then make -j4 check || make -j4 test
 	fi
 	make install
 	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
