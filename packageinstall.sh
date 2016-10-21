@@ -34,7 +34,7 @@ defaultbuild(){
 	rm archive
 	cd *   # cd into the package directory
 	./configure --prefix=$installdirectory/$package_fullname/
-	make -j
+	make -j   # TODO: should be adjusted to the number of cores on the machine, otherwise it uses more memory than it can really process
 	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
 	then make -j check || make -j test
 	fi
