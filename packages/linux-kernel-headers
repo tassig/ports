@@ -4,7 +4,7 @@ build_dependencies=
 iscustombuild=1
 
 custombuild(){
-	url=https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.7.3.tar.xz
+	url=https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-$package_version.tar.xz
 	rm -rf builddir
 	mkdir -p builddir   # do everything in builddir for tidiness
 	cd builddir
