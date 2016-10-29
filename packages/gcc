@@ -1,18 +1,15 @@
 package_name=gcc
 package_version=6.1.0
-#musl's related vars
-musl_version=1.1.15
-musl_fullname=musl-$musl_version
-build_dependencies="make linux-kernel-headers"
+build_dependencies=
 iscustombuild=1
 
-##########################
-#
-# install GCC native compiler
-# C and C++ support
-#
-#
-##########################
+
+
+musl_version=1.1.15
+musl_fullname=musl-$musl_version
+
+
+# TODO: alignment along multiple lines must be done with spaces, not tabs
 
 
 # TODO: gcc still has /usr/local/include in the include path and /usr/lib in the lib path
@@ -28,7 +25,7 @@ custombuild(){
 	wget http://mirrors.tassig.com/binutils/binutils-2.26.tar.bz2
 	tar xvf binutils-2.26.tar.bz2
 	mkdir objdir
-	cd objdir				  
+	cd objdir
 	../binutils-2.26/configure --prefix=$installdirectory/$packagename \
 							   --with-lib-path=/lib \
 							   --build=$target_triple \
@@ -61,9 +58,9 @@ custombuild(){
 	
 	# do gcc
 	
-	wget http://mirrors.tassig.com/gcc/gcc-6.1.0.tar.bz2
-	tar xvf gcc-6.1.0.tar.bz2
-	cd gcc-6.1.0/
+	wget http://mirrors.tassig.com/gcc/$packagename.tar.bz2
+	tar xvf $packagename.tar.bz2
+	cd $packagename/
 	contrib/download_prerequisites
 	
 	echo "echo '$target_triple'" > config.guess
@@ -78,8 +75,8 @@ custombuild(){
 	cp -f config.sub mpfr/config.sub
 	
 	# NOTE: can also add the unofficial gcc patches for advanced features
-	mkdir patches-gcc-6.1.0
-	cd patches-gcc-6.1.0
+	mkdir patches-$packagename
+	cd patches-$packagename
 	wget http://port70.net/~nsz/musl/gcc-6.1.0/0001-cilkrts.patch
 	wget http://port70.net/~nsz/musl/gcc-6.1.0/0002-posix_memalign.patch
 	wget http://port70.net/~nsz/musl/gcc-6.1.0/0003-libgcc_s.patch
@@ -88,13 +85,13 @@ custombuild(){
 	wget http://port70.net/~nsz/musl/gcc-6.1.0/0006-ssp_nonshared.patch
 	wget http://port70.net/~nsz/musl/gcc-6.1.0/targetlib-test-fix.diff
 	cd ../
-	for file in patches-gcc-6.1.0/*;do patch -p1 -i $file;done
+	for file in patches-$packagename/* ; do patch -p1 -i $file ; done
 
 	cd ..
 	mkdir gccobjdir
 	cd gccobjdir
 	
-	# --disable-gnu-indirect-function: this is used by some code that replaces c library functions like malloc(), for example gn of chromium, but this is not support by musl
+	# --disable-gnu-indirect-function: indirect-function is used by some code that replaces C library functions like malloc(), for example gn of chromium, but this is not supported by musl
 	../gcc-6.1.0/configure --prefix=$installdirectory/$packagename \
 						   --enable-languages=c,c++ \
 						   --with-native-system-header-dir=$installdirectory/$packagename/$target_triple/include \
@@ -112,13 +109,6 @@ custombuild(){
 	rm -r gccobjdir
 	
 	
-	# final links
-	
-	ln -svf $installdirectory/$packagename/bin/* /bin/
-	ln -svf $installdirectory/linux-kernel-headers/include/* $installdirectory/$packagename/$target_triple/include/   # linux headers into system headers location
-	
-	
-	
 	# do musl libc again, this time it will use the new compiler
 	
 	wget http://mirrors.tassig.com/musl/$musl_fullname.tar.gz
@@ -130,5 +120,12 @@ custombuild(){
 	cp $installdirectory/$packagename/$target_triple/lib/libc.so /lib/ld-musl-$ARCH.so.1
 	cd ..
 	rm -r musl*
+	
+	
+	
+	# NOTE: to use this toolchain properly, you need to link some kernel headers as follows:
+	# ln -sv /opt/linux-kernel-headers/include/* /opt/$GCC_TOOLCHAIN_NAME/$ARCH-longhorn-linux-musl/include/ || true
+	# cp -r /opt/linux-kernel-headers/include/scsi/* /opt/$GCC_TOOLCHAIN_NAME/$ARCH-longhorn-linux-musl/include/scsi
+	
 }
 

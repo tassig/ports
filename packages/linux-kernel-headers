@@ -1,9 +1,10 @@
 package_name=linux-kernel-headers
-package_version=4.6.7
+package_version=4.6.7   # TODO: this field is provided for informational purposes only, it should be ignored by the script
 build_dependencies=
 iscustombuild=1
 
 custombuild(){
+	# TODO: it should download and install the headers of our current kernel version
 	url=https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-$package_version.tar.xz
 	rm -rf builddir
 	mkdir -p builddir   # do everything in builddir for tidiness

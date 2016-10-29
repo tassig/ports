@@ -1,7 +1,9 @@
 #!/bin/sh
 
+#
 # usage: ./packageinstall.sh package_identifier
 # example: ./packageinstall.sh autoconf
+#
 # the script is assuming you're running it in the ports directory (which is a 
 # bit stupid, need to be changed later) refer to "package definition 
 # specifications.md" for laws and regulations
@@ -9,6 +11,11 @@
 # TODO: installpackage() should be a transaction to prevent half-installed 
 #   packages and leftovers. ex: what do you do when "make install" returns an 
 #   error? right now, we do nothing, which is incorrect
+#
+# TODO: parallelism (make -j) should be adjusted to the number of cores on the machine, otherwise it uses more memory than it can really process
+#
+# TODO: start removing support for absolute urls
+#
 
 # version 1.1
 #
@@ -34,7 +41,7 @@ defaultbuild(){
 	rm archive
 	cd *   # cd into the package directory
 	./configure --prefix=$installdirectory/$package_fullname/
-	make -j   # TODO: should be adjusted to the number of cores on the machine, otherwise it uses more memory than it can really process
+	make -j  
 	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
 	then make -j check || make -j test
 	fi
@@ -73,7 +80,7 @@ installpackage(){
 	# installing the package's dependencies recursively
 	for pkg_name in $build_dependencies
 	do
-		(./packageinstall.sh $pkg_name) || exit $?   # i initially used a recursive call to "installpackage" instead, but it was inheriting the shell variables
+		(./packageinstall.sh $pkg_name) || exit $?   # I initially used a recursive call to "installpackage" instead, but it was inheriting the shell variables
 	done
 	
 	# do a custom build if the package defines custombuild(), otherwise do a 
