@@ -34,4 +34,6 @@ custombuild(){
 	fi
 	cd ../..
 	rm -r builddir
+	# patch glib.pc to add -rpath to ldflags
+	sed -i 's/Libs: -L${libdir} -lglib-2.0 /Libs: -L${libdir} -lglib-2.0 -Wl,-rpath,\/opt\/glib\/lib/g' $installdirectory/$package_name/lib/pkgconfig/glib-2.0.pc
 }
