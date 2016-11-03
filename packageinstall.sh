@@ -12,18 +12,7 @@
 #   packages and leftovers. ex: what do you do when "make install" returns an 
 #   error? right now, we do nothing, which is incorrect
 #
-# TODO: parallelism (make -j) should be adjusted to the number of cores on the machine, otherwise it uses more memory than it can really process
-#
 # TODO: start removing support for absolute urls
-#
-
-# version 1.1
-#
-# history
-# - 1.1: Aug 09 2016 dambaev <ice.redmine@gmail.com> 
-#		added support of relative urls by expecting rel_url to be suffix to
-#		"http://mirrors.tassig.com/" url iff there is no url defined;
-# - 1.0 initial version
 
 set -e
 
@@ -41,9 +30,10 @@ defaultbuild(){
 	rm archive
 	cd *   # cd into the package directory
 	./configure --prefix=$installdirectory/$package_fullname/
-	make -j  
+	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
+	make -j$ncpu
 	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
-	then make -j check || make -j test
+	then make -j$ncpu check || make -j$ncpu test
 	fi
 	make install
 	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
