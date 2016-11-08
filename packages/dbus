@@ -14,6 +14,7 @@ custombuild(){
     rm archive
     cd *   # cd into the package directory
     patch -p1 < ../../packages/dbus-configure.patch
+    autoreconf || true # it will fail due to missing autoconf modules, but configure script will still be updated
     ./configure --prefix=$installdirectory/$package_fullname/
     ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
     make -j$ncpu
