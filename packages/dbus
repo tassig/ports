@@ -1,5 +1,5 @@
 package_name=dbus
-package_version=1.11.6
+package_version=1.10.12
 tarball_suffix=gz
 build_dependencies="expat"
 iscustombuild=1
@@ -14,7 +14,7 @@ custombuild(){
     rm archive
     cd *   # cd into the package directory
     patch -p1 < ../../packages/dbus-configure.patch
-    autoreconf || true # it will fail due to missing autoconf modules, but configure script will still be updated
+    autoreconf
     ./configure --prefix=$installdirectory/$package_fullname/
     ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
     make -j$ncpu
