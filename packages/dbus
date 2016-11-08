@@ -30,5 +30,5 @@ custombuild(){
     fi
     cd ../..
     rm -r builddir
-    sed -i 's/Libs: -L${libdir} -lexpat/Libs: -L${libdir} -lexpat -Wl,-rpath,${libdir}/' $installdirectory/pkgconf/li
+    sed -i 's/Libs: -L${libdir} -ldbus-1/Libs: -L${libdir} -ldbus-1 -Wl,-rpath,${libdir}/' $installdirectory/pkgconf/lib/pkgconfig/dbus-1.pc
 }
