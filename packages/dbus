@@ -1,0 +1,4 @@
+package_name=dbus
+package_version=1.11.6
+tarball_suffix=gz
+build_dependencies=
