@@ -47,9 +47,4 @@ custombuild(){
 	fi
 	cd ../..
 	rm -r builddir
-    # chromium will be searching <cairo/cairo.h>
-    sed -i 's/Cflags: -I${includedir}\/cairo/Cflags: -I${includedir}\/cairo -I${includedir}/' $installdirectory/pkgconf/lib/pkgconfig/cairo.pc
-    # chromium will use pkg config to probe ldflags
-    sed -i 's/Libs: -L${libdir} -lcairo/Libs: -L${libdir} -lcairo -Wl,-rpath,${libdir}/' $installdirectory/pkgconf/lib/pkgconfig/cairo.pc
-
 }
