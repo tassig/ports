@@ -6,6 +6,8 @@ build_dependencies="zlib libressl curl perl gettext expat"
 iscustombuild=1
 no_check=1 # TODO: 6 tests failed, why?
 
+# git not using pkg-config
+# TODO: we should patch configure.ac, use pkg-config, and push the patch upstream, they should accept it
 custombuild(){
 	rm -rf builddir
 	mkdir -p builddir   # do everything in builddir for tidiness
