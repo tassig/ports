@@ -1,6 +1,6 @@
 # WARNING: do not forget to update http://longhorn.tassig.com/downloads/ports.tar.xz after git port update
 package_name=git
-package_version=2.7.3
+package_version=2.10.2
 tarball_suffix=xz
 build_dependencies="zlib libressl curl perl gettext expat"
 iscustombuild=1
@@ -15,7 +15,7 @@ custombuild(){
 	rm archive
 	cd *   # cd into the package directory
 
-	LDFLAGS="-L$installdirectory/libressl/lib -Wl,-rpath-link=$installdirectory/libressl/lib"   ./configure --prefix=$installdirectory/$package_fullname --with-openssl=$installdirectory/libressl --with-zlib=$installdirectory/zlib --with-curl=$installdirectory/curl --with-perl=/bin/perl --with-expat=$installdirectory/expat   # LDFLAGS fixes a bug in a git executable linkage
+	./configure --prefix=$installdirectory/$package_fullname --with-zlib=$installdirectory/zlib --with-curl=$installdirectory/curl --with-perl=/bin/perl
 
 	make -j
 	if test -z $no_check   # run the make check, unless $no_check is set for 
