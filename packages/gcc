@@ -77,13 +77,13 @@ custombuild(){
 	# NOTE: can also add the unofficial gcc patches for advanced features
 	mkdir patches-$packagename
 	cd patches-$packagename
-	wget http://port70.net/~nsz/musl/gcc-6.1.0/0001-cilkrts.patch
-	wget http://port70.net/~nsz/musl/gcc-6.1.0/0002-posix_memalign.patch
-	wget http://port70.net/~nsz/musl/gcc-6.1.0/0003-libgcc_s.patch
-	wget http://port70.net/~nsz/musl/gcc-6.1.0/0004-linux_libc_has_function.patch
-	wget http://port70.net/~nsz/musl/gcc-6.1.0/0005-nopie.patch
-	wget http://port70.net/~nsz/musl/gcc-6.1.0/0006-ssp_nonshared.patch
-	wget http://port70.net/~nsz/musl/gcc-6.1.0/targetlib-test-fix.diff
+	wget http://mirrors.tassig.com/gcc/gcc-6.1.0/0001-cilkrts.patch
+	wget http://mirrors.tassig.com/gcc/gcc-6.1.0/0002-posix_memalign.patch
+	wget http://mirrors.tassig.com/gcc/gcc-6.1.0/0003-libgcc_s.patch
+	wget http://mirrors.tassig.com/gcc/gcc-6.1.0/0004-linux_libc_has_function.patch
+	wget http://mirrors.tassig.com/gcc/gcc-6.1.0/0005-nopie.patch
+	wget http://mirrors.tassig.com/gcc/gcc-6.1.0/0006-ssp_nonshared.patch
+	wget http://mirrors.tassig.com/gcc/gcc-6.1.0/targetlib-test-fix.diff
 	cd ../
 	for file in patches-$packagename/* ; do patch -p1 -i $file ; done
 
