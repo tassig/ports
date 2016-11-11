@@ -1,5 +1,5 @@
 package_name=gtk+
-package_version=2.24.28 
+package_version=2.24.31 
 build_dependencies="atk gdk-pixbuf pango"
 tarball_suffix=xz
 iscustombuild=1
@@ -14,7 +14,7 @@ no_check=1
 ##########################
 
 # TODO: tests fail, fix
-
+# TODO: try to patch configure or whatever is broken
 
 # custombuild because bug in configure (incorrect linking of glib)
 custombuild(){
