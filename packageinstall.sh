@@ -20,6 +20,9 @@ packagedirectory="packages"   # the directory name where the packages definition
 installdirectory="/opt"   # TODO: implement per user installs (with different --prefix)
 mirror_prefix=http://mirrors.tassig.com # this is for relative URLs. If $url is empty, then url=$mirror_prefix/$rel_url
 
+export PATH_SEPARATOR=:   # the GNU build system does not know what is the separator in the PATH variable, and this prevents some builds like curl to work, so we have to specify this variable. However, for all users the PATH will become /bin/:~/.opt/bin , and these build systems can detect the ':', so we could actually remove this variable.
+
+
 # the function called by default to build a package
 defaultbuild(){
 	rm -rf builddir
