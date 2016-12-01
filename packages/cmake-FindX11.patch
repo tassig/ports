@@ -1,0 +1,20 @@
+--- /root/FindX11.cmake
++++ /opt/cmake-3.5.2/share/cmake-3.5/Modules/FindX11.cmake
+@@ -80,7 +80,7 @@
+     /usr/openwin/include
+     /usr/openwin/share/include
+     /opt/graphics/OpenGL/include
+-    /opt/X11/include
++    /opt/xorg/include
+   )
+ 
+   set(X11_LIB_SEARCH_PATH
+@@ -88,7 +88,7 @@
+     /usr/X11R6/lib
+     /usr/X11R7/lib
+     /usr/openwin/lib
+-    /opt/X11/lib
++    /opt/xorg/lib
+   )
+ 
+   find_path(X11_X11_INCLUDE_PATH X11/X.h                             ${X11_INC_SEARCH_PATH})
