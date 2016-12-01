@@ -42,13 +42,6 @@ defaultbuild(){
 		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
 		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
 	fi
-    # check if package is provides m4 rules for automake. if it is - install them into automake
-    # this will solve "autoreconf" errors in many apps (for example, in lxterminal, in which case issue is in
-    # glib and intltool)
-    if [ -d $installdirectory/$package_name/share/aclocal ]; then
-        ln -svf $installdirectory/$package_name/share/aclocal/* \
-            $installdirectory/automake/share/aclocal/ || true # don't fail if m4 rule is already there
-    fi
 	cd ../..
 	rm -r builddir
 }
