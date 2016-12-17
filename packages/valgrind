@@ -1,5 +1,5 @@
 package_name=valgrind
-package_version=3.11.0
+package_version=3.12.0
 tarball_suffix=bz2
 build_dependencies=
 iscustombuild=1
@@ -16,8 +16,10 @@ custombuild(){
 	rm archive
 	cd *   # cd into the package directory
 
-	# Specify GLIBC_VERSION in configure
-	sed -i -e 's/case "${GLIBC_VERSION}" in/GLIBC_VERSION=2.2\n\ncase "${GLIBC_VERSION}" in/g' configure
+	patch -p1 < ../../packages/valgrind-configure.patch
+	patch -p1 < ../../packages/valgrind-musl1.patch
+	patch -p1 < ../../packages/valgrind-musl2.patch
+	autoreconf
 	./configure --prefix=$installdirectory/$package_fullname --with-pagesize=4
 
 	make -j
