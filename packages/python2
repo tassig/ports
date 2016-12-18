@@ -5,8 +5,7 @@ rel_url=python/Python-2.7.11.tar.xz # custom relative URL
 build_dependencies=bzip2   # used by nothing but nacl of Chrome, which we should get rid of anyway TODO: bzip2 and this dependency can go away once we get rid of nacl
 iscustombuild=1
 no_check=1 # TODO: some test will fail
-							  
-# TODO: if a version of python is needed that has full supports for lots of plugins, we can add a new package, named "python-full" or something
+
 
 custombuild() {
 	rm -rf builddir

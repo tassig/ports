@@ -5,7 +5,10 @@ build_dependencies=
 iscustombuild=1
 no_check=1 # there is no test suite
 
-# does not uses autoconf tools, just make files
+# TODO: get rid of this once we get rid of the python2 dependency
+#       in case bunzip2 is needed, use the one from busybox
+
+# does not use autoconf tools, just makefiles
 
 custombuild(){ 
 	rm -rf builddir
