@@ -200,14 +200,14 @@ custombuild(){
 	./util/modular/build.sh --autoresume resumefile   # --check
 	
 	
-	# making sure we can't use startx or xinitrc too easily
-	cp $PREFIX/bin/startx $PREFIX/bin/startx.bak
+	# making sure we can't use initrc too easily
 	mv $PREFIX/etc/X11/xinit/xinitrc $PREFIX/etc/X11/xinit/xinitrc.bak
 	
 	# symlinks
 	ln -sv $PREFIX $installdirectory/$package_name   # link for canonical name
 	ln -svf $PREFIX/lib/pkgconfig/*.pc $installdirectory/pkgconf/lib/pkgconfig/   # copying all the pkgconf files, some of them might be useful for other software
 	ln -sv $PREFIX/bin/* /bin/
+	rm /bin/startx   # startx can confuse people
 	rm -r $HOME/src
 	
 }
