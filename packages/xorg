@@ -58,12 +58,12 @@ custombuild(){
 	#
 	# for some dependencies, X.org does not distribute the tarballs, so we get the code ourselves
 	# get a stable release of pixman, MESA - projects external to X.org
+	#
 	###################################################################################
 	
 	wget $mirror_prefix/pixman/pixman-0.34.0.tar.gz
 	mkdir -p mesa
 	cd mesa
-	#wget http://mirrors.tassig.com/mesa/MesaLib-10.4.7.tar.gz  # a version released approximately at the same time as X.org 7.7
 	clone drm 7aab852d4ed25703fb986cf42328d3882697cfdc
 	clone mesa 8314dd7ff2c4719ffb64b202cf5fdd0e38ad276e
 	cd ..
@@ -85,17 +85,9 @@ custombuild(){
 	cd util
 	clone imake 4063190bf2fd7e3c61b80e98d72e134609612bf8   # is needed by autoconf, later TODO: see if we can remove
 	cd ..
-	cd app
-	# these aren't needed but are small and good for testing TODO: it's time to remove them
-	clone xinit 72160c42bea2073bf95c01aca59a12f0ca7ab707   
-	#clone twm c5abcb619eb0b01f074fd9acb9128f19af774834
-	#clone xclock 4697248c5a3e2aa505eceadd45f17554d4424aff
-	cd ..
 	cd xcb
 	clone util-wm 0.4.1   # xcb needs it for support of EWMH
-	cd util-wm && git submodule update --init && cd ..   # we need to initialize git submodules for util-wm
-	clone util 0.4.0   # needed for obconf (openbox)
-	cd util && git submodule update --init && cd ..
+	cd util-wm && git submodule update --init && cd ..   # we need to initialize git submodules for util-wm TODO: this connects to freedesktop.org
 	cd ..
 	cp -v everything/xkeyboard-config-2.6.tar.gz .   # TODO: how come we can't find it on the filesystem? it seems it's not installed
 
@@ -158,7 +150,13 @@ custombuild(){
 	
 	
 	
-
+	########################################################
+	#                                                      #
+	# apply patches                                        #
+	#                                                      #
+	########################################################
+	
+	
 	# unpack the parts to be patched
 	cd app
 	tar xvf sessreg-1.0.7.tar.gz
@@ -182,7 +180,16 @@ custombuild(){
 		sed -i 's/@RUN_FCCACHE@/#@RUN_FCCACHE@/' $f/Makefile.am
 		sed -i 's/@RUN_FCCACHE@/#@RUN_FCCACHE@/' $f/Makefile.in
 	done
-
+	
+	
+	
+	
+	
+	########################################################
+	#                                                      #
+	# run the build                                        #
+	#                                                      #
+	########################################################
 	
 	# set CFLAGS and LDFLAGS
 	# TODO: what exactly requires _GNU_SOURCE ?
