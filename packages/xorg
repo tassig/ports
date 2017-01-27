@@ -87,7 +87,7 @@ custombuild(){
 	cd ..
 	cd xcb
 	clone util-wm 0.4.1   # xcb needs it for support of EWMH
-	#cd util-wm && git submodule update --init && cd ..   # we need to initialize git submodules for util-wm TODO: this connects to freedesktop.org
+	cd util-wm && git submodule update --init && cd ..   # we need to initialize git submodules for util-wm TODO: this connects to freedesktop.org
 	cd ..
 	cp -v everything/xkeyboard-config-2.6.tar.gz .   # TODO: how come we can't find it on the filesystem? it seems it's not installed
 
