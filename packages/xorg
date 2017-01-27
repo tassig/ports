@@ -206,10 +206,6 @@ custombuild(){
 	# running the main build and installation script
 	./util/modular/build.sh --autoresume resumefile   # --check
 	
-	
-	# making sure we can't use initrc too easily
-	mv $PREFIX/etc/X11/xinit/xinitrc $PREFIX/etc/X11/xinit/xinitrc.bak
-	
 	# symlinks
 	ln -sv $PREFIX $installdirectory/$package_name   # link for canonical name
 	ln -svf $PREFIX/lib/pkgconfig/*.pc $installdirectory/pkgconf/lib/pkgconfig/   # copying all the pkgconf files, some of them might be useful for other software
