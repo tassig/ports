@@ -12,7 +12,7 @@
 #   packages and leftovers. ex: what do you do when "make install" returns an 
 #   error? right now, we do nothing, which is incorrect
 #
-# TODO: start removing support for absolute urls
+# TODO: remove support for custom relative urls
 
 set -e
 
@@ -60,10 +60,7 @@ installpackage(){
 		# if there is no defined rel_url, then define it by default
 		rel_url=$package_name/$package_fullname.tar.$tarball_suffix # default URL, relative to $mirror_prefix
 	fi
-	if [ "$url" == "" ]; then
-		# if no absolute $url defined, then assume, that we have relative url $rel_url
-		url=$mirror_prefix/$rel_url
-	fi
+	url=$mirror_prefix/$rel_url
 
 	echo "build dependencies of $1: $build_dependencies"
 	
@@ -88,7 +85,6 @@ installpackage(){
 	
 	# clean up by removing the build directory and the tarball
 	rm -rf $package_name*
-	
 }
 
 

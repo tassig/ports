@@ -21,8 +21,6 @@ These variables are mandatory and can be used without restrictions, by internal 
 ### Public, optional variables
 
 `build_dependencies`: a list of packages unique identifiers separated by spaces and quoted, representing the packages needed by this package at build time. Empty if there are no build build_dependencies. example: build_dependencies="m4 perl"
-`url`: the ABSOLUTE url of the package. If not defined, then URL `http://mirrors.tassig.com/$rel_url` will be used.
-`rel_url`: the RELATIVE suffix-part of URL to package. Default value is `$package_name/$package_fullname.tar.$tarball_suffix`. Need to be used, when relative tar archive location is not matched with default value. SHOULD NOT contain "http://mirrors.tassig.com" prefix in its value.
 `iscustombuild`: `0` or `1`, if `1` then a function `custombuild()` needs to be provided, such function will be called in place of the `defaultbuild()` function
 `haspostinstall`: `0` or `1`, if `1` then a function `haspostinstall()` needs to be provided, such function will be called after the `defaultbuild()` has completed
 `no_check`: `0` or `1`, if `1` then the `make check` won't be run for this package. This is useful if a test suite is buggy or if we want to temporarily work around a bug in our system
@@ -33,8 +31,6 @@ packageinstall.sh script provides some variables, that can be used in custombuil
 
 * `package_fullname` = `$package_name-$package_version` - variable contains package name and version
 * `installdirectory` = contains path to destination (prefix) directory
-* `url` = the ABSOLUTE url of the package. If not defined in port, then URL `$mirror_prefix/$rel_url` will be used
-* `rel_url`: the RELATIVE suffix-part of URL to package. Default value is `$package_name/$package_fullname.tar.$tarball_suffix`.
 * `mirror_prefix` = URL prefix. By default = `http://mirrors.tassig.com`
 
 ## Policies
