@@ -1,0 +1,108 @@
+diff --git a/gio/xdgmime/xdgmime.c b/gio/xdgmime/xdgmime.c
+index 42dda58..4f3c947 100644
+--- a/gio/xdgmime/xdgmime.c
++++ b/gio/xdgmime/xdgmime.c
+@@ -27,6 +27,8 @@
+ #include "config.h"
+ #endif
+ 
++#include "ctype.h" /* isprint */
++
+ #include "xdgmime.h"
+ #include "xdgmimeint.h"
+ #include "xdgmimeglob.h"
+@@ -432,6 +434,81 @@ xdg_check_time_and_dirs (void)
+   return retval;
+ }
+ 
++#define spaces " \t\n"
++static int isprint_str(char* tok) {
++  while(*tok != '\0') {
++    if(isprint(*tok) == 0) {
++      return 0;
++    }
++
++    tok++;
++  }
++
++  return 1;
++}
++static void
++etc_mime_types(XdgGlobHash *glob_hash)
++{
++  FILE *mt_file;
++  char *line = NULL;
++  size_t len = 0;
++  ssize_t read;
++  int mtbuf_len, ext_len;
++  char *tok, *saveptr;
++  char *mimetype, *glob;
++  char* mtbuf = NULL;
++  char* p = NULL;
++  int weight = 50;
++  int case_sensitive = FALSE;
++
++  mt_file = fopen("/etc/mime.types", "r");
++  if (mt_file == NULL)
++    return;
++
++  while(1)
++    {
++      read = getline(&line, &len, mt_file);
++      if(read == -1)
++        break;
++
++      /* mime-type or comment */
++      tok = strtok_r(line, spaces, &saveptr);
++      if(tok == NULL || isprint_str(tok) == 0 || tok[0] == '#')
++        continue;
++
++      mtbuf_len = strlen(tok);
++      mtbuf = malloc(mtbuf_len + 1);
++      if(mtbuf) {
++        strcpy(mtbuf, tok); /* save mime type */
++      }
++
++      /* extensions */
++      while(1) {
++        tok = strtok_r(NULL, spaces, &saveptr);
++        if( tok == NULL || isprint_str(tok) == 0)
++          break;
++
++        p = malloc( (mtbuf_len + 1) + (2 + strlen(tok) + 1) );
++        strcpy(p, mtbuf);
++        *(p + mtbuf_len) = 0;
++        mimetype = p;
++        p = p + mtbuf_len + 1;
++        p[0] = '*'; p[1] = '.';
++        strcpy(p + 2, tok);
++        glob = p;
++        _xdg_glob_hash_append_glob (glob_hash, glob, mimetype, weight, case_sensitive);
++      }
++
++      if(mtbuf) {
++        free(mtbuf);
++        mtbuf = NULL;
++      }
++    }
++
++  if(line)
++    free(line);
++}
++
+ /* Called in every public function.  It reloads the hash function if need be.
+  */
+ static void
+@@ -451,8 +528,10 @@ xdg_mime_init (void)
+       icon_list = _xdg_mime_icon_list_new ();
+       generic_icon_list = _xdg_mime_icon_list_new ();
+ 
+-      xdg_run_command_on_dirs ((XdgDirectoryFunc) xdg_mime_init_from_directory,
+-			       NULL);
++      etc_mime_types(global_hash);
++
++      /*xdg_run_command_on_dirs ((XdgDirectoryFunc) xdg_mime_init_from_directory,
++			       NULL);*/
+ 
+       need_reread = FALSE;
+     }
