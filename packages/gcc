@@ -5,11 +5,8 @@ iscustombuild=1
 
 
 
-musl_version=1.1.15
+musl_version=1.1.16
 musl_fullname=musl-$musl_version
-
-
-# TODO: alignment along multiple lines must be done with spaces, not tabs
 
 
 # TODO: gcc still has /usr/local/include in the include path and /usr/lib in the lib path
@@ -27,10 +24,10 @@ custombuild(){
 	mkdir objdir
 	cd objdir
 	../binutils-2.26/configure --prefix=$installdirectory/$packagename \
-							   --with-lib-path=/lib \
-							   --build=$target_triple \
-							   --disable-werror \
-							   --disable-nls
+                               --with-lib-path=/lib \
+                               --build=$target_triple \
+                               --disable-werror \
+                               --disable-nls
 	make -j
 	#make check
 	make install
@@ -41,7 +38,7 @@ custombuild(){
 	
 	# do musl libc
 	
-	wget http://mirrors.tassig.com/musl/$musl_fullname.tar.gz
+	git clone http://mirrors.tassig.com/repos/musl.git musl && cd musl && git checkout tags/v$musl_version
 	tar xvf $musl_fullname.tar.gz
 	cd $musl_fullname
 	./configure --prefix=$installdirectory/$packagename/$target_triple
@@ -93,13 +90,13 @@ custombuild(){
 	
 	# --disable-gnu-indirect-function: indirect-function is used by some code that replaces C library functions like malloc(), for example gn of chromium, but this is not supported by musl
 	../gcc-6.1.0/configure --prefix=$installdirectory/$packagename \
-						   --enable-languages=c,c++ \
-						   --with-native-system-header-dir=$installdirectory/$packagename/$target_triple/include \
-						   --disable-multilib \
-						   --disable-nls \
-						   --disable-libsanitizer \
-						   --disable-libcilkrts \
-						   --disable-gnu-indirect-function
+                           --enable-languages=c,c++ \
+                           --with-native-system-header-dir=$installdirectory/$packagename/$target_triple/include \
+                           --disable-multilib \
+                           --disable-nls \
+                           --disable-libsanitizer \
+                           --disable-libcilkrts \
+                           --disable-gnu-indirect-function
 	ln -sv $installdirectory/$packagename/$target_triple/lib/*.o /lib/   # hack to pass the bootstrap stage, some configure scripts probably incorrect TODO: could be patched
 	make --debug -j4
 	rm /lib/*.o   # previous hack clean up
@@ -111,7 +108,7 @@ custombuild(){
 	
 	# do musl libc again, this time it will use the new compiler
 	
-	wget http://mirrors.tassig.com/musl/$musl_fullname.tar.gz
+	git clone http://mirrors.tassig.com/repos/musl.git musl && cd musl && git checkout tags/v$musl_version
 	tar xvf $musl_fullname.tar.gz
 	cd $musl_fullname
 	./configure --prefix=$installdirectory/$packagename/$target_triple
