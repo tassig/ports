@@ -1,5 +1,5 @@
 diff --git a/gio/xdgmime/xdgmime.c b/gio/xdgmime/xdgmime.c
-index 42dda58..4f3c947 100644
+index 42dda58..806998e 100644
 --- a/gio/xdgmime/xdgmime.c
 +++ b/gio/xdgmime/xdgmime.c
 @@ -27,6 +27,8 @@
@@ -11,7 +11,7 @@ index 42dda58..4f3c947 100644
  #include "xdgmime.h"
  #include "xdgmimeint.h"
  #include "xdgmimeglob.h"
-@@ -432,6 +434,81 @@ xdg_check_time_and_dirs (void)
+@@ -432,6 +434,83 @@ xdg_check_time_and_dirs (void)
    return retval;
  }
  
@@ -84,16 +84,18 @@ index 42dda58..4f3c947 100644
 +        free(mtbuf);
 +        mtbuf = NULL;
 +      }
-+    }
 +
-+  if(line)
-+    free(line);
++      if(line) {
++        free(line);
++        line = NULL;
++      }
++    }
 +}
 +
  /* Called in every public function.  It reloads the hash function if need be.
   */
  static void
-@@ -451,8 +528,10 @@ xdg_mime_init (void)
+@@ -451,8 +530,10 @@ xdg_mime_init (void)
        icon_list = _xdg_mime_icon_list_new ();
        generic_icon_list = _xdg_mime_icon_list_new ();
  
