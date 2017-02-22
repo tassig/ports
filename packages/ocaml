@@ -1,5 +1,5 @@
 package_name=ocaml
-package_version=4.02.3
+package_version=4.03.0
 tarball_suffix=xz
 build_dependencies=
 iscustombuild=1
