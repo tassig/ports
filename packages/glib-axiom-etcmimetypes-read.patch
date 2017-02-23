@@ -1,5 +1,5 @@
 diff --git a/gio/xdgmime/xdgmime.c b/gio/xdgmime/xdgmime.c
-index 42dda58..2a05fa3 100644
+index 42dda58..0bdd18a 100644
 --- a/gio/xdgmime/xdgmime.c
 +++ b/gio/xdgmime/xdgmime.c
 @@ -27,6 +27,8 @@
@@ -42,7 +42,7 @@ index 42dda58..2a05fa3 100644
 +  int weight = 50;
 +  int case_sensitive = FALSE;
 +
-+  mt_file = fopen("/etc/mime.types", "r");
++  mt_file = fopen("/opt/glib/etc/mime.types", "r");
 +  if (mt_file == NULL)
 +    return;
 +
