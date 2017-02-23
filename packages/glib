@@ -38,6 +38,10 @@ custombuild(){
 		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
 		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
 	fi
+	
+	mkdir -p $installdirectory/$package_name/etc
+	cp ../../packages/glib-share/mime.types $installdirectory/$package_name/etc/
+
 	cd ../..
 	rm -r builddir
 }
