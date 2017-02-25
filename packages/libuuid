@@ -1,0 +1,4 @@
+package_name=libuuid
+package_version=1.0.3
+tarball_suffix=gz
+build_dependencies=
