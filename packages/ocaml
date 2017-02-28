@@ -1,9 +1,9 @@
 package_name=ocaml
-package_version=4.03.0
-tarball_suffix=xz
+package_version=4.04.0
+tarball_suffix=gz
 build_dependencies=
 iscustombuild=1
-no_check=1 # no test suit
+no_check=1 # no test suite
 
 custombuild(){
 	rm -rf builddir
@@ -16,7 +16,7 @@ custombuild(){
 
 	./configure --prefix $installdirectory/$package_fullname/
 	# this world.opt prevents the build from being a default build
-	make world.opt
+	make -j world.opt
 
 	if test -z $no_check   # run the make check, unless $no_check is set for 
 						   # this package definition
