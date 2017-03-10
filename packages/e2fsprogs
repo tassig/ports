@@ -1,0 +1,11 @@
+package_name=e2fsprogs
+package_version=1.43.4
+tarball_suffix=gz
+no_check=1
+haspostinstall=1
+
+postinstall(){
+	ln -sv $installdirectory/$package_name/sbin/* /bin # e2fsprgs will install by default to sbin/
+}
+
+
