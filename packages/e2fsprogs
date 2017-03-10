@@ -5,7 +5,7 @@ no_check=1
 haspostinstall=1
 
 postinstall(){
-	ln -sv $installdirectory/$package_name/sbin/* /bin # e2fsprgs will install by default to sbin/
+	ln -svf $installdirectory/$package_name/sbin/* /bin # e2fsprgs will install by default to sbin/
 }
 
 
