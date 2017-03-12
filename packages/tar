@@ -1,0 +1,26 @@
+package_name=tar
+package_version=1.29
+tarball_suffix=gz
+build_dependencies=
+iscustombuild=1
+no_check=1 
+
+custombuild(){ 
+	rm -rf builddir
+	mkdir -p builddir   # do everything in builddir for tidiness
+	cd builddir
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	cd *   # cd into the package directory
+	FORCE_UNSAFE_CONFIGURE=1 ./configure --prefix=$installdirectory/$package_fullname
+	make -j
+	make install
+
+	rm /bin/tar
+	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+	ln -sv $installdirectory/$package_name/bin/tar /bin/tar 
+
+	cd ../..
+	rm -r builddir
+}
