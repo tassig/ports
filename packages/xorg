@@ -18,6 +18,8 @@ freedesktop_url=http://mirrors.tassig.com/repos/freedesktop
 ##########################
 
 
+# TODO: configure xserver without udev
+
 ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
 export MAKEFLAGS="-j $ncpu"
 
@@ -111,6 +113,8 @@ custombuild(){
 	clone macros d7acec2d3a3abe79814ceb72e2c0d4d95ed31d37  # wanted by build.sh and the latest version of libxcb
 	cd ..
 	rm xserver/*.tar.gz # remove the xserver tarball, to make sure the build system is not using it
+	git clone http://git.cacaoweb.org/xserver.git   # we use our own fork
+	cd xserver && git checkout axiom-prod && cd ..
 	clone xserver xorg-server-1.18.3   # we use a recent version of x.org server
 	clone libevdev 7f2fffc0d9fe47a76dcaaa3db9bd758e8433c0b6   # TODO: we should remove the existing tar.gz too
 	cd driver
