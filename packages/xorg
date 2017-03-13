@@ -193,14 +193,12 @@ custombuild(){
 	
 	# set CFLAGS and LDFLAGS
 	# TODO: what exactly requires _GNU_SOURCE ?
-	export CFLAGS="-D_GNU_SOURCE -I$installdirectory/zlib/include -I$installdirectory/eudev/include -I$installdirectory/mtdev/include"   
-	export CFLAGS="$CFLAGS -I$installdirectory/libressl/include"   # TODO: mesa needs it
+	export CFLAGS="-D_GNU_SOURCE -I/opt/zlib/include -I/opt/eudev/include -I/opt/mtdev/include"   
+	export CFLAGS="$CFLAGS -I/opt/libressl/include"   # TODO: mesa needs it
 	
 	# TODO: all these -rpath will end up in every binary and library that we build here, see if we can find a cleaner solution
-	export LDFLAGS="-Wl,-rpath=$PREFIX/lib -Wl,-rpath=$installdirectory/freetype/lib -Wl,-rpath=$installdirectory/zlib/lib,-rpath=$installdirectory/llvm/lib"
-	export LDFLAGS="$LDFLAGS -Wl,-rpath=$installdirectory/fontconfig/lib -Wl,-rpath=$installdirectory/expat/lib -Wl,-rpath=$installdirectory/libpng/lib"
-	# add support for libudev
-	export LDFLAGS="$LDFLAGS -L$installdirectory/eudev/lib -Wl,-rpath=$installdirectory/eudev/lib"
+	export LDFLAGS="-Wl,-rpath=$PREFIX/lib"
+	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/freetype/lib -Wl,-rpath=/opt/zlib/lib,-rpath=/opt/llvm/lib -Wl,-rpath=/opt/fontconfig/lib -Wl,-rpath=/opt/expat/lib -Wl,-rpath=/opt/libpng/lib -L/opt/eudev/lib -Wl,-rpath=/opt/eudev/lib"
 
 	
 	# running the main build and installation script
