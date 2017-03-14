@@ -1,5 +1,5 @@
 package_name=e2fsprogs
-package_version=1.43.4
+package_version=1.42.12
 tarball_suffix=gz
 no_check=1
 haspostinstall=1
