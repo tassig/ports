@@ -4,6 +4,12 @@ tarball_suffix=gz
 no_check=1
 haspostinstall=1
 
+# this package is used by Axiom bootstrap build, in particular mkfs.ext4, by build-image script
+# version 1.42.12 is being used, since versions > 1.43 were introducing additional default options, which made bootstrap root filesystem inaccessible for syslinux
+# According to http://e2fsprogs.sourceforge.net/e2fsprogs-release.html, this change occured in 1.43 version
+# "Mke2fs will now create file systems with the metadata_csum and 64bit features enabled by default."
+# Alternatively we can change the build-image script, and use latest e2fsprogs version
+
 postinstall(){
 	ln -svf $installdirectory/$package_name/sbin/* /bin # e2fsprgs will install by default to sbin/
 }
