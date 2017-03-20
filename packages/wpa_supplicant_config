@@ -1,0 +1,69 @@
+# Driver interface for Linux drivers using the nl80211 kernel interface
+CONFIG_DRIVER_NL80211=y
+
+# QCA vendor extensions to nl80211
+#CONFIG_DRIVER_NL80211_QCA=y
+
+# Use libnl 3.2 libraries (if this is selected, CONFIG_LIBNL20 is ignored)
+CONFIG_LIBNL32=y
+
+
+# PKCS#12 (PFX) support (used to read private key and certificate file from
+# a file that usually has extension .p12 or .pfx)
+CONFIG_PKCS12=y
+
+# Select control interface backend for external programs, e.g, wpa_cli:
+# unix = UNIX domain sockets (default for Linux/*BSD)
+# udp = UDP sockets using localhost (127.0.0.1)
+# udp6 = UDP IPv6 sockets using localhost (::1)
+# named_pipe = Windows Named Pipe (default for Windows)
+# udp-remote = UDP sockets with remote access (only for tests systems/purpose)
+# udp6-remote = UDP IPv6 sockets with remote access (only for tests purpose)
+# y = use default (backwards compatibility)
+# If this option is commented out, control interface is not included in the
+# build.
+CONFIG_CTRL_IFACE=y
+
+# Remove debugging code that is printing out debug message to stdout.
+# This can be used to reduce the size of the wpa_supplicant considerably
+# if debugging code is not needed. The size reduction can be around 35%
+# (e.g., 90 kB).
+#CONFIG_NO_STDOUT_DEBUG=y
+
+
+# Select configuration backend:
+# file = text file (e.g., wpa_supplicant.conf; note: the configuration file
+#	path is given on command line, not here; this option is just used to
+#	select the backend that allows configuration files to be used)
+# winreg = Windows registry (see win_example.reg for an example)
+CONFIG_BACKEND=file
+
+
+# PeerKey handshake for Station to Station Link (IEEE 802.11e DLS)
+CONFIG_PEERKEY=y
+
+# Select TLS implementation
+# openssl = OpenSSL (default)
+# gnutls = GnuTLS
+# internal = Internal TLSv1 implementation (experimental)
+# none = Empty template
+CONFIG_TLS=internal
+
+
+# If CONFIG_TLS=internal is used, additional library and include paths are
+# needed for LibTomMath. Alternatively, an integrated, minimal version of
+# LibTomMath can be used. See beginning of libtommath.c for details on benefits
+# and drawbacks of this option.
+CONFIG_INTERNAL_LIBTOMMATH=y
+ifndef CONFIG_INTERNAL_LIBTOMMATH
+LTM_PATH=/usr/src/libtommath-0.39
+CFLAGS += -I$(LTM_PATH)
+LIBS += -L$(LTM_PATH)
+LIBS_p += -L$(LTM_PATH)
+endif
+# At the cost of about 4 kB of additional binary size, the internal LibTomMath
+# can be configured to include faster routines for exptmod, sqr, and div to
+# speed up DH and RSA calculation considerably
+CONFIG_INTERNAL_LIBTOMMATH_FAST=y
+
+

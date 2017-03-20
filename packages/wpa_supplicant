@@ -1,0 +1,32 @@
+package_name=wpa_supplicant
+package_version=2.6
+tarball_suffix=gz
+build_dependencies=libnl
+iscustombuild=1
+
+custombuild(){
+	rm -rf builddir
+	mkdir -p builddir   # do everything in builddir for tidiness
+	cd builddir
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	cd *   # cd into the package directory
+
+	cd wpa_supplicant
+
+	cp ../../../packages/wpa_supplicant_config .config
+
+	export CC=gcc
+	
+	LDFLAGS="-L/opt/libnl/lib -lnl-3 -Wl,-rpath=/opt/libnl/lib" make
+
+	mkdir $installdirectory/$package_fullname
+	cp wpa_cli wpa_supplicant $installdirectory/$package_fullname
+	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+	ln -sv $installdirectory/$package_name/* /bin/ || true   # don't crash if the links are already there
+
+	cd ../../..
+	rm -r builddir
+
+}
