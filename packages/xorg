@@ -36,8 +36,9 @@ custombuild(){
 	
 	# get util/modular (where the build.sh file is located)
 	pwd="`pwd`"
-	mkdir $HOME/src
-	cd $HOME/src
+	export BUILDDIR=/home/work/xorgbuild
+	mkdir -p $BUILDDIR
+	cd $BUILDDIR
 	export PREFIX=$installdirectory/$package_name-$package_version
 	mkdir -p $PREFIX
 	
@@ -212,6 +213,6 @@ custombuild(){
 	ln -svf $PREFIX/lib/pkgconfig/*.pc $installdirectory/pkgconf/lib/pkgconfig/   # copying all the pkgconf files, some of them might be useful for other software
 	ln -sv $PREFIX/bin/* /bin/
 	rm /bin/startx   # startx can confuse people
-	rm -r $HOME/src
+	rm -r $BUILDDIR
 	
 }
