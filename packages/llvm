@@ -47,5 +47,9 @@ custombuild(){
 	fi
 	cd ../..
 	rm -r builddir
+	
+	# strip binaries
+	strip $installdirectory/$package_name/bin/*
+	strip $installdirectory/$package_name/lib/*
 }
 
