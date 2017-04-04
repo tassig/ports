@@ -1,0 +1,47 @@
+package_name=readline
+package_version=7.0
+tarball_suffix=gz
+build_dependencies=ncurses
+iscustombuild=1
+
+##########################
+#
+# readline
+#
+# this package simplifies work with command-line interface
+#
+##########################
+
+
+# custom build because readline needed to be pointed to direction where ncurses is installed and to link with it
+# or it will have unresolved intifiers
+custombuild(){
+        rm -rf builddir
+        mkdir -p builddir
+
+        cd builddir
+
+        wget $url -O archive
+        tar -xf archive
+        rm -f archive
+        cd *
+
+	LDFLAGS="-L/opt/ncurses/lib -Wl,-rpath,/opt/ncurses/lib -lncurses" CFLAGS="-I/opt/ncurses/include" ./configure --prefix=/opt/$package_name-$package_version  --with-curses
+        make -j
+        make install
+
+        cd ../..
+        rm -rf builddir
+
+        ln -sv /opt/$package_name-$package_version /opt/$package_name
+        ln -svf /opt/$package_name-$package_version/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
+
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash 
+											# if the links are already there
+	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+	fi
+}
+
+

@@ -1,0 +1,51 @@
+package_name=dbus
+package_version=1.10.12
+tarball_suffix=gz
+build_dependencies=
+iscustombuild=1
+
+##########################
+#
+# dbus
+#
+# dbus is one of common dependencies, that implements common message bus. 
+# ideally, we don't want to use it, but sometimes it is difficult to be replaced for short amount of time.
+# For example, web browser depends on it, but works fine without daemon, but bluez will not work without it at all
+#
+# For those apps, that we required to use dbus, we concluded to use separate config files and separate dirs for sockets
+# this will eliminate one single point of failure for multiple applications.
+# 
+##########################
+
+
+# custom build because configure will not found expat and will not use -rpath
+custombuild(){
+        rm -rf builddir
+        mkdir -p builddir
+
+        cd builddir
+
+        wget $url -O archive
+        tar -xf archive
+        rm -f archive
+        cd *
+
+        LDFLAGS="-L/opt/expat/lib -Wl,-rpath,/opt/expat/lib" CFLAGS="-I/opt/expat/include" ./configure --prefix=/opt/$package_name-$package_version
+        make -j
+        make install
+
+        cd ../..
+        rm -rf builddir
+
+        ln -sv /opt/$package_name-$package_version /opt/$package_name
+        ln -svf /opt/$package_name-$package_version/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
+
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash 
+											# if the links are already there
+	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+	fi
+}
+
+

@@ -1,0 +1,160 @@
+package_name=bluez
+package_version=5.44
+tarball_suffix=xz
+build_dependencies="libical dbus readline"
+iscustombuild=1
+haspostinstall=1
+
+##########################
+#
+# bluez
+#
+# bluez is a Bluetooth stack for linux
+# 
+##########################
+
+
+# TODO: fix obex building
+
+# custom build because configure will not link with readline and ncurses. And currently, need to disable obex
+custombuild(){
+        rm -rf builddir
+        mkdir -p builddir
+
+        cd builddir
+
+        wget $url -O archive
+        tar -xf archive
+        rm -f archive
+        cd *
+
+        LDFLAGS="-L/opt/readline/lib -L/opt/ncurses/lib -lncurses -lreadline \
+		-Wl,-rpath,/opt/ncurses/lib -Wl,-rpath,/opt/readline/lib" \
+		CFLAGS="-I/opt/readline/include" \
+		ICAL_CFLAGS="-I/opt/libical/include" ICAL_LIBS="-L/opt/libical/lib -Wl,-rpath,/opt/libical/lib" \
+		DBUS_CFLAGS="-I/opt/dbus/include/dbus-1.0 -I/opt/dbus/lib/dbus-1.0/include" \
+		DBUS_LIBS="-L/opt/dbus/lib -Wl,-rpath,/opt/dbus/lib -ldbus-1" \
+		./configure --prefix=/opt/$package_name-$package_version \
+			--disable-udev \
+			--disable-systemd \
+			--disable-obex \
+			--disable-tools \
+			--with-dbusconfdir=/opt/$package_name-$package_version/etc/ \
+			--with-dbussystembusdir=/opt/$package_name-$package_version/var/run/
+	make -j
+        make install
+
+        cd ../..
+        rm -rf builddir
+
+        ln -sv /opt/$package_name-$package_version /opt/$package_name
+        ln -svf /opt/$package_name-$package_version/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
+
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash 
+											# if the links are already there
+	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+	fi
+}
+
+# install wrappers and dbus config
+postinstall()
+{
+	mkdir -p /opt/bluez/var/run/dbus/
+	# make wrappers
+	echo '#!/bin/sh
+set -e
+DBUS_SYSTEM_BUS_ADDRESS=unix:path=/opt/bluez/var/run/dbus/system_bus_socket /opt/dbus/bin/dbus-daemon --config-file=/opt/bluez/etc/dbus-1/system.d/bluetooth.conf
+DBUS_SYSTEM_BUS_ADDRESS=unix:path=/opt/bluez/var/run/dbus/system_bus_socket /opt/bluez/libexec/bluetooth/bluetoothd &
+' > /opt/bluez/bin/bluetoothd
+chmod a+x /opt/bluez/bin/bluetoothd
+
+mv /opt/bluez/bin/bluetoothctl /opt/bluez/bin/bluetoothctl-real
+echo '#!/bin/sh
+DBUS_SYSTEM_BUS_ADDRESS=unix:path=/opt/bluez/var/run/dbus/system_bus_socket /opt/bluez/bin/bluetoothctl-real
+' > /opt/bluez/bin/bluetoothctl
+chmod a+x /opt/bluez/bin/bluetoothctl
+
+echo '<!-- This configuration file specifies the required security policies
+     for Bluetooth core daemon to work. -->
+
+<!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+<busconfig>
+
+  <!-- ../system.conf have denied everything, so we just punch some holes -->
+
+<policy context="default">
+    <!-- All users can connect to system bus -->
+    <allow user="*"/>
+
+    <!-- Holes must be punched in service configuration files for
+         name ownership and sending method calls -->
+    <deny own="*"/>
+    <deny send_type="method_call"/>
+
+    <!-- Signals and reply messages (method returns, errors) are allowed
+         by default -->
+    <allow send_type="signal"/>
+    <allow send_requested_reply="true" send_type="method_return"/>
+    <allow send_requested_reply="true" send_type="error"/>
+
+    <!-- All messages may be received by default -->
+    <allow receive_type="method_call"/>
+    <allow receive_type="method_return"/>
+    <allow receive_type="error"/>
+    <allow receive_type="signal"/>
+
+    <!-- Allow anyone to talk to the message bus -->
+    <allow send_destination="org.freedesktop.DBus"/>
+    <!-- But disallow some specific bus services -->
+    <deny send_destination="org.freedesktop.DBus"
+          send_interface="org.freedesktop.DBus"
+          send_member="UpdateActivationEnvironment"/>
+  </policy>
+
+  <policy user="root">
+    <allow own="org.bluez"/>
+    <allow send_destination="org.bluez"/>
+    <allow send_interface="org.bluez.Agent1"/>
+    <allow send_interface="org.bluez.MediaEndpoint1"/>
+    <allow send_interface="org.bluez.MediaPlayer1"/>
+    <allow send_interface="org.bluez.ThermometerWatcher1"/>
+    <allow send_interface="org.bluez.AlertAgent1"/>
+    <allow send_interface="org.bluez.Profile1"/>
+    <allow send_interface="org.bluez.HeartRateWatcher1"/>
+    <allow send_interface="org.bluez.CyclingSpeedWatcher1"/>
+    <allow send_interface="org.bluez.GattCharacteristic1"/>
+    <allow send_interface="org.bluez.GattDescriptor1"/>
+    <allow send_interface="org.freedesktop.DBus.ObjectManager"/>
+    <allow send_interface="org.freedesktop.DBus.Properties"/>
+  </policy>
+
+  <policy at_console="true">
+    <allow send_destination="org.bluez"/>
+  </policy>
+
+  <!-- allow users of lp group (printing subsystem) to 
+       communicate with bluetoothd -->
+<!--  <policy group="lp">
+    <allow send_destination="org.bluez"/>
+  </policy> -->
+
+  <policy context="default">
+    <deny send_destination="org.bluez"/>
+  </policy>
+
+  <fork/>
+
+  <listen>unix:path=/opt/bluez/var/run/dbus/system_bus_socket</listen> 
+  <pidfile>/opt/bluez/var/run/dbus/pid</pidfile>
+  <!-- Our well-known bus type, do not change this -->
+  <type>system</type>
+
+  <!-- Run as special user -->
+<!--  <user>messagebus</user> -->
+
+</busconfig>' > /opt/bluez/etc/dbus-1/system.d/bluetooth.conf
+
+}

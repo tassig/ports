@@ -1,0 +1,46 @@
+package_name=libical
+package_version=2.0.0
+tarball_suffix=gz
+build_dependencies=cmake
+iscustombuild=1
+
+##########################
+#
+# libical
+#
+# this is small library for calendar data formats
+# 
+##########################
+
+
+# custom build because using cmake
+custombuild(){
+        rm -rf builddir
+        mkdir -p builddir
+
+        cd builddir
+
+        wget $url -O archive
+        tar -xf archive
+        rm -f archive
+        cd *
+
+	cmake -DCMAKE_INSTALL_PREFIX=/opt/$package_name-$package_version  -DCMAKE_RELEASE_TYPE=Release -DSTATIC_ONLY=true
+        make
+        make install
+
+        cd ../..
+        rm -rf builddir
+
+        ln -sv /opt/$package_name-$package_version /opt/$package_name
+        ln -svf /opt/$package_name-$package_version/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
+
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash 
+											# if the links are already there
+	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+	fi
+}
+
+
