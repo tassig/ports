@@ -30,9 +30,7 @@ custombuild(){
 
 	# patch sshd config file, to allow root logins
 	sed -i '/#PermitRootLogin prohibit-password/c\PermitRootLogin yes' $installdirectory/$package_name/etc/sshd_config
-
-	# add user sshd, sshd needs to drop privileges
-	adduser -D sshd || true  # don't crash if user is already there
+	sed -i '/#UsePrivilegeSeparation sandbox/c\UsePrivilegeSeparation no ' $installdirectory/$package_name/etc/sshd_config
 
 	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
 		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
