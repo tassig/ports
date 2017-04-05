@@ -65,6 +65,14 @@ postinstall()
 	# make wrappers
 	echo '#!/bin/sh
 set -e
+# if there is pid file
+[ -e /opt/bluez/var/run/dbus/pid ] && {
+    # kill -0 will only check if dbus is running
+    kill -0 `cat /opt/bluez/var/run/dbus/pid` || {
+        # remove all running stuff
+        rm -f /opt/bluez/var/run/dbus/*
+    }
+}
 DBUS_SYSTEM_BUS_ADDRESS=unix:path=/opt/bluez/var/run/dbus/system_bus_socket /opt/dbus/bin/dbus-daemon --config-file=/opt/bluez/etc/dbus-1/system.d/bluetooth.conf
 DBUS_SYSTEM_BUS_ADDRESS=unix:path=/opt/bluez/var/run/dbus/system_bus_socket /opt/bluez/libexec/bluetooth/bluetoothd &
 ' > /opt/bluez/bin/bluetoothd
