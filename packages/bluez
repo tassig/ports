@@ -18,45 +18,45 @@ haspostinstall=1
 
 # custom build because configure will not link with readline and ncurses. And currently, need to disable obex
 custombuild(){
-        rm -rf builddir
-        mkdir -p builddir
-
-        cd builddir
-
-        wget $url -O archive
-        tar -xf archive
-        rm -f archive
-        cd *
-
-        LDFLAGS="-L/opt/readline/lib -L/opt/ncurses/lib -lncurses -lreadline \
-		-Wl,-rpath,/opt/ncurses/lib -Wl,-rpath,/opt/readline/lib" \
-		CFLAGS="-I/opt/readline/include" \
-		ICAL_CFLAGS="-I/opt/libical/include" ICAL_LIBS="-L/opt/libical/lib -Wl,-rpath,/opt/libical/lib" \
-		DBUS_CFLAGS="-I/opt/dbus/include/dbus-1.0 -I/opt/dbus/lib/dbus-1.0/include" \
-		DBUS_LIBS="-L/opt/dbus/lib -Wl,-rpath,/opt/dbus/lib -ldbus-1" \
-		./configure --prefix=/opt/$package_name-$package_version \
+	rm -rf builddir
+	mkdir -p builddir   # do everything in builddir for tidiness
+	cd builddir
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	cd *   # cd into the package directory
+ 
+	LDFLAGS="-L$installdirectory/readline/lib -L$installdirectory/ncurses/lib -lncurses -lreadline \
+			-Wl,-rpath,$installdirectory/ncurses/lib \
+			-Wl,-rpath,$installdirectory/readline/lib" \
+		CFLAGS="-I$installdirectory/readline/include" \
+		ICAL_CFLAGS="-I$installdirectory/libical/include" \
+		ICAL_LIBS="-L$installdirectory/libical/lib -Wl,-rpath,$installdirectory/libical/lib" \
+		DBUS_CFLAGS="-I$installdirectory/dbus/include/dbus-1.0 \
+			-I$installdirectory/dbus/lib/dbus-1.0/include" \
+		DBUS_LIBS="-L$installdirectory/dbus/lib -Wl,-rpath,$installdirectory/dbus/lib -ldbus-1" \
+		./configure --prefix=$installdirectory/$package_fullname \
 			--disable-udev \
 			--disable-systemd \
 			--disable-obex \
 			--disable-tools \
-			--with-dbusconfdir=/opt/$package_name-$package_version/etc/ \
+			--with-dbusconfdir=$installdirectory/$package_fullname/etc/ \
 			--with-dbussystembusdir=/var/run/$package_name \
 			--localstatedir=/var/
-	make -j
-        make install
-
-        cd ../..
-        rm -rf builddir
-
-        ln -sv /opt/$package_name-$package_version /opt/$package_name
-        ln -svf /opt/$package_name-$package_version/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
-
-	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash 
-											# if the links are already there
+	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
+	make -j$ncpu
+	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
+	then make -j$ncpu check || make -j$ncpu test
+	fi
+	make install
+	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
 	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
 		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
 		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
 	fi
+	cd ../..
+	rm -r builddir
 }
 
 # install wrappers and dbus config
@@ -64,7 +64,7 @@ postinstall()
 {
 	mkdir -p /var/run/bluez
 	# make wrappers
-	echo '#!/bin/sh
+	echo "#!/bin/sh
 set -e
 # if there is pid file
 [ -e /var/run/bluez/pid ] && {
@@ -74,16 +74,16 @@ set -e
         rm -f /var/run/bluez/*
     }
 }
-DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/bluez/system_bus_socket /opt/dbus/bin/dbus-daemon --config-file=/opt/bluez/etc/dbus-1/system.d/bluetooth.conf
-DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/bluez/system_bus_socket /opt/bluez/libexec/bluetooth/bluetoothd &
-' > /opt/bluez/bin/bluetoothd
-chmod a+x /opt/bluez/bin/bluetoothd
+DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/bluez/system_bus_socket $installdirectory/dbus/bin/dbus-daemon --config-file=$installdirectory/bluez/etc/dbus-1/system.d/bluetooth.conf
+DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/bluez/system_bus_socket $installdirectory/bluez/libexec/bluetooth/bluetoothd &
+" > $installdirectory/bluez/bin/bluetoothd
+chmod a+x $installdirectory/bluez/bin/bluetoothd
 
-mv /opt/bluez/bin/bluetoothctl /opt/bluez/bin/bluetoothctl-real
-echo '#!/bin/sh
-DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/bluez/system_bus_socket /opt/bluez/bin/bluetoothctl-real
-' > /opt/bluez/bin/bluetoothctl
-chmod a+x /opt/bluez/bin/bluetoothctl
+mv $installdirectory/bluez/bin/bluetoothctl $installdirectory/bluez/bin/bluetoothctl-real
+echo "#!/bin/sh
+DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/bluez/system_bus_socket $installdirectory/bluez/bin/bluetoothctl-real
+" > $installdirectory/bluez/bin/bluetoothctl
+chmod a+x $installdirectory/bluez/bin/bluetoothctl
 
 echo '<!-- This configuration file specifies the required security policies
      for Bluetooth core daemon to work. -->
@@ -164,6 +164,6 @@ echo '<!-- This configuration file specifies the required security policies
   <!-- Run as special user -->
 <!--  <user>messagebus</user> -->
 
-</busconfig>' > /opt/bluez/etc/dbus-1/system.d/bluetooth.conf
+</busconfig>' > $installdirectory/bluez/etc/dbus-1/system.d/bluetooth.conf
 
 }

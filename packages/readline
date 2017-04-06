@@ -16,32 +16,33 @@ iscustombuild=1
 # custom build because readline needed to be pointed to direction where ncurses is installed and to link with it
 # or it will have unresolved intifiers
 custombuild(){
-        rm -rf builddir
-        mkdir -p builddir
-
-        cd builddir
-
-        wget $url -O archive
-        tar -xf archive
-        rm -f archive
-        cd *
-
-	LDFLAGS="-L/opt/ncurses/lib -Wl,-rpath,/opt/ncurses/lib -lncurses" CFLAGS="-I/opt/ncurses/include" ./configure --prefix=/opt/$package_name-$package_version  --with-curses
-        make -j
-        make install
-
-        cd ../..
-        rm -rf builddir
-
-        ln -sv /opt/$package_name-$package_version /opt/$package_name
-        ln -svf /opt/$package_name-$package_version/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
-
-	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash 
-											# if the links are already there
+	rm -rf builddir
+	mkdir -p builddir   # do everything in builddir for tidiness
+	cd builddir
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	cd *   # cd into the package directory
+	LDFLAGS="-L$installdirectory/ncurses/lib -Wl,-rpath,$installdirectory/ncurses/lib -lncurses" \
+		CFLAGS="-I$installdirectory/ncurses/include" \
+		./configure --prefix=$installdirectory/$package_fullname  --with-curses
+	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
+	make -j$ncpu
+	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
+	then make -j$ncpu check || make -j$ncpu test
+	fi
+	make install
+	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
 	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
 		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
 		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
 	fi
-}
+	cd ../..
+	rm -r builddir
 
+        rm -rf builddir
+        mkdir -p builddir
+
+}
 
