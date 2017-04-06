@@ -40,7 +40,8 @@ custombuild(){
 			--disable-obex \
 			--disable-tools \
 			--with-dbusconfdir=/opt/$package_name-$package_version/etc/ \
-			--with-dbussystembusdir=/opt/$package_name-$package_version/var/run/
+			--with-dbussystembusdir=/var/run/$package_name \
+			--localstatedir=/var/
 	make -j
         make install
 
@@ -61,26 +62,26 @@ custombuild(){
 # install wrappers and dbus config
 postinstall()
 {
-	mkdir -p /opt/bluez/var/run/dbus/
+	mkdir -p /var/run/bluez
 	# make wrappers
 	echo '#!/bin/sh
 set -e
 # if there is pid file
-[ -e /opt/bluez/var/run/dbus/pid ] && {
+[ -e /var/run/bluez/pid ] && {
     # kill -0 will only check if dbus is running
-    kill -0 `cat /opt/bluez/var/run/dbus/pid` >/dev/null 2>/dev/null || {
+    kill -0 `cat /var/run/bluez/pid` >/dev/null 2>/dev/null || {
         # remove all running stuff
-        rm -f /opt/bluez/var/run/dbus/*
+        rm -f /var/run/bluez/*
     }
 }
-DBUS_SYSTEM_BUS_ADDRESS=unix:path=/opt/bluez/var/run/dbus/system_bus_socket /opt/dbus/bin/dbus-daemon --config-file=/opt/bluez/etc/dbus-1/system.d/bluetooth.conf
-DBUS_SYSTEM_BUS_ADDRESS=unix:path=/opt/bluez/var/run/dbus/system_bus_socket /opt/bluez/libexec/bluetooth/bluetoothd &
+DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/bluez/system_bus_socket /opt/dbus/bin/dbus-daemon --config-file=/opt/bluez/etc/dbus-1/system.d/bluetooth.conf
+DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/bluez/system_bus_socket /opt/bluez/libexec/bluetooth/bluetoothd &
 ' > /opt/bluez/bin/bluetoothd
 chmod a+x /opt/bluez/bin/bluetoothd
 
 mv /opt/bluez/bin/bluetoothctl /opt/bluez/bin/bluetoothctl-real
 echo '#!/bin/sh
-DBUS_SYSTEM_BUS_ADDRESS=unix:path=/opt/bluez/var/run/dbus/system_bus_socket /opt/bluez/bin/bluetoothctl-real
+DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/bluez/system_bus_socket /opt/bluez/bin/bluetoothctl-real
 ' > /opt/bluez/bin/bluetoothctl
 chmod a+x /opt/bluez/bin/bluetoothctl
 
@@ -155,8 +156,8 @@ echo '<!-- This configuration file specifies the required security policies
 
   <fork/>
 
-  <listen>unix:path=/opt/bluez/var/run/dbus/system_bus_socket</listen> 
-  <pidfile>/opt/bluez/var/run/dbus/pid</pidfile>
+  <listen>unix:path=/var/run/bluez/system_bus_socket</listen> 
+  <pidfile>/var/run/bluez/pid</pidfile>
   <!-- Our well-known bus type, do not change this -->
   <type>system</type>
 
