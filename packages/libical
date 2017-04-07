@@ -28,7 +28,8 @@ custombuild(){
 	tar xvf archive
 	rm archive
 	cd *   # cd into the package directory
-	cmake -DCMAKE_INSTALL_PREFIX=$installdirectory/$package_fullname/ -DCMAKE_RELEASE_TYPE=Release -DSTATIC_ONLY=true
+	cmake -DCMAKE_INSTALL_PREFIX=$installdirectory/$package_fullname/ -DCMAKE_RELEASE_TYPE=Release -DCMAKE_SHARED_LINKER_FLAGS="-L/opt/gcc-6.1.0/lib64/ -lstdc++ -Wl,-rpath,/opt/gcc-6.1.0/lib64/"
+#-DSTATIC_ONLY=true
 	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
 	make -j$ncpu
 	if test -z $no_check   # run the make check, unless $no_check is set for this package definition

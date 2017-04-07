@@ -31,20 +31,19 @@ custombuild(){
 			-Wl,-rpath,$installdirectory/readline/lib" \
 		CFLAGS="-I$installdirectory/readline/include" \
 		ICAL_CFLAGS="-I$installdirectory/libical/include" \
-		ICAL_LIBS="-L$installdirectory/libical/lib -Wl,-rpath,$installdirectory/libical/lib" \
+		ICAL_LIBS="-L$installdirectory/libical/lib64 -Wl,-rpath,$installdirectory/libical/lib64 -lical -licalvcal" \
 		DBUS_CFLAGS="-I$installdirectory/dbus/include/dbus-1.0 \
 			-I$installdirectory/dbus/lib/dbus-1.0/include" \
 		DBUS_LIBS="-L$installdirectory/dbus/lib -Wl,-rpath,$installdirectory/dbus/lib -ldbus-1" \
 		./configure --prefix=$installdirectory/$package_fullname \
 			--disable-udev \
 			--disable-systemd \
-			--disable-obex \
 			--disable-tools \
 			--with-dbusconfdir=$installdirectory/$package_fullname/etc/ \
 			--with-dbussystembusdir=/var/run/$package_name \
 			--localstatedir=/var/
 	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
-	make -j$ncpu
+	make -j$ncpu --trace
 	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
 	then make -j$ncpu check || make -j$ncpu test
 	fi
@@ -69,7 +68,7 @@ set -e
 # if there is pid file
 [ -e /var/run/bluez/pid ] && {
     # kill -0 will only check if dbus is running
-    kill -0 `cat /var/run/bluez/pid` >/dev/null 2>/dev/null || {
+    kill -0 \`cat /var/run/bluez/pid\` >/dev/null 2>/dev/null || {
         # remove all running stuff
         rm -f /var/run/bluez/*
     }
@@ -138,10 +137,24 @@ echo '<!-- This configuration file specifies the required security policies
     <allow send_interface="org.bluez.GattDescriptor1"/>
     <allow send_interface="org.freedesktop.DBus.ObjectManager"/>
     <allow send_interface="org.freedesktop.DBus.Properties"/>
+
+    <allow own="org.bluez.obex"/>
+    <allow send_destination="org.bluez.obex"/>
+    <allow send_interface="org.bluez.obex.Agent1"/>
+    <allow send_interface="org.bluez.obex.Client1"/>
+    <allow send_interface="org.bluez.obex.Session1"/>
+    <allow send_interface="org.bluez.obex.Transfer1"/>
+    <allow send_interface="org.bluez.obex.ObjectPush1"/>
+    <allow send_interface="org.bluez.obex.FileTransfer1"/>
+    <allow send_interface="org.bluez.obex.PhonebookAccess1"/>
+    <allow send_interface="org.bluez.obex.Synchronization1"/>
+    <allow send_interface="org.bluez.obex.MessageAccess1"/>
+    <allow send_interface="org.bluez.obex.Message1"/>
   </policy>
 
   <policy at_console="true">
     <allow send_destination="org.bluez"/>
+    <allow send_destination="org.bluez.obex"/>
   </policy>
 
   <!-- allow users of lp group (printing subsystem) to 
