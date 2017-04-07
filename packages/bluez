@@ -68,7 +68,7 @@ set -e
 # if there is pid file
 [ -e /var/run/bluez/pid ] && {
     # kill -0 will only check if dbus is running
-    kill -0 \`cat /var/run/bluez/pid\` >/dev/null 2>/dev/null || {
+    kill -0 \`cat /var/run/bluez/pid\` >/dev/null 2>/dev/null && exit 0 || {
         # remove all running stuff
         rm -f /var/run/bluez/*
     }
