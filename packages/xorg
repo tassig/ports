@@ -152,6 +152,29 @@ custombuild(){
 	
 	
 	
+	########################################################
+	#                                                      #
+	# removal of programs we don't need or want            #
+	# TODO: more could be removed                          #
+	#                                                      #
+	########################################################
+	
+	rm -r lib/libSM*
+	rm -r lib/libXt*
+	rm -r lib/libXaw*
+	rm -r lib/libXmu*
+	rm -r app/smproxy-1.0.5*
+	rm -r app/x11perf*
+	rm -r app/xauth*
+	rm -r app/xdpyinfo*
+	rm -r app/xhost*
+	rm -r app/xkbutils*
+	rm -r app/xkill*
+	rm -r app/xpr*
+	rm -r app/xrdb*
+	rm -r app/xset*
+	rm -r app/xwd*
+	
 	
 	
 	########################################################
@@ -159,7 +182,6 @@ custombuild(){
 	# apply patches                                        #
 	#                                                      #
 	########################################################
-	
 	
 	# unpack the parts to be patched
 	cd app
@@ -200,23 +222,28 @@ custombuild(){
 	export CFLAGS="-D_GNU_SOURCE -I/opt/zlib/include -I/opt/eudev/include -I/opt/mtdev/include"   
 	export CFLAGS="$CFLAGS -I/opt/libressl/include"   # TODO: mesa needs it
 	
-	# TODO: all these -rpath will end up in every binary and library that we build here, see if we can find a cleaner solution
+	# TODO: all these -rpath will end up in every binary and library that we build here, try to remove some of them
 	export LDFLAGS="-Wl,-rpath=$PREFIX/lib"
-	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/freetype/lib -Wl,-rpath=/opt/zlib/lib,-rpath=/opt/llvm/lib -Wl,-rpath=/opt/fontconfig/lib -Wl,-rpath=/opt/expat/lib -Wl,-rpath=/opt/libpng/lib -L/opt/eudev/lib -Wl,-rpath=/opt/eudev/lib"
+	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/freetype/lib -Wl,-rpath=/opt/llvm/lib -Wl,-rpath=/opt/fontconfig/lib -Wl,-rpath=/opt/expat/lib -Wl,-rpath=/opt/libpng/lib -L/opt/eudev/lib"
 
 	
 	# running the main build and installation script
+	# --check is commented out: TODO: mesa check fails
 	./util/modular/build.sh --autoresume resumefile   # --check
 	
 	# symlinks
 	ln -sv $PREFIX $installdirectory/$package_name   # link for canonical name
 	ln -svf $PREFIX/lib/pkgconfig/*.pc $installdirectory/pkgconf/lib/pkgconfig/   # copying all the pkgconf files, some of them might be useful for other software
 	ln -sv $PREFIX/bin/* /bin/
+	
+	# remove non-useful stuff
 	rm /bin/startx   # startx can confuse people
 	rm -r $installdirectory/$package_name/share/fonts   # we remove support for X native fonts
 	rm -r $installdirectory/$package_name/share/man   # not useful
 	rm -r $installdirectory/$package_name/share/doc   # not useful
 	strip $installdirectory/$package_name/lib/dri/*   # strip too big libraries
+	
+	
 	rm -r $BUILDDIR
 	
 }
