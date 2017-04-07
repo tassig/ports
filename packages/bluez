@@ -36,22 +36,28 @@ custombuild(){
 		./configure --prefix=$installdirectory/$package_fullname \
 			--disable-udev \
 			--disable-systemd \
-			--disable-tools \
 			--with-dbusconfdir=$installdirectory/$package_fullname/etc/ \
 			--with-dbussystembusdir=/var/run/$package_name \
 			--localstatedir=/var/
+	# patch kernel source header to eliminate duplication
+	patch -p0 < ../../packages/bluez_step1_before_make.patch
+	# enable building hciconfig to use it for powering on
+	patch -p0 < ../../packages/bluez_step1_enable_hciconfig.patch
 	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
 	make -j$ncpu --trace
 	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
 	then make -j$ncpu check || make -j$ncpu test
 	fi
 	make install
+	patch -p0 < ../../packages/bluez_step2_after_make.patch
 	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
 	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
 	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
 		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
 		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
 	fi
+	# uncomment this to install tools to destination
+	# find ./tools -type f -perm 0755 -exec cp '{}' $installdirectory/bluez/bin/ \;
 	cd ../..
 	rm -r builddir
 }

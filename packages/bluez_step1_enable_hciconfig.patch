@@ -1,0 +1,41 @@
+--- Makefile
++++ Makefile
+@@ -448,8 +448,7 @@
+ 	tools/l2ping$(EXEEXT) tools/bccmd$(EXEEXT) \
+ 	tools/bluemoon$(EXEEXT) tools/hex2hcd$(EXEEXT) \
+ 	tools/mpris-proxy$(EXEEXT) tools/btattach$(EXEEXT)
+-#am__EXEEXT_4 = tools/hciattach$(EXEEXT) \
+-#	tools/hciconfig$(EXEEXT) \
++am__EXEEXT_4 = tools/hciconfig$(EXEEXT) 
+ #	tools/hcitool$(EXEEXT) \
+ #	tools/hcidump$(EXEEXT) \
+ #	tools/rfcomm$(EXEEXT) \
+@@ -1240,12 +1239,12 @@
+ #	lib/libbluetooth-internal.la
+ am__tools_hciconfig_SOURCES_DIST = tools/hciconfig.c tools/csr.h \
+ 	tools/csr.c
+-#am_tools_hciconfig_OBJECTS =  \
+-#	tools/hciconfig.$(OBJEXT) \
+-#	tools/csr.$(OBJEXT)
++am_tools_hciconfig_OBJECTS =  \
++	tools/hciconfig.$(OBJEXT) \
++	tools/csr.$(OBJEXT)
+ tools_hciconfig_OBJECTS = $(am_tools_hciconfig_OBJECTS)
+-#tools_hciconfig_DEPENDENCIES =  \
+-#	lib/libbluetooth-internal.la
++tools_hciconfig_DEPENDENCIES =  \
++	lib/libbluetooth-internal.la
+ am__tools_hcidump_SOURCES_DIST = tools/hcidump.c tools/parser/parser.h \
+ 	tools/parser/parser.c tools/parser/lmp.c tools/parser/hci.c \
+ 	tools/parser/l2cap.h tools/parser/l2cap.c tools/parser/amp.c \
+@@ -2638,8 +2637,8 @@
+ #						tools/hciattach_bcm43xx.c
+ 
+ #tools_hciattach_LDADD = lib/libbluetooth-internal.la
+-#tools_hciconfig_SOURCES = tools/hciconfig.c tools/csr.h tools/csr.c
+-#tools_hciconfig_LDADD = lib/libbluetooth-internal.la
++tools_hciconfig_SOURCES = tools/hciconfig.c tools/csr.h tools/csr.c
++tools_hciconfig_LDADD = lib/libbluetooth-internal.la
+ #tools_hcitool_SOURCES = tools/hcitool.c src/oui.h src/oui.c
+ #tools_hcitool_LDADD = lib/libbluetooth-internal.la 
+ #tools_hcidump_SOURCES = tools/hcidump.c \
