@@ -159,6 +159,7 @@ custombuild(){
 	#                                                      #
 	########################################################
 	
+	rm -r lib/libICE*
 	rm -r lib/libSM*
 	rm -r lib/libXt*
 	rm -r lib/libXaw*
