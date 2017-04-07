@@ -62,18 +62,29 @@ custombuild(){
 postinstall()
 {
 	mkdir -p /var/run/bluez
-	# make wrappers. They are required, because we are using separate instance of dbus
-	cp ../../packages/bluez_step3_bluetoohd_wrapper $installdirectory/bluez/bin/bluetoothd
-        chmod a+x $installdirectory/bluez/bin/bluetoothd
-
-	# rename real bluetoothctl
-	mv $installdirectory/bluez/bin/bluetoothctl $installdirectory/bluez/bin/bluetoothctl-real
+	# make wrappers
 	echo "#!/bin/sh
+set -e
+# if there is pid file
+[ -e /var/run/bluez/pid ] && {
+    # kill -0 will only check if dbus is running
+    kill -0 \`cat /var/run/bluez/pid\` >/dev/null 2>/dev/null && exit 0 || {
+        # remove all running stuff
+        rm -f /var/run/bluez/*
+    }
+}
+DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/bluez/system_bus_socket $installdirectory/dbus/bin/dbus-daemon --config-file=$installdirectory/bluez/etc/dbus-1/system.d/bluetooth.conf
+DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/bluez/system_bus_socket $installdirectory/bluez/libexec/bluetooth/bluetoothd &
+" > $installdirectory/bluez/bin/bluetoothd
+chmod a+x $installdirectory/bluez/bin/bluetoothd
+
+mv $installdirectory/bluez/bin/bluetoothctl $installdirectory/bluez/bin/bluetoothctl-real
+echo "#!/bin/sh
 DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/bluez/system_bus_socket $installdirectory/bluez/bin/bluetoothctl-real
 " > $installdirectory/bluez/bin/bluetoothctl
-	chmod a+x $installdirectory/bluez/bin/bluetoothctl
+chmod a+x $installdirectory/bluez/bin/bluetoothctl
 
-	echo '<!-- This configuration file specifies the required security policies
+echo '<!-- This configuration file specifies the required security policies
      for Bluetooth core daemon to work. -->
 
 <!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
