@@ -22,11 +22,11 @@ custombuild(){
 	make install
 	cd ../..
 	
-	ln -sv /opt/tcl-tk-8.6.5 /opt/tcl-tk
+	ln -sv /opt/tcl-tk-$package_version /opt/tcl-tk
 	ln -sv /opt/tcl-tk/bin/* /bin/
 	ln -sv /bin/wish8.6 /bin/wish
 	
-	ln -sv /opt/tk-tcl/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
+	ln -sv /opt/tcl-tk/lib/pkgconfig/* /opt/pkgconf/lib/pkgconfig/
 }
 
 
