@@ -1,7 +1,0 @@
-# used by obconf
-
-package_name=libglade
-package_version=2.6.4
-tarball_suffix=gz
-build_dependencies="libxml2"
-no_check=1   # TODO: some test fails, don't know why
