@@ -175,6 +175,7 @@ custombuild(){
 	rm -r app/xrdb*
 	rm -r app/xset*
 	rm -r app/xwd*
+	rm -r app/iceauth*
 	
 	
 	
