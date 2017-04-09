@@ -156,26 +156,27 @@ custombuild(){
 	#                                                      #
 	# removal of programs we don't need or want            #
 	# TODO: more could be removed                          #
+	# TODO: cannot be removed because some small part of VirtualBox (shared clipboard) depends on Xt
 	#                                                      #
 	########################################################
 	
-	rm -r lib/libICE*
-	rm -r lib/libSM*
-	rm -r lib/libXt*
-	rm -r lib/libXaw*
-	rm -r lib/libXmu*
-	rm -r app/smproxy-1.0.5*
-	rm -r app/x11perf*
-	rm -r app/xauth*
-	rm -r app/xdpyinfo*
-	rm -r app/xhost*
-	rm -r app/xkbutils*
-	rm -r app/xkill*
-	rm -r app/xpr*
-	rm -r app/xrdb*
-	rm -r app/xset*
-	rm -r app/xwd*
-	rm -r app/iceauth*
+	#rm -r lib/libICE*
+	#rm -r lib/libSM*
+	#rm -r lib/libXt*
+	#rm -r lib/libXaw*
+	#rm -r lib/libXmu*
+	#rm -r app/smproxy-1.0.5*
+	#rm -r app/x11perf*
+	#rm -r app/xauth*
+	#rm -r app/xdpyinfo*
+	#rm -r app/xhost*
+	#rm -r app/xkbutils*
+	#rm -r app/xkill*
+	#rm -r app/xpr*
+	#rm -r app/xrdb*
+	#rm -r app/xset*
+	#rm -r app/xwd*
+	#rm -r app/iceauth*
 	
 	
 	
