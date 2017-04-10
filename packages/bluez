@@ -67,10 +67,12 @@ postinstall()
 {
 	mkdir -p /var/run/bluez
 	# make wrappers
+	# TODO: calling the wrapper the same name as the daemon... what can possibly go wrong?
 	cp ./packages/bluez_step3_bluetoothd_wrapper $installdirectory/bluez/bin/bluetoothd
 	chmod a+x $installdirectory/bluez/bin/bluetoothd
 
 	mv $installdirectory/bluez/bin/bluetoothctl $installdirectory/bluez/bin/bluetoothctl-real
+	# TODO: move to a real file, not inline
 	echo "#!/bin/sh
 DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/bluez/system_bus_socket $installdirectory/bluez/bin/bluetoothctl-real
 " > $installdirectory/bluez/bin/bluetoothctl
