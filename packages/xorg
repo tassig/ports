@@ -240,7 +240,6 @@ custombuild(){
 	ln -sv $PREFIX/bin/* /bin/
 	
 	# remove non-useful stuff
-	rm /bin/startx   # startx can confuse people
 	rm -r $installdirectory/$package_name/share/fonts   # we remove support for X native fonts
 	rm -r $installdirectory/$package_name/share/man   # not useful
 	rm -r $installdirectory/$package_name/share/doc   # not useful
