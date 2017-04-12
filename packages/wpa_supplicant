@@ -26,6 +26,11 @@ custombuild(){
 	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
 	ln -sv $installdirectory/$package_name/* /bin/ || true   # don't crash if the links are already there
 
+	cat <<EOF > $installdirectory/$package_fullname/wpa_supplicant.conf
+ctrl_interface=/var/run/wpa_supplicant
+update_config=1
+EOF
+
 	cd ../../..
 	rm -r builddir
 
