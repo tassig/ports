@@ -1,0 +1,4 @@
+package_name=libva
+package_version=1.7.3
+tarball_suffix=gz
+build_dependencies=
