@@ -3,6 +3,7 @@ package_version=2.6
 tarball_suffix=gz
 build_dependencies=libnl
 iscustombuild=1
+haspostinstall=1
 
 custombuild(){
 	rm -rf builddir
@@ -26,12 +27,19 @@ custombuild(){
 	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
 	ln -sv $installdirectory/$package_name/* /bin/ || true   # don't crash if the links are already there
 
-	cat <<EOF > $installdirectory/$package_fullname/wpa_supplicant.conf
-ctrl_interface=/var/run/wpa_supplicant
-update_config=1
-EOF
-
 	cd ../../..
 	rm -r builddir
+}
 
+# setup configuration file
+# TODO: we'll use a dedicated group for all users to access ctrl_interface
+postinstall()
+{
+	mkdir -p /var/etc
+	cat <<EOF > /var/etc/wpa_supplicant.conf
+ctrl_interface=/var/run/wpa_supplicant
+ctrl_interface_group=jerry
+update_config=1
+EOF
+ 
 }
