@@ -239,6 +239,18 @@ custombuild(){
 	ln -svf $PREFIX/lib/pkgconfig/*.pc $installdirectory/pkgconf/lib/pkgconfig/   # copying all the pkgconf files, some of them might be useful for other software
 	ln -sv $PREFIX/bin/* /bin/
 	
+	
+	# re-build mesa with libva support
+	# TODO: do we need to add libvdpau here?
+	cd ~/ports
+	./packageinstall.sh libva
+	./packageinstall.sh intel-vaapi-driver
+	./packageinstall.sh libva-utils
+	cd $BUILDDIR
+	./util/modular/build.sh -o mesa/mesa   # rebuild and reinstall mesa
+	ln -svf $PREFIX/lib/pkgconfig/*.pc $installdirectory/pkgconf/lib/pkgconfig/
+	
+	
 	# remove non-useful stuff
 	rm -r $installdirectory/$package_name/share/fonts   # we remove support for X native fonts
 	rm -r $installdirectory/$package_name/share/man   # not useful
