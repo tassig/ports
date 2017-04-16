@@ -120,7 +120,8 @@ custombuild(){
 	rm xserver/*.tar.gz # remove the xserver tarball, to make sure the build system is not using it
 	git clone http://git.cacaoweb.org/xserver.git   # we use our own fork
 	cd xserver && git checkout axiom_prod && cd ..
-	clone libevdev 7f2fffc0d9fe47a76dcaaa3db9bd758e8433c0b6   # TODO: we should remove the existing tar.gz too
+	rm libevdev*
+	clone libevdev 7f2fffc0d9fe47a76dcaaa3db9bd758e8433c0b6
 	cd driver
 	# NOTE: we don't need to delete the tarballs to update a package, the X build system will give priority to source trees (such as the one we get from git) over tarballs
 	clone xf86-input-synaptics 59e5db025307404fbfbc82f2fb3fe91d6a3005d7
