@@ -71,7 +71,7 @@ custombuild(){
 	clone mesa 8314dd7ff2c4719ffb64b202cf5fdd0e38ad276e
 	cd ..
 	cd proto
-	clone dri3proto 91df0f88b70c268f3580385a7b37543ab8c544c8   # mesa needs it TODO: double-check
+	clone dri3proto 91df0f88b70c268f3580385a7b37543ab8c544c8   # mesa needs it
 	clone presentproto ef84007fc4a23d3897b4776906139de9d0698c2a  # mesa needs it TODO: double-check
 	clone glproto bd3d751e1eb17efb39f65093271bb4ac071aa9e0  # xserver needs it
 	clone inputproto 6946d497e3fe496818fa70de6702934bf70e44ec  # xserver needs it
@@ -109,6 +109,10 @@ custombuild(){
 	clone libxcb d34785a34f28fa6a00f8ce00d87e3132ff0f6467
 	clone proto 6398e42131eedddde0d98759067dde933191f049
 	cd ..
+	cd proto
+	rm dri2proto*
+	clone dri2proto b118dfbf91dcec6d82dfddc3f41031e23ea3c039   # X server needs a recent version, DRI2 is needed for lots of applications
+	cd ..
 	cd util
 	rm util-macros-1.17.tar.gz
 	clone macros d7acec2d3a3abe79814ceb72e2c0d4d95ed31d37  # wanted by build.sh and the latest version of libxcb
@@ -118,6 +122,7 @@ custombuild(){
 	cd xserver && git checkout axiom_prod && cd ..
 	clone libevdev 7f2fffc0d9fe47a76dcaaa3db9bd758e8433c0b6   # TODO: we should remove the existing tar.gz too
 	cd driver
+	# NOTE: we don't need to delete the tarballs to update a package, the X build system will give priority to source trees (such as the one we get from git) over tarballs
 	clone xf86-input-synaptics 59e5db025307404fbfbc82f2fb3fe91d6a3005d7
 	clone xf86-video-v4l 95fcc10d962f3ff682cfb8c1bbfd3f14db167a13
 	clone xf86-video-intel 8477615ae1bd284aca1221185ffefe0630d3f7ab
