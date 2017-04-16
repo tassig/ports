@@ -259,8 +259,11 @@ custombuild(){
 	
 	# re-build xfree86-video-intel with correct LDFLAGS
 	# we should do that for all drivers, but this would require patches to X build system
+	cd driver/xf86-video-intel/
 	export LDFLAGS="-Wl,-z,lazy"   # without this, we're getting an unresolved symbol error in Xorg.log
-	./util/modular/build.sh -o driver/xf86-video-intel
+	./configure --prefix=$PREFIX --disable-dga --disable-xaa --disable-ums --disable-uxa   # we disable as much as possible
+	make $MAKEFLAGS
+	make install
 	
 	
 	# updating the pkgconfig files, in case something changed
