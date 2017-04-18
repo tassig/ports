@@ -1,0 +1,34 @@
+package_name=xf86-video-nouveau
+package_version=1.0.14
+tarball_suffix=gz
+build_dependencies=xorg
+iscustombuild=1 # custom build because we need to install it to /opt/xorg
+
+
+custombuild(){
+	rm -rf builddir
+	mkdir -p builddir   # do everything in builddir for tidiness
+	cd builddir
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	cd *   # cd into the package directory
+	./configure --prefix=$installdirectory/xorg
+	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
+	make -j$ncpu
+	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
+	then make -j$ncpu check || make -j$ncpu test
+	fi
+	make install
+	cd ../..
+	rm -r builddir
+	
+	# now we need to download firmware and place to /lib/firmware/nouveau/
+        mkdir -p builddir   # do everything in builddir for tidiness
+        cd builddir
+	wget -O archive $url-firmware
+	tar xvf archive -C /lib/firmware/
+	cd ..
+	rm -r builddir
+}
+
