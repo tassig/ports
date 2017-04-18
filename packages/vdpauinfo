@@ -1,0 +1,31 @@
+package_name=vdpauinfo
+package_version=1.0
+tarball_suffix=gz
+build_dependencies=libvdpau
+iscustombuild=1 # custom build to define -rpath to libvdpau and xorg
+
+custombuild(){
+	rm -rf builddir
+	mkdir -p builddir   # do everything in builddir for tidiness
+	cd builddir
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	cd *   # cd into the package directory
+	LDFLAGS="-Wl,-rpath,/opt/xorg/lib -Wl,-rpath,/opt/libvdpau/lib" ./configure --prefix=$installdirectory/$package_fullname/
+	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
+	make -j$ncpu
+	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
+	then make -j$ncpu check || make -j$ncpu test
+	fi
+	make install
+	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
+	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+	fi
+	cd ../..
+	rm -r builddir
+}
+
