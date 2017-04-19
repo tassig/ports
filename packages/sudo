@@ -3,3 +3,5 @@ package_version=1.8.19p2
 tarball_suffix=gz
 build_dependencies=
 no_check=1
+
+# TODO: we should remove this one, sudo doesn't have real use case (i haven't used it for many years and was just fine)

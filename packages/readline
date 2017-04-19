@@ -10,6 +10,8 @@ iscustombuild=1
 #
 # this package simplifies work with command-line interface
 #
+# TODO: this seems to be only used by bluez, remove once we rationalize our bluetooth tools
+#
 ##########################
 
 
