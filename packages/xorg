@@ -227,17 +227,17 @@ custombuild(){
 	
 	# set CFLAGS and LDFLAGS
 	# TODO: what exactly requires _GNU_SOURCE ?
-	export CFLAGSTMP="-D_GNU_SOURCE -I$installdirectory/zlib/include -I/opt/eudev/include -I/opt/mtdev/include"   
-	export CFLAGSTMP="$CFLAGSTMP -I$installdirectory/libressl/include"   # TODO: mesa needs it
+	export CFLAGS="-D_GNU_SOURCE -I/opt/zlib/include -I/opt/eudev/include -I/opt/mtdev/include"   
+	export CFLAGS="$CFLAGS -I/opt/libressl/include"   # TODO: mesa needs it
 	
 	# TODO: all these -rpath will end up in every binary and library that we build here, try to remove some of them
-	export LDFLAGSTMP="-Wl,-rpath=$PREFIX/lib"
-	export LDFLAGSTMP="$LDFLAGSTMP -Wl,-rpath=$installdirectory/freetype/lib -Wl,-rpath=$installdirectory/llvm/lib -Wl,-rpath=$installdirectory/fontconfig/lib -Wl,-rpath=$installdirectory/expat/lib -Wl,-rpath=$installdirectory/libpng/lib -L$installdirectory/eudev/lib"
+	export LDFLAGS="-Wl,-rpath=$PREFIX/lib"
+	export LDFLAGS="$LDFLAGS -Wl,-rpath=/opt/freetype/lib -Wl,-rpath=/opt/llvm/lib -Wl,-rpath=/opt/fontconfig/lib -Wl,-rpath=/opt/expat/lib -Wl,-rpath=/opt/libpng/lib -L/opt/eudev/lib"
 
 	
 	# running the main build and installation script
 	# --check is commented out: TODO: mesa check fails
-	CFLAGS="$CFLAGSTMP" LDFLAGS="$LDFLAGSTMP" ./util/modular/build.sh --autoresume resumefile # --check
+	./util/modular/build.sh --autoresume resumefile   # --check
 	
 	# symlinks
 	ln -sv $PREFIX $installdirectory/$package_name   # link for canonical name
@@ -246,25 +246,15 @@ custombuild(){
 	
 	
 	
-	# re-build mesa with libva and vdpau support
+	# re-build mesa with libva support
 	# we have to do build mesa -> X -> libva -> mesa so that the correct dependencies are met
+	# TODO: do we need to add libvdpau here?
 	cd ~/ports
 	./packageinstall.sh libva
 	./packageinstall.sh intel-vaapi-driver
 	./packageinstall.sh libva-utils
-	# install nouveau and libvdpau for NVidia
-	./packageinstall.sh xf86-video-nouveau
-	./packageinstall.sh libvdpau
-	./packageinstall.sh vdpauinfo
-
-	cd $BUILDDIR/mesa/mesa
-	# clean build directory from prevous build
-	make clean
-
 	cd $BUILDDIR
-	export CFLAGSTMP="$CFLAGSTMP -I$installdirectory/libvdpau/include"
-	export LDFLAGSTMP="$LDFLAGSTMP -L$installdirectory/libvdpau/lib -Wl,-rpath,$installdirectory/libvdpau/lib"
-	CFLAGS="$CFLAGSTMP" LDFLAGS="$LDFLAGSTMP" ./util/modular/build.sh -o mesa/mesa --confflags "--enable-vdpau --with-gallium-drivers=nouveau --with-dri-drivers=nouveau"  # rebuild and reinstall mesa
+	./util/modular/build.sh -o mesa/mesa   # rebuild and reinstall mesa
 	
 	# re-build xfree86-video-intel with correct LDFLAGS
 	# we should do that for all drivers, but this would require patches to X build system
@@ -274,15 +264,7 @@ custombuild(){
 	make $MAKEFLAGS
 	make install
 	
-	# now we need to place libvdpau_nouveau.so into /opt/libvdpau/lib and create symlink
-	# libvdpau_nvidia.so
-	cp $PREFIX/lib/vdpau/libvdpau_nouveau.so $installdirectory/libvdpau/lib/
-	ln -s $installdirectory/libvdpau/lib/libvdpau_nouveau.so $installdirectory/libvdpau/lib/libvdpau_nvidia.so
-	# now we need to place gallium_drv_video.so into /opt/libva/lib/ and symlink 
-	# nouveau_drv_video.so to it
-	cp $PREFIX/lib/dri/gallium_drv_video.so $installdirectory/libva/lib/dri/
-	ln -s $installdirectory/libva/lib/dri/gallium_drv_video.so $installdirectory/libva/lib/dri/nouveau_drv_video.so
-
+	
 	# updating the pkgconfig files, in case something changed
 	ln -svf $PREFIX/lib/pkgconfig/*.pc $installdirectory/pkgconf/lib/pkgconfig/
 	
@@ -291,7 +273,7 @@ custombuild(){
 	rm -r $installdirectory/$package_name/share/fonts   # we remove support for X native fonts
 	rm -r $installdirectory/$package_name/share/man   # not useful
 	rm -r $installdirectory/$package_name/share/doc   # not useful
-	strip $installdirectory/$package_name/lib/dri/*.so*   # strip too big libraries. There can be *.la files
+	strip $installdirectory/$package_name/lib/dri/*   # strip too big libraries
 	
 	
 	rm -r $BUILDDIR
