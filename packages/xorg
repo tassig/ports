@@ -273,7 +273,7 @@ custombuild(){
 	rm -r $installdirectory/$package_name/share/fonts   # we remove support for X native fonts
 	rm -r $installdirectory/$package_name/share/man   # not useful
 	rm -r $installdirectory/$package_name/share/doc   # not useful
-	strip $installdirectory/$package_name/lib/dri/*   # strip too big libraries
+	strip $installdirectory/$package_name/lib/dri/*.so*   # strip too big libraries
 	
 	
 	rm -r $BUILDDIR
