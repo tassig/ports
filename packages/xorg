@@ -254,6 +254,8 @@ custombuild(){
 	./packageinstall.sh intel-vaapi-driver
 	./packageinstall.sh libva-utils
 
+        # install nouveau driver for NVidia GPUs
+        ./packageinstall.sh xf86-video-nouveau 
 
         # clean build directory from prevous build
         cd $BUILDDIR/mesa/mesa
