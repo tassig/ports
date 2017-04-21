@@ -27,6 +27,8 @@ custombuild(){
         mkdir -p builddir   # do everything in builddir for tidiness
         cd builddir
 	wget -O archive $url-firmware
+	# this dir can be missed
+	mkdir -p /lib/firmware
 	tar xvf archive -C /lib/firmware/
 	cd ..
 	rm -r builddir
