@@ -277,6 +277,14 @@ custombuild(){
 	make $MAKEFLAGS
 	make install
 	
+        # now we need to place libvdpau_nouveau.so into /opt/libvdpau/lib and create symlink
+        # libvdpau_nvidia.so
+        cp $PREFIX/lib/vdpau/libvdpau_nouveau.so $installdirectory/libvdpau/lib/
+        ln -s $installdirectory/libvdpau/lib/libvdpau_nouveau.so $installdirectory/libvdpau/lib/libvdpau_nvidia.so
+        # now we need to place gallium_drv_video.so into /opt/libva/lib/ and symlink
+        # nouveau_drv_video.so to it
+        cp $PREFIX/lib/dri/gallium_drv_video.so $installdirectory/libva/lib/dri/
+        ln -s $installdirectory/libva/lib/dri/gallium_drv_video.so $installdirectory/libva/lib/dri/nouveau_drv_video.so
 	
 	# updating the pkgconfig files, in case something changed
 	ln -svf $PREFIX/lib/pkgconfig/*.pc $installdirectory/pkgconf/lib/pkgconfig/
