@@ -253,6 +253,12 @@ custombuild(){
 	./packageinstall.sh libva
 	./packageinstall.sh intel-vaapi-driver
 	./packageinstall.sh libva-utils
+
+
+        # clean build directory from prevous build
+        cd $BUILDDIR/mesa/mesa
+        make clean
+
 	cd $BUILDDIR
 	./util/modular/build.sh -o mesa/mesa   # rebuild and reinstall mesa
 	
