@@ -21,6 +21,9 @@ custombuild(){
 	fi
 	make install
 	
+	# symlinks to xorg standard place
+	ln -sv /opt/libva/lib/dri/* /opt/xorg/lib/dri/
+	
 	
 	cd ../..
 	rm -r builddir
