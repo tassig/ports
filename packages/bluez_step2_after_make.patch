@@ -1,5 +1,5 @@
---- /opt/linux-kernel-headers-4.10.4/include/linux/if_bridge.h
-+++ /opt/linux-kernel-headers-4.10.4/include/linux/if_bridge.h
+--- /opt/linux-kernel-headers/include/linux/if_bridge.h
++++ /opt/linux-kernel-headers/include/linux/if_bridge.h
 @@ -15,7 +15,7 @@
  
  #include <linux/types.h>
