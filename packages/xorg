@@ -267,7 +267,7 @@ custombuild(){
 	# add libvdpau flags
         export CFLAGS="$CFLAGS -I$installdirectory/libvdpau/include"   
         export LDFLAGS="$LDFLAGS -L$installdirectory/libvdpau/lib -Wl,-rpath,$installdirectory/libvdpau/lib"
-	./util/modular/build.sh -o mesa/mesa --confflags "--enable-vdpau --with-gallium-drivers=nouveau --with-dri-drivers=nouveau"  # rebuild and reinstall mesa
+	./util/modular/build.sh -o mesa/mesa --confflags "--with-gallium-drivers=r300,r600,svga,swrast,nouveau"  # rebuild and reinstall mesa TODO: adding nouveau to the gallium drivers has to be wrong, these are drivers for software emulated acceleration
 	
 	# re-build xfree86-video-intel with correct LDFLAGS
 	# we should do that for all drivers, but this would require patches to X build system
@@ -283,8 +283,9 @@ custombuild(){
         ln -s $installdirectory/libvdpau/lib/libvdpau_nouveau.so $installdirectory/libvdpau/lib/libvdpau_nvidia.so
         # now we need to place gallium_drv_video.so into /opt/libva/lib/ and symlink
         # nouveau_drv_video.so to it
-        cp $PREFIX/lib/dri/gallium_drv_video.so $installdirectory/libva/lib/dri/
-        ln -s $installdirectory/libva/lib/dri/gallium_drv_video.so $installdirectory/libva/lib/dri/nouveau_drv_video.so
+        # TODO: i could possibly understand symlinking nouveau_drv_video.so into xorg/lib/dri , but libva should stay out of this
+        #cp $PREFIX/lib/dri/gallium_drv_video.so $installdirectory/libva/lib/dri/
+        #ln -s $installdirectory/libva/lib/dri/gallium_drv_video.so $installdirectory/libva/lib/dri/nouveau_drv_video.so
 	
 	# updating the pkgconfig files, in case something changed
 	ln -svf $PREFIX/lib/pkgconfig/*.pc $installdirectory/pkgconf/lib/pkgconfig/
