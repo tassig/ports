@@ -6,10 +6,6 @@ iscustombuild=1
 no_check=1 # TODO: 14 tests failed
 haspostinstall=1
 
-postinstall(){
-        ln -sv /opt/glib/share/aclocal/* `aclocal --print-ac-dir`/
-}
-
 
 custombuild(){
 	rm -rf builddir
@@ -39,9 +35,22 @@ custombuild(){
 		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
 	fi
 	
-	mkdir -p $installdirectory/$package_name/etc
-	cp ../../packages/glib-share/mime.types $installdirectory/$package_name/etc/
-
 	cd ../..
 	rm -r builddir
+}
+
+postinstall(){
+	
+	# mime file
+	mkdir -p $installdirectory/$package_fullname/etc
+	cp packages/glib-share/mime.types $installdirectory/$package_fullname/etc/
+	
+	# aclocal files
+        ln -sv $installdirectory/$package_fullname/share/aclocal/* `aclocal --print-ac-dir`/
+        
+        # remove docs
+        rm -r $installdirectory/$package_fullname/share/gtk-doc
+        
+        # strip
+        strip $installdirectory/$package_fullname/lib/* || true
 }
