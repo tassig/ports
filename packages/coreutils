@@ -1,0 +1,7 @@
+package_name=coreutils
+package_version=8.27
+tarball_suffix=xz
+build_dependencies=
+no_check=1
+
+export FORCE_UNSAFE_CONFIGURE=1   # hack for coreutils configure
