@@ -1,5 +1,5 @@
 package_name=gdb
 package_version=7.12.1
 tarball_suffix=xz
-build_dependencies=texinfo
+build_dependencies="texinfo gdb"
 no_check=1   # running this test suite involves the same thing as running the gcc tests suite; it's likely to fail and it needs a few additional dependencies
