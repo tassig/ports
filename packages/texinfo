@@ -1,4 +1,4 @@
 package_name=texinfo
 package_version=6.1
 tarball_suffix=xz
-build_dependencies=
+build_dependencies=perl
