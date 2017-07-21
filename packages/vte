@@ -28,7 +28,8 @@ custombuild(){
 
 	# it uses ptsname_r function which requires _GNU_SOURCE definition.but the source does not have it
 	# TODO: it probably only requires _XOPEN_SOURCE
-	patch -p0 < ../../packages/vte-pty.patch   
+	patch -p0 < ../../packages/vte-pty.patch
+	patch -p0 < ../../packages/vte-cwd.patch   
 	
 	# work around broken configure script for ncurses
 	CFLAGS="-I$installdirectory/ncurses/include" LDFLAGS="-L$installdirectory/ncurses/lib -Wl,-rpath,$installdirectory/ncurses/lib" ./configure --prefix=$installdirectory/$package_fullname/
