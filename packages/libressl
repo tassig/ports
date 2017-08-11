@@ -3,3 +3,11 @@ package_name=libressl
 package_version=2.3.4
 tarball_suffix=gz
 build_dependencies=
+# by default, /etc/ssl is empty, which breaks SSL connection, based on libressl. We must
+# link this dir into real ssl directory
+haspostinstall=1
+
+postinstall(){
+  rm -rf /etc/ssl
+  ln -s /opt/libressl/etc/ssl /etc/
+}
