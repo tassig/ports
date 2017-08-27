@@ -1,0 +1,5 @@
+package_name=patch
+package_version=2.7
+tarball_suffix=gz
+build_dependencies=
+no_check=1
