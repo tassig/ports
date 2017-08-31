@@ -1,0 +1,31 @@
+package_name=apr-util
+package_version=1.6.0
+tarball_suffix=gz
+build_dependencies=apr
+iscustombuild=1
+
+# custom build becasue we need to use custom configure and make commands
+
+custombuild(){
+	rm -rf builddir
+	mkdir -p builddir   # do everything in builddir for tidiness
+	cd builddir
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	cd *   # cd into the package directory
+
+	./configure --prefix=$installdirectory/$package_fullname --with-apr=/opt/apr --with-expat=/opt/expat
+	make -j CFLAGS="-I/opt/expat/include" LDFLAGS="-L/opt/expat/lib"
+	make install
+	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash
+											# if the links are already there
+	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+	fi
+
+	cd ../..
+	rm -r builddir
+}
