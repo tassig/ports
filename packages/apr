@@ -1,5 +1,0 @@
-package_name=apr
-package_version=1.6.2
-tarball_suffix=gz
-build_dependencies=
-no_check=1
