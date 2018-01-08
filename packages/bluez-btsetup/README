@@ -1,0 +1,44 @@
+# Rationale
+
+This patch provide bluez tools client (bluetoothctl) to act as a simple server over a unix socket, allowing 
+third party software (axiom btsetup in this case) to run commands, and read replies, the same way as user would do in interactive mode.
+
+btsetup is axiom based bluetooth gui setup utility, which needs backend to manage bluetooth devices. The rationale behind was apply simplest solution and to use stable
+code base of bluetoothctl, which runs on dbus and attaches to bluetoothd, to execute commands, and read replies. The idea also came form wpasupplicant and their
+unix socket interface, to connect to wpasupplicant running services, used in wifisetup. Bluez tools do not provide such simple interface.
+
+Other approaches would involve writing btsetup backend to use dbus methods directly, to interact with running bluetoothd. In fact, this is the official bluez tools interface
+to be used by third party software. 
+
+One more advanced approach would replace bluetoothd with btsetup backend using hci protocol directly, to interact with bluetooth controller, and to implement only very 
+basic set of functionalities, required by btsetup itself.
+
+# Patch details
+
+Code base to patch is located in `client/` folder of bluez-5.44 source base. It expands bluetoothctl with additional command line switch --unix-backend "socket path". If bluetoothctl is being called with this switch, it will act as a simple server on the given unix socket. Instead of using readline, it listens and accepts connections on "socket path", read sent commands, and send replies back. It was designed to run with btsetup utility, as the client, and implements only very basic set of commands, and replies:
+
+ - is_ready  - custom command to check if unix socket backend is operational
+ - scan on   - start continuous device scan
+ - scan off  - stop scan
+ - devices   - list of available devices, in format: mac device_name
+ - info mac  - detailed info on a device with given mac
+ - agent on  - trun on bluetooth agent
+ - default-agent - we use only default agent for now
+ - pair mac  - pair device with given mac, NOTE: if pin appears to be required, it shall be handled internally, by writing it back
+ - trust mac - trust device with a given mac 
+ - connect mac - connect device with a given mac
+ - delete mac - delete device with a given mac
+
+TODO: commands "pair", "trust", "connect" and "delete" are not actually implemented. Special care shall be taken for "pair" command, to implement automatic PIN reply, once PIN number was delivered form bluetoothd. It sould not be a problem, but the question is do we want to completely hide it from the user, and allow all devices to be connected automatically?
+
+Existing code base is expanded with `unixsocket.c` and `unixsocket.h` new source files, and existing files `main.c` and `agent.c` are patched to make use of new unix socket functionalities. bluez Makefile was patched too, so new sources would be taken into account while compiling whole bluez code base. 
+
+Patched code is supplied with extensive code comments.
+
+NOTE: patched code creates `/tmp/bluetooth.unix`, and hardcodes ownership change to 1001:1001, so userland btsetup utility can read/write this socket.
+
+# Patch usage
+
+Once patched bluez is installed, it will add new scritp `bluetoothctl-btsetup` to `/opt/bluez/bin`. Once started (as root only), it will run patched bluetoothctl.
+The idea is to run this script on system startup, so it will act as a daemon for btsetup client. 
+
