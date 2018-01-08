@@ -1,0 +1,321 @@
+--- main.c.orig
++++ main.c
+@@ -46,6 +46,11 @@
+ #include "gatt.h"
+ #include "advertising.h"
+ 
++/* axiom patch, unix socket command interface */
++#include "unixsocket.h"
++extern guint us_use_unix_socket_backend;
++/* axiom patch end */
++
+ /* String display constants */
+ #define COLORED_NEW	COLOR_GREEN "NEW" COLOR_OFF
+ #define COLORED_CHG	COLOR_YELLOW "CHG" COLOR_OFF
+@@ -73,6 +78,8 @@
+ 
+ static guint input = 0;
+ 
++
++
+ static const char * const agent_arguments[] = {
+ 	"on",
+ 	"off",
+@@ -170,15 +177,27 @@
+ 	else
+ 		name = "<unknown>";
+ 
+-	rl_printf("%s%s%sController %s %s %s\n",
+-				description ? "[" : "",
+-				description ? : "",
+-				description ? "] " : "",
++	/* axiom patch, unix socket command interface */
++	/* NOTE: we don't need decription dependent prints, and skip if there is a description */
++	if (us_use_unix_socket_backend && description == NULL)
++	{
++		unix_socket_reply_append ( "Controller %s %s %s\n",
+ 				address, name,
+ 				default_ctrl &&
+ 				default_ctrl->proxy == proxy ?
+ 				"[default]" : "");
++	}
++	/* axiom patch end */
+ 
++	rl_printf("%s%s%sController %s %s %s\n",
++			description ? "[" : "",
++			description ? : "",
++			description ? "] " : "",
++			address, name,
++			default_ctrl &&
++			default_ctrl->proxy == proxy ?
++				"[default]" : "");
++
+ }
+ 
+ static void print_device(GDBusProxy *proxy, const char *description)
+@@ -196,6 +215,15 @@
+ 	else
+ 		name = "<unknown>";
+ 
++	/* axiom patch, unix socket command interface */
++	/* NOTE: we don't need decription dependent prints, and skip if there is a description */
++	if (us_use_unix_socket_backend && description == NULL)
++	{
++		/* send space separated entries mac name */
++		unix_socket_reply_append ("%s %s\n", address, name);
++	}
++	/* axiom patch end */
++
+ 	rl_printf("%s%s%sDevice %s %s\n",
+ 				description ? "[" : "",
+ 				description ? : "",
+@@ -227,15 +255,37 @@
+ 	case DBUS_TYPE_STRING:
+ 	case DBUS_TYPE_OBJECT_PATH:
+ 		dbus_message_iter_get_basic(iter, &valstr);
++
++		/* axiom patch, unix socket command interface */
++		/* Name, Icon, append only if 'info' command was the caller */
++		if (us_use_unix_socket_backend && (*label == '\t'))
++			unix_socket_reply_append ("%s%s: %s\n", label, name, valstr);
++		/* axiom patch end */
++
+ 		rl_printf("%s%s: %s\n", label, name, valstr);
+ 		break;
+ 	case DBUS_TYPE_BOOLEAN:
+ 		dbus_message_iter_get_basic(iter, &valbool);
++
++		/* axiom patch, unix socket command interface */
++		/* Paired, Trusted, Connected, append only if 'info' command was the caller */
++		if (us_use_unix_socket_backend && (*label == '\t'))
++			unix_socket_reply_append ("%s%s: %s\n", label, name,
++					valbool == TRUE ? "yes" : "no");
++		/* axiom patch end */
++
+ 		rl_printf("%s%s: %s\n", label, name,
+ 					valbool == TRUE ? "yes" : "no");
+ 		break;
+ 	case DBUS_TYPE_UINT32:
+ 		dbus_message_iter_get_basic(iter, &valu32);
++
++		/* axiom patch, unix socket command interface */
++		/* Class, append only if 'info' command was the caller */
++		if (us_use_unix_socket_backend && (*label == '\t'))
++			unix_socket_reply_append ("%s%s: 0x%06x\n", label, name, valu32);
++		/* axiom patch end */
++
+ 		rl_printf("%s%s: 0x%06x\n", label, name, valu32);
+ 		break;
+ 	case DBUS_TYPE_UINT16:
+@@ -244,6 +294,13 @@
+ 		break;
+ 	case DBUS_TYPE_INT16:
+ 		dbus_message_iter_get_basic(iter, &vals16);
++
++		/* axiom patch, unix socket command interface */
++		/* RSSI, append only if 'info' command was the caller */
++		if (us_use_unix_socket_backend && (*label == '\t'))
++			unix_socket_reply_append ("%s%s: %d\n", label, name, vals16);
++		/* axiom patch end */
++
+ 		rl_printf("%s%s: %d\n", label, name, vals16);
+ 		break;
+ 	case DBUS_TYPE_BYTE:
+@@ -770,6 +827,11 @@
+ 		struct adapter *adapter = list->data;
+ 		print_adapter(adapter->proxy, NULL);
+ 	}
++	
++	/* axiom patch, unix socket command interface */
++	if(us_use_unix_socket_backend)
++		unix_socket_write_reply();
++	/* axiom patch end */
+ }
+ 
+ static void cmd_show(const char *arg)
+@@ -839,11 +901,20 @@
+ 	if (check_default_ctrl() == FALSE)
+ 		return;
+ 
++	/* axiom patch, unix socket command interface */
++	/* NOTE: dummy desctiption line to simplify parsing procedure */
++	unix_socket_reply_append ("%s\n", "Devices found:");
++
+ 	for (ll = g_list_first(default_ctrl->devices);
+ 			ll; ll = g_list_next(ll)) {
+ 		GDBusProxy *proxy = ll->data;
+ 		print_device(proxy, NULL);
+ 	}
++
++	/* axiom patch, unix socket command interface */
++	if(us_use_unix_socket_backend)
++		unix_socket_write_reply();
++	/* axiom patch end */
+ }
+ 
+ static void cmd_paired_devices(const char *arg)
+@@ -1024,12 +1095,34 @@
+ 	dbus_error_init(&error);
+ 
+ 	if (dbus_set_error_from_message(&error, message) == TRUE) {
++
++		/* axiom patch, unix socket command interface */
++		if(us_use_unix_socket_backend)
++		{
++			unix_socket_reply_append ("Failed to %s discovery: %s\n",
++					enable == TRUE ? "start" : "stop", error.name);
++			unix_socket_write_reply();
++		}
++		/* axiom patch end */
++
+ 		rl_printf("Failed to %s discovery: %s\n",
+ 				enable == TRUE ? "start" : "stop", error.name);
+ 		dbus_error_free(&error);
+ 		return;
+ 	}
+ 
++	/* axiom patch, unix socket command interface */
++	if(us_use_unix_socket_backend)
++	{
++		/* we are interested only in "started" event */
++		if (enable == TRUE)
++		{
++			unix_socket_reply_append ("Discovery %s", "started");
++			unix_socket_write_reply();
++		}
++	}
++	/* axiom patch end */
++
+ 	rl_printf("Discovery %s\n", enable == TRUE ? "started" : "stopped");
+ }
+ 
+@@ -1356,6 +1449,11 @@
+ 	dbus_message_iter_get_basic(&iter, &address);
+ 	rl_printf("Device %s\n", address);
+ 
++	/* axiom patch, unix socket command interface */
++	if (us_use_unix_socket_backend)
++		unix_socket_reply_append ("Device %s\n", address);
++	/* axiom patch end */
++
+ 	print_property(proxy, "Name");
+ 	print_property(proxy, "Alias");
+ 	print_property(proxy, "Class");
+@@ -1372,6 +1470,11 @@
+ 	print_property(proxy, "ServiceData");
+ 	print_property(proxy, "RSSI");
+ 	print_property(proxy, "TxPower");
++	
++	/* axiom patch, unix socket command interface */
++	if (us_use_unix_socket_backend)
++		unix_socket_write_reply ();
++	/* axiom patch end*/
+ }
+ 
+ static void pair_reply(DBusMessage *message, void *user_data)
+@@ -2264,6 +2367,13 @@
+ 	free(input);
+ }
+ 
++/* axiom patch, allow unix socket command interface */
++void clent_process_command (gchar *cmd)
++{
++	rl_handler(cmd);
++}
++/* axiom patch end */
++
+ static gboolean signal_handler(GIOChannel *channel, GIOCondition condition,
+ 							gpointer user_data)
+ {
+@@ -2378,6 +2488,8 @@
+ 		input = setup_standard_input();
+ }
+ 
++
++
+ int main(int argc, char *argv[])
+ {
+ 	GOptionContext *context;
+@@ -2385,10 +2497,22 @@
+ 	GDBusClient *client;
+ 	guint signal;
+ 
++	/* axiom patch, allow unix socket command interface */
++	if(argc > 2 && !strcmp(argv[1], "--unix-socket-backend"))
++	{
++		us_use_unix_socket_backend = 1;
++		printf("Unix socket backend: %s\n", argv[2]);
++		
++		argc = 0; /* do not process arguments by default code */
++	}
++	/* axiom patch end */
++
+ 	context = g_option_context_new(NULL);
+ 	g_option_context_add_main_entries(context, options, NULL);
+ 
+-	if (g_option_context_parse(context, &argc, &argv, &error) == FALSE) {
++	
++	if (g_option_context_parse(context, &argc, &argv, &error) == FALSE) 
++	{
+ 		if (error != NULL) {
+ 			g_printerr("%s\n", error->message);
+ 			g_error_free(error);
+@@ -2399,7 +2523,8 @@
+ 
+ 	g_option_context_free(context);
+ 
+-	if (option_version == TRUE) {
++	if (option_version == TRUE) 
++	{
+ 		printf("%s\n", VERSION);
+ 		exit(0);
+ 	}
+@@ -2407,15 +2532,30 @@
+ 	main_loop = g_main_loop_new(NULL, FALSE);
+ 	dbus_conn = g_dbus_setup_bus(DBUS_BUS_SYSTEM, NULL, NULL);
+ 
+-	setlinebuf(stdout);
+-	rl_attempted_completion_function = cmd_completion;
++	/* axiom patch, allow unix socket command interface */
++	if(us_use_unix_socket_backend)
++	{
++		/* open unix socket */
++		if (unix_socket_backend_open(argv[2]) == -1)
++			exit(EXIT_FAILURE);
++		
++		/* instead of cli interface, use 1s timeout to process incoming commands */
++		g_timeout_add (PROCESSING_PERIOD_ms , unix_socket_backend_process , argv[2]);
++	}
++	else
++	{
++	/* axiom patch end */
+ 
+-	rl_erase_empty_line = 1;
+-	rl_callback_handler_install(NULL, rl_handler);
++		setlinebuf(stdout);
++		rl_attempted_completion_function = cmd_completion;
+ 
+-	rl_set_prompt(PROMPT_OFF);
+-	rl_redisplay();
++		rl_erase_empty_line = 1;
++		rl_callback_handler_install(NULL, rl_handler);
+ 
++		rl_set_prompt(PROMPT_OFF);
++		rl_redisplay();
++	}
++
+ 	signal = setup_signalfd();
+ 	client = g_dbus_client_new(dbus_conn, "org.bluez", "/org/bluez");
+ 
+@@ -2444,6 +2584,11 @@
+ 	g_list_free_full(ctrl_list, proxy_leak);
+ 
+ 	g_free(auto_register_agent);
++	
++	/* axiom patch, allow unix socket command interface */
++	if(us_use_unix_socket_backend)
++		unix_socket_backend_close();
++	/* axiom patch end */
+ 
+ 	return 0;
+ }

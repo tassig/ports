@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# NOTE: run as root, bluetoothctl needs to access DBUS_SYSTEM_BUS_ADDRESS  
+
+# start bluetoothctl in unix socket patched mode, to allow btsetup to connect and run commands
+DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/bluez/system_bus_socket /opt/bluez/bin/bluetoothctl-real --unix-socket-backend /tmp/bluetooth.unix
+
+# NOTE: patched bluetoothctl will change ownership of /tmp/bluetooth.unix to 1001:1001, so btsetup can access it

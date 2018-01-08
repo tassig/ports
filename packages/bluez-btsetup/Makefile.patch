@@ -1,0 +1,24 @@
+--- Makefile.orig
++++ Makefile
+@@ -731,11 +731,11 @@
+ am__client_bluetoothctl_SOURCES_DIST = client/main.c client/display.h \
+ 	client/display.c client/agent.h client/agent.c \
+ 	client/advertising.h client/advertising.c client/gatt.h \
+-	client/gatt.c monitor/uuid.h monitor/uuid.c
++	client/gatt.c client/unixsocket.h client/unixsocket.c monitor/uuid.h monitor/uuid.c
+ am_client_bluetoothctl_OBJECTS = client/main.$(OBJEXT) \
+ 	client/display.$(OBJEXT) client/agent.$(OBJEXT) \
+ 	client/advertising.$(OBJEXT) \
+-	client/gatt.$(OBJEXT) monitor/uuid.$(OBJEXT)
++	client/gatt.$(OBJEXT) client/unixsocket.$(OBJEXT) monitor/uuid.$(OBJEXT)
+ client_bluetoothctl_OBJECTS = $(am_client_bluetoothctl_OBJECTS)
+ client_bluetoothctl_DEPENDENCIES =  \
+ 	gdbus/libgdbus-internal.la
+@@ -2423,6 +2423,7 @@
+ 					client/advertising.h \
+ 					client/advertising.c \
+ 					client/gatt.h client/gatt.c \
++					client/unixsocket.h client/unixsocket.c \
+ 					monitor/uuid.h monitor/uuid.c
+ 
+ client_bluetoothctl_LDADD = gdbus/libgdbus-internal.la -L/opt/glib-2.48.1/lib -lglib-2.0   -L/opt/dbus/lib -Wl,-rpath,/opt/dbus/lib -ldbus-1 \

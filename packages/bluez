@@ -43,6 +43,19 @@ custombuild(){
 	patch -p0 < ../../packages/bluez_step1_before_make.patch
 	# enable building hciconfig to use it for powering on
 	patch -p0 < ../../packages/bluez_step1_enable_hciconfig.patch
+	
+	# patch to allow bluetoothctl to run commands via unix socket, to be used with btsetup gui tool
+	cp ../../packages/bluez-btsetup/Makefile.patch .
+	patch Makefile Makefile.patch # NOTE: this has to be done after bluez_step1_enable_hciconfig.patch
+	cp ../../packages/bluez-btsetup/client-agent.patch client/
+	cp ../../packages/bluez-btsetup/client-main.patch client/
+	cp ../../packages/bluez-btsetup/unixsocket.c client/
+	cp ../../packages/bluez-btsetup/unixsocket.h client/
+	cd client/
+	patch main.c client-main.patch
+	patch agent.c client-agent.patch
+	cd ../
+	
 	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
 	make -j$ncpu --trace
 	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
@@ -70,6 +83,9 @@ postinstall()
 	# TODO: calling the wrapper the same name as the daemon... what can possibly go wrong?
 	cp ./packages/bluez_step3_bluetoothd_wrapper $installdirectory/bluez/bin/bluetoothd
 	chmod a+x $installdirectory/bluez/bin/bluetoothd
+
+	# add script to start patched bletoothctl, in mode to accept commands via unix socket, to be used with btsetup
+	cp ./packages/bluez-btsetup/bluetoothctl-btsetup $installdirectory/bluez/bin/
 
 	mv $installdirectory/bluez/bin/bluetoothctl $installdirectory/bluez/bin/bluetoothctl-real
 	# TODO: move to a real file, not inline

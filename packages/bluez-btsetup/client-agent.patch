@@ -1,0 +1,61 @@
+--- agent.c.orig
++++ agent.c
+@@ -33,6 +33,11 @@
+ #include "display.h"
+ #include "agent.h"
+ 
++/* axiom patch, unix socket command interface */
++#include "unixsocket.h"
++extern guint us_use_unix_socket_backend;
++/* axiom patch end */
++
+ #define AGENT_PATH "/org/bluez/agent"
+ #define AGENT_INTERFACE "org.bluez.Agent1"
+ 
+@@ -368,6 +373,15 @@
+ 
+ 	if (dbus_set_error_from_message(&error, message) == FALSE) {
+ 		agent_registered = TRUE;
++		
++		/* axiom patch, unix socket command interface */
++		if (us_use_unix_socket_backend)
++		{
++			unix_socket_reply_append ("%s", "Agent registered");
++			unix_socket_write_reply();
++		}
++		/* axiom patch end */
++		
+ 		rl_printf("Agent registered\n");
+ 	} else {
+ 		rl_printf("Failed to register agent: %s\n", error.name);
+@@ -384,6 +398,15 @@
+ 
+ {
+ 	if (agent_registered == TRUE) {
++
++		/* axiom patch, unix socket command interface */
++		if (us_use_unix_socket_backend)
++		{
++			unix_socket_reply_append ("%s", "Agent is already registered\n");
++			unix_socket_write_reply();
++		}
++		/* axiom patch end */
++		
+ 		rl_printf("Agent is already registered\n");
+ 		return;
+ 	}
+@@ -471,6 +494,14 @@
+ 		dbus_error_free(&error);
+ 		return;
+ 	}
++
++	/* axiom patch, unix socket command interface */
++	if (us_use_unix_socket_backend)
++	{
++		unix_socket_reply_append ("%s", "Default agent request successful");
++		unix_socket_write_reply ();
++	}
++	/* axiom patch */
+ 
+ 	rl_printf("Default agent request successful\n");
+ }
