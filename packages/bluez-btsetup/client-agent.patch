@@ -12,7 +12,22 @@
  #define AGENT_PATH "/org/bluez/agent"
  #define AGENT_INTERFACE "org.bluez.Agent1"
  
-@@ -368,6 +373,15 @@
+@@ -205,6 +210,14 @@
+ 	dbus_message_get_args(msg, NULL, DBUS_TYPE_OBJECT_PATH, &device,
+ 				DBUS_TYPE_STRING, &pincode, DBUS_TYPE_INVALID);
+ 
++	/* axiom patch, unix socket command interface */
++	if (us_use_unix_socket_backend)
++	{
++		unix_socket_reply_append ("PIN code: %s\n", pincode);
++		unix_socket_write_reply();
++	}
++	/* axiom patch end */
++
+ 	rl_printf(AGENT_PROMPT "PIN code: %s\n", pincode);
+ 
+ 	return dbus_message_new_method_return(msg);
+@@ -368,6 +381,15 @@
  
  	if (dbus_set_error_from_message(&error, message) == FALSE) {
  		agent_registered = TRUE;
@@ -28,7 +43,7 @@
  		rl_printf("Agent registered\n");
  	} else {
  		rl_printf("Failed to register agent: %s\n", error.name);
-@@ -384,6 +398,15 @@
+@@ -384,6 +406,15 @@
  
  {
  	if (agent_registered == TRUE) {
@@ -44,7 +59,7 @@
  		rl_printf("Agent is already registered\n");
  		return;
  	}
-@@ -471,6 +494,14 @@
+@@ -471,6 +502,14 @@
  		dbus_error_free(&error);
  		return;
  	}

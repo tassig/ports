@@ -21,7 +21,21 @@
  static const char * const agent_arguments[] = {
  	"on",
  	"off",
-@@ -170,15 +177,27 @@
+@@ -155,7 +162,12 @@
+ 	default_ctrl = NULL;
+ }
+ 
+-static void print_adapter(GDBusProxy *proxy, const char *description)
++/* axiom patch, unix socket command interface */
++/* print_adapter() will be called from different part of code and various callbacks
++ * and we want to append reply only for command "list"
++ */
++
++static void us_print_adapter(GDBusProxy *proxy, const char *description)
+ {
+ 	DBusMessageIter iter;
+ 	const char *address, *name;
+@@ -170,17 +182,70 @@
  	else
  		name = "<unknown>";
  
@@ -40,7 +54,24 @@
  				"[default]" : "");
 +	}
 +	/* axiom patch end */
++}
++/* axiom patch end */
  
++static void print_adapter(GDBusProxy *proxy, const char *description)
++{
++	DBusMessageIter iter;
++	const char *address, *name;
++
++	if (g_dbus_proxy_get_property(proxy, "Address", &iter) == FALSE)
++		return;
++
++	dbus_message_iter_get_basic(&iter, &address);
++
++	if (g_dbus_proxy_get_property(proxy, "Alias", &iter) == TRUE)
++		dbus_message_iter_get_basic(&iter, &name);
++	else
++		name = "<unknown>";
++
 +	rl_printf("%s%s%sController %s %s %s\n",
 +			description ? "[" : "",
 +			description ? : "",
@@ -52,24 +83,34 @@
 +
  }
  
- static void print_device(GDBusProxy *proxy, const char *description)
-@@ -196,6 +215,15 @@
- 	else
- 		name = "<unknown>";
- 
-+	/* axiom patch, unix socket command interface */
-+	/* NOTE: we don't need decription dependent prints, and skip if there is a description */
-+	if (us_use_unix_socket_backend && description == NULL)
-+	{
-+		/* send space separated entries mac name */
-+		unix_socket_reply_append ("%s %s\n", address, name);
-+	}
-+	/* axiom patch end */
++/* axiom patch, unix socket command interface */
++/* print_device() will be called from different part of code and various callbacks
++ * and we want to append reply only for command "devices"
++ */
 +
- 	rl_printf("%s%s%sDevice %s %s\n",
- 				description ? "[" : "",
- 				description ? : "",
-@@ -227,15 +255,37 @@
++static void us_print_device(GDBusProxy *proxy, const char *description)
++{
++	DBusMessageIter iter;
++	const char *address, *name;
++
++	if (g_dbus_proxy_get_property(proxy, "Address", &iter) == FALSE)
++		return;
++
++	dbus_message_iter_get_basic(&iter, &address);
++
++	if (g_dbus_proxy_get_property(proxy, "Alias", &iter) == TRUE)
++		dbus_message_iter_get_basic(&iter, &name);
++	else
++		name = "<unknown>";
++
++	unix_socket_reply_append ("%s %s\n", address, name);
++}
++/* axiom patch end */
++
+ static void print_device(GDBusProxy *proxy, const char *description)
+ {
+ 	DBusMessageIter iter;
+@@ -227,15 +292,37 @@
  	case DBUS_TYPE_STRING:
  	case DBUS_TYPE_OBJECT_PATH:
  		dbus_message_iter_get_basic(iter, &valstr);
@@ -107,7 +148,7 @@
  		rl_printf("%s%s: 0x%06x\n", label, name, valu32);
  		break;
  	case DBUS_TYPE_UINT16:
-@@ -244,6 +294,13 @@
+@@ -244,6 +331,13 @@
  		break;
  	case DBUS_TYPE_INT16:
  		dbus_message_iter_get_basic(iter, &vals16);
@@ -121,9 +162,15 @@
  		rl_printf("%s%s: %d\n", label, name, vals16);
  		break;
  	case DBUS_TYPE_BYTE:
-@@ -770,6 +827,11 @@
+@@ -769,7 +863,17 @@
+ 	for (list = g_list_first(ctrl_list); list; list = g_list_next(list)) {
  		struct adapter *adapter = list->data;
  		print_adapter(adapter->proxy, NULL);
++		
++		/* axiom patch, unix socket command interface */
++		if(us_use_unix_socket_backend)
++			us_print_adapter(adapter->proxy, NULL);
++		/* axiom patch end */
  	}
 +	
 +	/* axiom patch, unix socket command interface */
@@ -133,18 +180,25 @@
  }
  
  static void cmd_show(const char *arg)
-@@ -839,11 +901,20 @@
+@@ -839,11 +943,27 @@
  	if (check_default_ctrl() == FALSE)
  		return;
  
 +	/* axiom patch, unix socket command interface */
 +	/* NOTE: dummy desctiption line to simplify parsing procedure */
-+	unix_socket_reply_append ("%s\n", "Devices found:");
++	if(us_use_unix_socket_backend)
++		unix_socket_reply_append ("%s\n", "Devices found:");
++	/* axiom patch end */
 +
  	for (ll = g_list_first(default_ctrl->devices);
  			ll; ll = g_list_next(ll)) {
  		GDBusProxy *proxy = ll->data;
  		print_device(proxy, NULL);
++		
++		/* axiom patch, unix socket command interface */
++		if(us_use_unix_socket_backend)
++			us_print_device(proxy, NULL);
++		/* axiom patch end */
  	}
 +
 +	/* axiom patch, unix socket command interface */
@@ -154,7 +208,7 @@
  }
  
  static void cmd_paired_devices(const char *arg)
-@@ -1024,12 +1095,34 @@
+@@ -1024,12 +1144,34 @@
  	dbus_error_init(&error);
  
  	if (dbus_set_error_from_message(&error, message) == TRUE) {
@@ -189,7 +243,7 @@
  	rl_printf("Discovery %s\n", enable == TRUE ? "started" : "stopped");
  }
  
-@@ -1356,6 +1449,11 @@
+@@ -1356,6 +1498,11 @@
  	dbus_message_iter_get_basic(&iter, &address);
  	rl_printf("Device %s\n", address);
  
@@ -201,7 +255,7 @@
  	print_property(proxy, "Name");
  	print_property(proxy, "Alias");
  	print_property(proxy, "Class");
-@@ -1372,6 +1470,11 @@
+@@ -1372,6 +1519,11 @@
  	print_property(proxy, "ServiceData");
  	print_property(proxy, "RSSI");
  	print_property(proxy, "TxPower");
@@ -213,7 +267,39 @@
  }
  
  static void pair_reply(DBusMessage *message, void *user_data)
-@@ -2264,6 +2367,13 @@
+@@ -1386,6 +1538,14 @@
+ 		return;
+ 	}
+ 
++	/* axiom patch, unix socket command interface */
++	if (us_use_unix_socket_backend)
++	{
++		unix_socket_reply_append ("%s\n", "Pairing successful");
++		unix_socket_write_reply ();
++	}
++	/* axiom patch end*/
++
+ 	rl_printf("Pairing successful\n");
+ }
+ 
+@@ -1420,6 +1580,16 @@
+ 
+ 	str = g_strdup_printf("%s trust", arg);
+ 
++	/* axiom patch, unix socket command interface */
++	if (us_use_unix_socket_backend)
++	{
++		/* normally, this report would get printed in generic_callback ()
++		 * but we need dedicated reply only for trust command */
++		unix_socket_reply_append ("Device %s: trust succeeded\n", arg);
++		unix_socket_write_reply();
++	}
++	/* axiom patch end */
++
+ 	if (g_dbus_proxy_set_property_basic(proxy, "Trusted",
+ 					DBUS_TYPE_BOOLEAN, &trusted,
+ 					generic_callback, str, g_free) == TRUE)
+@@ -2264,6 +2434,13 @@
  	free(input);
  }
  
@@ -227,7 +313,7 @@
  static gboolean signal_handler(GIOChannel *channel, GIOCondition condition,
  							gpointer user_data)
  {
-@@ -2378,6 +2488,8 @@
+@@ -2378,6 +2555,8 @@
  		input = setup_standard_input();
  }
  
@@ -236,7 +322,7 @@
  int main(int argc, char *argv[])
  {
  	GOptionContext *context;
-@@ -2385,10 +2497,22 @@
+@@ -2385,10 +2564,22 @@
  	GDBusClient *client;
  	guint signal;
  
@@ -260,7 +346,7 @@
  		if (error != NULL) {
  			g_printerr("%s\n", error->message);
  			g_error_free(error);
-@@ -2399,7 +2523,8 @@
+@@ -2399,7 +2590,8 @@
  
  	g_option_context_free(context);
  
@@ -270,7 +356,7 @@
  		printf("%s\n", VERSION);
  		exit(0);
  	}
-@@ -2407,15 +2532,30 @@
+@@ -2407,15 +2599,30 @@
  	main_loop = g_main_loop_new(NULL, FALSE);
  	dbus_conn = g_dbus_setup_bus(DBUS_BUS_SYSTEM, NULL, NULL);
  
@@ -307,7 +393,7 @@
  	signal = setup_signalfd();
  	client = g_dbus_client_new(dbus_conn, "org.bluez", "/org/bluez");
  
-@@ -2444,6 +2584,11 @@
+@@ -2444,6 +2651,11 @@
  	g_list_free_full(ctrl_list, proxy_leak);
  
  	g_free(auto_register_agent);

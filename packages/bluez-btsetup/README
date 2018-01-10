@@ -27,9 +27,7 @@ Code base to patch is located in `client/` folder of bluez-5.44 source base. It 
  - pair mac  - pair device with given mac, NOTE: if pin appears to be required, it shall be handled internally, by writing it back
  - trust mac - trust device with a given mac 
  - connect mac - connect device with a given mac
- - delete mac - delete device with a given mac
-
-TODO: commands "pair", "trust", "connect" and "delete" are not actually implemented. Special care shall be taken for "pair" command, to implement automatic PIN reply, once PIN number was delivered form bluetoothd. It sould not be a problem, but the question is do we want to completely hide it from the user, and allow all devices to be connected automatically?
+ - remove mac - delete device with a given mac
 
 Existing code base is expanded with `unixsocket.c` and `unixsocket.h` new source files, and existing files `main.c` and `agent.c` are patched to make use of new unix socket functionalities. bluez Makefile was patched too, so new sources would be taken into account while compiling whole bluez code base. 
 
