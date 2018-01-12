@@ -1,7 +1,7 @@
 package_name=libxml2
 package_version=2.9.4
 tarball_suffix=gz
-dependencies="python2"
+build_dependencies="python2"
 iscustombuild=1
 
 # because of no libtool support in Python2
