@@ -1,0 +1,4 @@
+package_name=glade3
+package_version=3.8.6
+tarball_suffix=xz
+build_dependencies="perl-xml-parser libxml2"
