@@ -34,9 +34,3 @@ Existing code base is expanded with `unixsocket.c` and `unixsocket.h` new source
 Patched code is supplied with extensive code comments.
 
 NOTE: patched code creates `/tmp/bluetooth.unix`, and hardcodes ownership change to 1001:1001, so userland btsetup utility can read/write this socket.
-
-# Patch usage
-
-Once patched bluez is installed, it will add new scritp `bluetoothctl-btsetup` to `/opt/bluez/bin`. Once started (as root only), it will run patched bluetoothctl.
-The idea is to run this script on system startup, so it will act as a daemon for btsetup client. 
-
