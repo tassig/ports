@@ -1,0 +1,4 @@
+package_name=libunistring
+package_version=0.9.8
+tarball_suffix=xz
+no_check=1 # TODO: 9 tests will fail

@@ -1,0 +1,4 @@
+package_name=libatomic_ops
+package_version=7.6.2
+tarball_suffix=gz
+build_dependencies=

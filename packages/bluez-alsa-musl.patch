@@ -1,0 +1,33 @@
+--- a/src/transport.c
++++ b/src/transport.c
+@@ -99,7 +99,7 @@
+ 		return -1;
+ 	}
+ 
+-	pthread_setname_np(t->thread, "baio");
++	//pthread_setname_np(t->thread, "baio");
+ 	debug("Created new IO thread: %s",
+ 			bluetooth_profile_to_string(t->profile, t->codec));
+ 	return 0;
+--- a/src/shared/log.c
++++ b/src/shared/log.c
+@@ -10,7 +10,7 @@
+ 
+ #include "shared/log.h"
+ 
+-#include <printf.h>
++//#include <printf.h>
+ #include <pthread.h>
+ #include <stdarg.h>
+ #include <stdio.h>
+--- a/src/ctl.c
++++ b/src/ctl.c
+@@ -621,7 +621,7 @@
+ 	}
+ 
+ 	/* name controller thread - for aesthetic purposes only */
+-	pthread_setname_np(config.ctl.thread, "bactl");
++	//pthread_setname_np(config.ctl.thread, "bactl");
+ 
+ 	return 0;
+ 
