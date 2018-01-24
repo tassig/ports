@@ -1,7 +1,7 @@
 package_name=guile
 package_version=2.0.14
 tarball_suffix=xz
-build_dependencies="libtool gmp libunistring gc"
+build_dependencies="libtool gmp libunistring gc libffi"
 iscustombuild=1
 no_check=1
 
