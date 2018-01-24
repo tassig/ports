@@ -100,7 +100,7 @@ custombuild(){
 	# to dbus unix socket, which is not standard
 	mv -f $installdirectory/$package_fullname/bin/bluetoothctl \
 		$installdirectory/$package_fullname/bin/bluetoothctl-real
-	cp ../../packages/bluez_bluetoothctl_wrapper \
+	cp packages/bluez_bluetoothctl_wrapper \
 		$installdirectory/$package_fullname/bin/bluetoothctl
 	
 	
