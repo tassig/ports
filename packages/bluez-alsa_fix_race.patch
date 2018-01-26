@@ -1,0 +1,18 @@
+diff --git a/src/transport.c b/src/transport.c
+index cb99f2c..33f900f 100644
+--- a/src/transport.c
++++ b/src/transport.c
+@@ -691,8 +691,11 @@ int transport_set_state(struct ba_transport *t, enum ba_transport_state state) {
+ 	switch (state) {
+ 	case TRANSPORT_IDLE:
+ 		if (created) {
+-			pthread_cancel(t->thread);
+-			ret = pthread_join(t->thread, NULL);
++			if( t-> release != NULL)
++			{
++				pthread_cancel(t->thread);
++				ret = pthread_join(t->thread, NULL);
++			}
+ 			t->thread = config.main_thread;
+ 		}
+ 		break;
