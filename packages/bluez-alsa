@@ -49,6 +49,10 @@ custombuild(){
 	fi
 	cd ../..
 	rm -r builddir
+
+	# install wrapper to point to correct path to bluetooth's dbus socket
+	mv -v /opt/bluez-alsa/bin/bluealsa /opt/bluez-alsa/bin/bluealsa-real
+	cp -v packages/bluez-alsa_wrapper /opt/bluez-alsa/bin/bluealsa
 }
 
 
