@@ -32,7 +32,7 @@ custombuild(){
 	patch -p1 < ../../packages/bluez-alsa-musl.patch
 	# without this patch, bluealsa daemon will segfault in case if transport thread will
 	# exit before pthread_cancel will be called
-	patch -p1 < ../../bluez-alsa_fix_race.patch
+	patch -p1 < ../../packages/bluez-alsa_fix_race.patch
 
 	make -j
 	if test -z $no_check   # run the make check, unless $no_check is set for 
