@@ -1,5 +1,0 @@
-package_name=gc
-package_version=7.6.2
-tarball_suffix=gz
-build_dependencies="libatomic_ops"
-# iscustombuild=1
