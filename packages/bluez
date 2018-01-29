@@ -32,15 +32,12 @@ custombuild(){
 		DBUS_CFLAGS="-I$installdirectory/dbus/include/dbus-1.0 \
 			-I$installdirectory/dbus/lib/dbus-1.0/include" \
 		DBUS_LIBS="-L$installdirectory/dbus/lib -Wl,-rpath,$installdirectory/dbus/lib -ldbus-1" \
-                ALSA_CFLAGS="-I/opt/alsa-lib/include" \
-                ALSA_LDFLAGS="-L/opt/alsa-lib/lib -lasound -Wl,-rpath,/opt/alsa-lib/lib" \
 		./configure --prefix=$installdirectory/$package_fullname \
 			--disable-udev \
 			--disable-systemd \
 			--with-dbusconfdir=$installdirectory/$package_fullname/etc/ \
 			--with-dbussystembusdir=/var/run/$package_name \
-			--localstatedir=/var/ \
-			--enable-library
+			--localstatedir=/var/
 			
 			
 	# patch kernel source header to avoid redefinition error, reversed later
