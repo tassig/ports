@@ -77,6 +77,12 @@ custombuild(){
 	
 	# install bluetoothctl-btsetup wrapper
 	cp ../..//packages/bluez-btsetup/bluetoothctl-btsetup $installdirectory/$package_fullname/bin/
+	# we need a wrapper over bluetoothctl, which will have predefined path
+	# to dbus unix socket, which is not standard
+	mv -f $installdirectory/$package_fullname/bin/bluetoothctl \
+		$installdirectory/$package_fullname/bin/bluetoothctl-real
+	cp ../../packages/bluez_bluetoothctl_wrapper \
+		$installdirectory/$package_fullname/bin/bluetoothctl
 
 	# install a configuration file for dbus
 	cp ../../packages/bluez_bluetooth.conf $installdirectory/$package_fullname/etc/dbus-1/system.d/bluetooth.conf
