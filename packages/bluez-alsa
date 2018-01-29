@@ -26,8 +26,7 @@ custombuild(){
 	CFLAGS="" \
 	LDFLAGS="-Wl,-rpath,/opt/ncurses/lib \
 		-Wl,-rpath,/opt/readline/lib" \
-	./configure --prefix=$installdirectory/$package_name-$package_version \
-		--with-alsadatadir=/opt/alsa-lib/share/alsa/
+	./configure --prefix=$installdirectory/$package_name-$package_version 
 
 	patch -p1 < ../../packages/bluez-alsa-musl.patch
 
@@ -45,7 +44,6 @@ custombuild(){
 		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
 	fi
 	cd ../..
-	exit 0
 	rm -r builddir
 }
 
