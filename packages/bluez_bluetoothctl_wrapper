@@ -1,6 +1,0 @@
-#!/bin/sh
-
-# NOTE: run as root, bluetoothctl needs to access DBUS_SYSTEM_BUS_ADDRESS  
-
-DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/bluez/system_bus_socket /opt/bluez/bin/bluetoothctl-real 
-
