@@ -45,6 +45,7 @@ custombuild(){
 		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
 	fi
 	cd ../..
+	exit 0
 	rm -r builddir
 }
 
