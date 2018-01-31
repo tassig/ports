@@ -1,0 +1,35 @@
+--- a/src/main.c
++++ b/src/main.c
+@@ -599,6 +599,14 @@
+ 	guint signal, watchdog;
+ 	const char *watchdog_usec;
+ 
++	// we are using non-standard path for dbus socket
++	if( !getenv( "DBUS_SYSTEM_BUS_ADDRESS"))
++	{
++		setenv( "DBUS_SYSTEM_BUS_ADDRESS"
++		      , "unix:path=/var/run/bluez/system_bus_socket"
++		      , 0
++		      );
++	}
+ 	init_defaults();
+ 
+ 	context = g_option_context_new(NULL);
+--- a/client/main.c
++++ b/client/main.c
+@@ -2564,6 +2564,15 @@
+ 	GDBusClient *client;
+ 	guint signal;
+ 
++	// we are using non-standard path for dbus socket
++	if( !getenv( "DBUS_SYSTEM_BUS_ADDRESS"))
++	{
++		setenv( "DBUS_SYSTEM_BUS_ADDRESS"
++		      , "unix:path=/var/run/bluez/system_bus_socket"
++		      , 0
++		      );
++	}
++
+ 	/* axiom patch, allow unix socket command interface */
+ 	if(argc > 2 && !strcmp(argv[1], "--unix-socket-backend"))
+ 	{
