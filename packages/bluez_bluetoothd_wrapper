@@ -3,6 +3,8 @@ set -e
 
 COMMAND="$1"
 
+START_DBUS=yes
+
 usage()
 {
 	echo "$0 start|stop"
@@ -12,14 +14,16 @@ start()
 {
 	# if there is pid file
 	[ -e /var/run/bluez/pid ] && {
-	    # kill -0 will only check if dbus is running. if it is, then exit
-	    kill -0 `cat /var/run/bluez/pid` >/dev/null 2>/dev/null && exit 0 || {
-	        # remove all running stuff
+	    # kill -0 will only check if dbus is running. if it is, then don't run it again
+	    kill -0 `cat /var/run/bluez/pid` >/dev/null 2>/dev/null && START_DBUS=no || {
+	        # remove all running stuff and restart dbus
 	        rm -f /var/run/bluez/*
 	    }
 	}
-	DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/bluez/system_bus_socket /opt/dbus/bin/dbus-daemon --config-file=/opt/bluez/etc/dbus-1/system.d/bluetooth.conf
-	DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/bluez/system_bus_socket /opt/bluez/libexec/bluetooth/bluetoothd &
+	if [ "$START_DBUS" == "yes" ]; then
+		DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/bluez/system_bus_socket /opt/dbus/bin/dbus-daemon --config-file=/opt/bluez/etc/dbus-1/system.d/bluetooth.conf
+	fi
+	/opt/bluez/libexec/bluetooth/bluetoothd &
 }
 
 stop()

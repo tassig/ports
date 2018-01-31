@@ -54,6 +54,8 @@ custombuild(){
 	patch main.c client-main.patch
 	patch agent.c client-agent.patch
 	cd ../
+	# adjust dbus socket path, because it will be non-standard
+	patch -p1 < ../../packages/bluez_dbus_path.patch
 	
 	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
 	make -j$ncpu
@@ -91,11 +93,5 @@ custombuild(){
 	cd ../..
 	rm -r builddir
 	
-	
-	
-	
-	
 	mkdir -p /var/run/bluez
-
-
 }
