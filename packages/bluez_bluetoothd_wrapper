@@ -21,7 +21,7 @@ start()
 	    }
 	}
 	if [ "$START_DBUS" == "yes" ]; then
-		DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/bluez/system_bus_socket /opt/dbus/bin/dbus-daemon --config-file=/opt/bluez/etc/dbus-1/system.d/bluetooth.conf
+		/opt/dbus/bin/dbus-daemon --config-file=/opt/bluez/etc/dbus-1/system.d/bluetooth.conf
 	fi
 	/opt/bluez/libexec/bluetooth/bluetoothd &
 }
