@@ -46,11 +46,11 @@ postinstall(){
 	cp packages/glib-share/mime.types $installdirectory/$package_fullname/etc/
 	
 	# aclocal files
-        ln -sv $installdirectory/$package_fullname/share/aclocal/* `aclocal --print-ac-dir`/
-        
-        # remove docs
-        rm -r $installdirectory/$package_fullname/share/gtk-doc
-        
-        # strip
-        strip $installdirectory/$package_fullname/lib/* || true
+	ln -sv $installdirectory/$package_fullname/share/aclocal/* `aclocal --print-ac-dir`/
+
+	# remove docs
+	rm -r $installdirectory/$package_fullname/share/gtk-doc
+
+	# strip
+	strip $installdirectory/$package_fullname/lib/* || true
 }
