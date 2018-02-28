@@ -39,7 +39,8 @@ custombuild(){
 			--with-dbussystembusdir=/var/run/$package_name \
 			--localstatedir=/var/
 			
-			
+	
+	# TODO: the patches should be made before configure
 	# patch kernel source header to avoid redefinition error, reversed later
 	patch -p0 < ../../packages/bluez_kernel_headers.patch
 	
@@ -56,6 +57,9 @@ custombuild(){
 	cd ../
 	# adjust dbus socket path, because it will be non-standard
 	patch -p1 < ../../packages/bluez_dbus_path.patch
+	
+	
+	
 	
 	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
 	make -j$ncpu

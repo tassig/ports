@@ -46,7 +46,7 @@ guint unix_socket_backend_open (gchar *path)
 {
 	struct sockaddr_un addr; /* used to setup connection */
 
-	/* fail if path is not provided */
+	/* fail if path is not provided TODO: why care? bind() will fail */
 	if(path == NULL)
 		return -1;
 	
@@ -69,7 +69,7 @@ guint unix_socket_backend_open (gchar *path)
 		return -1;
 	}
 	
-	/* dirty hack to allow user jerry to run btsetup, and to connect to unix socket */
+	/* dirty hack to allow user jerry to run btsetup, and to connect to unix socket TODO: we shouldn't need that */
 	chown (path, 1001, 1001);
 	
 	/* listen incoming connections */

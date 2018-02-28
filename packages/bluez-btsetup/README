@@ -4,7 +4,7 @@ This patch provide bluez tools client (bluetoothctl) to act as a simple server o
 third party software (axiom btsetup in this case) to run commands, and read replies, the same way as user would do in interactive mode.
 
 btsetup is axiom based bluetooth gui setup utility, which needs backend to manage bluetooth devices. The rationale behind was apply simplest solution and to use stable
-code base of bluetoothctl, which runs on dbus and attaches to bluetoothd, to execute commands, and read replies. The idea also came form wpasupplicant and their
+code base of bluetoothctl, which communicates with bluetoothd via dbus, to execute commands, and read replies. The idea also came form wpasupplicant and their
 unix socket interface, to connect to wpasupplicant running services, used in wifisetup. Bluez tools do not provide such simple interface.
 
 Other approaches would involve writing btsetup backend to use dbus methods directly, to interact with running bluetoothd. In fact, this is the official bluez tools interface
