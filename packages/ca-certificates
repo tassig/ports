@@ -1,0 +1,19 @@
+package_name=ca-certificates
+package_version=10.03.2018
+tarball_suffix=gz
+build_dependencies=libressl
+iscustombuild=1
+
+# custom build becasue we need to patch Makefile.in for libtool support
+
+custombuild(){
+	rm -rf builddir
+	mkdir -p builddir   # do everything in builddir for tidiness
+	cd builddir
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	cp -r certs /etc/ssl/
+	cd ..
+	rm -r builddir
+}
