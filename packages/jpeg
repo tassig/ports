@@ -2,5 +2,4 @@ package_name=jpeg
 package_version=v9b
 tarball_suffix=gz
 build_dependencies="nasm"
-haspostinstall=1
 
