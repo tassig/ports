@@ -1,4 +1,1 @@
-package_name=libjpeg
-package_version=v9b
-tarball_suffix=gz
-build_dependencies="nasm"
+libjpeg-turbo
