@@ -3,7 +3,7 @@
 package_name=curl
 package_version=7.51.0
 tarball_suffix=bz2
-build_dependencies="zlib libressl perl ca-certificates"
+build_dependencies="zlib libressl perl"
 no_check=1   # dambaev (Aug 15, 2016): there are 2 main reasons why tests fail:
 			 # 1. curl's test suit must be patched (1. runtests.pl modifies HOME
 			 #	  variable and then executes $SHELL which relies on $HOME; 

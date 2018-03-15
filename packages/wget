@@ -1,7 +1,6 @@
 package_name=wget
 package_version=1.18
 tarball_suffix=xz
-build_dependencies=ca-certificates
 iscustombuild=1
 no_check=1 # TODO: 9 checks will fail
 
