@@ -97,5 +97,8 @@ custombuild(){
 	cd ../..
 	rm -r builddir
 	
+	# make dbus less visible, to ensure we're the only one using it
+	rm -r /opt/pkgconf/lib/pkgconfig/dbus*
+	
 	mkdir -p /var/run/bluez
 }
