@@ -1,0 +1,5 @@
+package_name=libglade
+package_version=2.6.4
+tarball_suffix=gz
+build_dependencies=""
+no_check=1
