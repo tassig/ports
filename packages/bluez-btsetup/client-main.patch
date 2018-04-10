@@ -368,7 +368,7 @@
 +		/* open unix socket */
 +		if (unix_socket_backend_open(argv[2]) == -1)
 +			exit(EXIT_FAILURE);
-+		rl_callback_handler_install(NULL, rl_handler);
++		
 +		/* instead of cli interface, use 1s timeout to process incoming commands */
 +		g_timeout_add (PROCESSING_PERIOD_ms , unix_socket_backend_process , argv[2]);
 +	}
