@@ -35,7 +35,7 @@ custombuild(){
 
 	LDFLAGS="-Wl,-rpath=$installdirectory/glib/lib" ./configure --prefix=$installdirectory/$package_fullname/   # bug in configure
 
-	make
+	make -j
 	if test -z $no_check   # run the make check, unless $no_check is set for 
 						   # this package definition
 	then make -j check || make -j test
