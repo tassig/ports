@@ -1,0 +1,10 @@
+--- gtkmain.c.orig
++++ gtkmain.c
+@@ -304,6 +304,7 @@
+ static gboolean
+ check_setugid (void)
+ {
++	return TRUE;
+ /* this isn't at all relevant on MS Windows and doesn't compile ... --hb */
+ #ifndef G_OS_WIN32
+   uid_t ruid, euid, suid; /* Real, effective and saved user ID's */

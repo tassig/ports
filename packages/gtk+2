@@ -27,9 +27,15 @@ custombuild(){
 	rm archive
 	cd *   # cd into the package directory
 
+	# gtk will prevent suid apps to run, but will allow root to run, so it's a bug
+	# remove check for suid/sgid
+	cd gtk/
+	patch < ../../../packages/gtk+2-suid.patch
+	cd ../
+
 	LDFLAGS="-Wl,-rpath=$installdirectory/glib/lib" ./configure --prefix=$installdirectory/$package_fullname/   # bug in configure
 
-	make -j
+	make
 	if test -z $no_check   # run the make check, unless $no_check is set for 
 						   # this package definition
 	then make -j check || make -j test
