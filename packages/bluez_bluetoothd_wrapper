@@ -12,6 +12,10 @@ usage()
 
 start()
 {
+	mkdir /var/run/bluez || true
+	
+	
+	# the following conditional will never be executed in normal usage because /var/run is cleaned up at boot, it's buggy anyway and dbus was not always starting TODO: removes
 	# if there is pid file
 	[ -e /var/run/bluez/pid ] && {
 	    # kill -0 will only check if dbus is running. if it is, then don't run it again
@@ -20,6 +24,9 @@ start()
 	        rm -f /var/run/bluez/*
 	    }
 	}
+	
+	
+	
 	if [ "$START_DBUS" == "yes" ]; then
 		/opt/dbus/bin/dbus-daemon --config-file=/opt/bluez/etc/dbus-1/system.d/bluetooth.conf
 	fi
@@ -28,7 +35,6 @@ start()
 
 stop()
 {
-	[ -e /var/run/bluez/pid ] || exit 0
 	# this will kill dbus, which triggers bluetoothd to be dead too
 	kill `cat /var/run/bluez/pid`
 }
