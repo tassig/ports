@@ -18,9 +18,9 @@ custombuild() {
 
 	# hack to help python to find include files
 	mkdir -p /usr/local/include
-	ln -sv $installdirectory/zlib/include/* /usr/local/include/
-	ln -sv $installdirectory/bzip2/include/* /usr/local/include/
-	ln -sv $installdirectory/libressl/include/* /usr/local/include/
+	ln -sv $installdirectory/zlib/include/* /usr/local/include/ || true
+	ln -sv $installdirectory/bzip2/include/* /usr/local/include/ || true
+	ln -sv $installdirectory/libressl/include/* /usr/local/include/ || true
 	
 	export LDFLAGS="-Wl,-rpath=$installdirectory/libressl/lib -L $installdirectory/libressl/lib -Wl,-rpath=$installdirectory/zlib/lib -L $installdirectory/zlib/lib -Wl,-rpath=$installdirectory/bzip2/lib -L $installdirectory/bzip2/lib"
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=$installdirectory/Python-2.7.11/lib"
