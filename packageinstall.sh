@@ -36,7 +36,7 @@ defaultbuild(){
 	then make -j$ncpu check || make -j$ncpu test
 	fi
 	make install
-	ln -snv $installdirectory/$package_fullname $installdirectory/$package_name
+	ln -snv $installdirectory/$package_fullname $installdirectory/$package_name || true
 	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
 	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
 		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
