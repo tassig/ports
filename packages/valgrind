@@ -2,6 +2,5 @@ package_name=valgrind
 package_version=3.14.0
 tarball_suffix=bz2
 build_dependencies=perl
-no_check=1 # TODO: str_tester-str_tester.o: In function `test_rawmemchr':
-		   # /root/ports/builddir/valgrind-3.11.0/memcheck/tests/str_tester.c:513: undefined reference to `rawmemchr'
-		   # why?
+
+
