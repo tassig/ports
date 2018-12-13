@@ -3,7 +3,6 @@ package_version=2.4.6
 tarball_suffix=gz
 build_dependencies=m4
 no_check=1
-haspostinstall=1
 
 postinstall(){
 	# symlink the m4 macros into aclocal directory

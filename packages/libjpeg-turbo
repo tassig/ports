@@ -2,7 +2,6 @@ package_name=libjpeg-turbo
 package_version=1.5.0
 tarball_suffix=gz
 build_dependencies="nasm"
-haspostinstall=1
 
 # create symlink to /opt/libjpeg to be compatible with client libs
 postinstall(){

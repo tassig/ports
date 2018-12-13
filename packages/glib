@@ -4,7 +4,6 @@ tarball_suffix=xz
 build_dependencies="python2 libffi pcre" # python is needed for proper installation
 iscustombuild=1
 no_check=1 # TODO: 14 tests failed
-haspostinstall=1
 
 
 custombuild(){

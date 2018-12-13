@@ -2,7 +2,6 @@ package_name=e2fsprogs
 package_version=1.42.12
 tarball_suffix=gz
 no_check=1
-haspostinstall=1
 
 # this package is used by Axiom bootstrap build, in particular mkfs.ext4, by build-image script
 # version 1.42.12 is being used, since versions > 1.43 were introducing additional default options, which made bootstrap root filesystem inaccessible for syslinux

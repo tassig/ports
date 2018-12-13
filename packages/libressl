@@ -5,7 +5,6 @@ tarball_suffix=gz
 build_dependencies=
 # by default, /etc/ssl is empty, which breaks SSL connection, based on libressl. We must
 # link this dir into real ssl directory
-haspostinstall=1
 
 postinstall(){
   rm -rvf /etc/ssl

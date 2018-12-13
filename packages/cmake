@@ -3,7 +3,6 @@ package_version=3.5.2
 tarball_suffix=gz
 build_dependencies=
 no_check=1   # this would take too long otherwise
-haspostinstall=1
 
 postinstall(){
         cat ./packages/cmake-FindX11.patch | patch -p0

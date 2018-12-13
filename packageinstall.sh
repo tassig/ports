@@ -72,14 +72,14 @@ installpackage(){
 	
 	# do a custom build if the package defines custombuild(), otherwise do a 
 	# default build
-	if test $iscustombuild
+	if type 'custombuild' 2>/dev/null | grep -q 'function'
 	then custombuild
 	else defaultbuild
 	fi
 	
 	# call its postinstall() function if the package defines postinstall(), 
 	# otherwise do nothing
-	if test $haspostinstall
+	if type 'postinstall' 2>/dev/null | grep -q 'function'
 	then postinstall
 	fi
 	
