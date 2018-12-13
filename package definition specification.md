@@ -21,8 +21,8 @@ These variables are mandatory and can be used without restrictions, by internal 
 ### Public, optional variables
 
 `build_dependencies`: a list of packages unique identifiers separated by spaces and quoted, representing the packages needed by this package at build time. Empty if there are no build build_dependencies. example: build_dependencies="m4 perl"
-`iscustombuild`: `0` or `1`, if `1` then a function `custombuild()` needs to be provided, such function will be called in place of the `defaultbuild()` function
-`haspostinstall`: `0` or `1`, if `1` then a function `haspostinstall()` needs to be provided, such function will be called after the `defaultbuild()` has completed
+`custombuild()`: can be provided, such function will be called in place of the `defaultbuild()` function
+`haspostinstall()`: can be provided, such function will be called after the `defaultbuild()` has completed
 `no_check`: `0` or `1`, if `1` then the `make check` won't be run for this package. This is useful if a test suite is buggy or if we want to temporarily work around a bug in our system
 
 ### Autodefined variables
