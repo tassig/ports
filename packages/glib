@@ -19,7 +19,8 @@ custombuild(){
 	done
 
 	LDFLAGS="-Wl,-rpath=$installdirectory/pcre/lib/ -Wl,-rpath=$installdirectory/libffi/lib64 -Wl,-rpath=$installdirectory/zlib/lib"  ./configure --prefix=$installdirectory/$package_fullname/   # apparently a bug in configure
-	make -j
+	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
+	make -j$ncpu
 	if test -z $no_check   # run the make check, unless $no_check is set for 
 						   # this package definition
 	then make -j check || make -j test
