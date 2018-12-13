@@ -2,7 +2,6 @@ package_name=autoconf
 package_version=2.69
 tarball_suffix=xz
 build_dependencies="m4 perl"
-haspostinstall=1
 no_check=1
 
 postinstall(){
