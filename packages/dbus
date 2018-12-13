@@ -2,7 +2,6 @@ package_name=dbus
 package_version=1.10.12
 tarball_suffix=gz
 build_dependencies=
-iscustombuild=1
 
 ##########################
 #

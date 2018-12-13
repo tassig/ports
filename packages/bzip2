@@ -2,7 +2,6 @@ package_name=bzip2
 package_version=1.0.6
 tarball_suffix=gz
 build_dependencies=
-iscustombuild=1
 no_check=1 # there is no test suite
 
 # TODO: get rid of this once we get rid of the python2 dependency

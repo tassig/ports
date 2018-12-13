@@ -2,7 +2,6 @@ package_name=qt
 package_version=5.7.0
 rel_url=qt/qt-everywhere-opensource-src-5.7.0.tar.gz # custom relative url
 build_dependencies=   # there are many
-iscustombuild=1
 
 
 # TODO:

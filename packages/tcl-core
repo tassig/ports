@@ -2,7 +2,6 @@ package_name=tcl-core
 package_version=8.6.5
 tarball_suffix=gz
 rel_url=tcl/tcl-core8.6.5-src.tar.gz
-iscustombuild=1
 no_check=1 # check are passed, but takes over 7-10 minutes
 
 

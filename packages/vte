@@ -2,7 +2,6 @@ package_name=vte
 package_version=0.28.2
 tarball_suffix=xz
 build_dependencies="gtk+2 python2 ncurses"   # ncurses not mentioned by linux from scratch, but when building vte, it requires tgetent which is in ncurses library
-iscustombuild=1
 
 # the list of dependencies is taken from http://www.linuxfromscratch.org/blfs/view/svn/xfce/vte2.html
 

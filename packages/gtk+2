@@ -2,7 +2,6 @@ package_name=gtk+
 package_version=2.24.31 
 build_dependencies="atk gdk-pixbuf pango"
 tarball_suffix=xz
-iscustombuild=1
 no_check=1
 
 ########################

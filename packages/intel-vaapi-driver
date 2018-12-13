@@ -2,7 +2,6 @@ package_name=intel-vaapi-driver
 package_version=1.7.3
 tarball_suffix=gz
 build_dependencies=
-iscustombuild=1
 
 # this is just an addon to libva, so the installation is different
 custombuild(){

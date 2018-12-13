@@ -1,7 +1,6 @@
 package_name=libffi
 package_version=3.2
 tarball_suffix=gz
-iscustombuild=1
 no_check=1 # has more dependenceies to run
 
 # custom build, because libffi does not support MUSL fully by default. Without this patch

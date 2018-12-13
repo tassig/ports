@@ -2,7 +2,6 @@ package_name=readline
 package_version=7.0
 tarball_suffix=gz
 build_dependencies=ncurses
-iscustombuild=1
 
 ##########################
 #

@@ -2,7 +2,6 @@ package_name=atk
 package_version=2.16.0
 build_dependencies="glib"
 tarball_suffix=xz
-iscustombuild=1
 
 ##########################
 #

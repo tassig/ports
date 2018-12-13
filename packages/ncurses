@@ -2,7 +2,6 @@ package_name=ncurses
 package_version=6.0
 tarball_suffix=gz
 build_dependencies=
-iscustombuild=1
 
 ##########################
 #

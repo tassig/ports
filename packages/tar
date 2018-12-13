@@ -2,7 +2,6 @@ package_name=tar
 package_version=1.29
 tarball_suffix=gz
 build_dependencies=
-iscustombuild=1
 no_check=1 
 
 custombuild(){ 

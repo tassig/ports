@@ -2,7 +2,6 @@ package_name=ocaml
 package_version=4.04.0
 tarball_suffix=gz
 build_dependencies=
-iscustombuild=1
 no_check=1 # no test suite
 
 custombuild(){

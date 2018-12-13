@@ -1,7 +1,6 @@
 package_name=tcl-tk
 package_version=8.6.5
 tarball_suffix=gz
-iscustombuild=1
 
 
 custombuild(){

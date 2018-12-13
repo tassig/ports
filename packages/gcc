@@ -1,7 +1,6 @@
 package_name=gcc
 package_version=6.1.0
 build_dependencies=
-iscustombuild=1
 
 
 

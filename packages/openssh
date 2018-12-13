@@ -1,7 +1,6 @@
 package_name=openssh
 package_version=7.2p2
 tarball_suffix=gz
-iscustombuild=1
 no_check=1
 
 # openssh configure script doesn't have much support for pkg-config

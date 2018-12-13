@@ -2,8 +2,9 @@ package_name=xf86-video-nouveau
 package_version=1.0.14
 tarball_suffix=gz
 build_dependencies=xorg
-iscustombuild=1 # custom build because we need to install it to /opt/xorg
 
+
+# custom build because we need to install it to /opt/xorg
 
 custombuild(){
 	rm -rf builddir

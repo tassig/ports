@@ -2,7 +2,6 @@ package_name=gdk-pixbuf
 package_version=2.35.1
 tarball_suffix=xz
 build_dependencies="glib libjpeg libtiff"
-iscustombuild=1
 no_check=1 # temporarily disable check TODO: is the test suite buggy or is our installation buggy?
 
 # custom build in order to set path to glib, libjpeg and libtiff

@@ -2,7 +2,6 @@ package_name=bash
 package_version=4.4
 tarball_suffix=gz
 build_dependencies=
-iscustombuild=1
 no_check=1
 
 

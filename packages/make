@@ -2,7 +2,6 @@ package_name=make
 package_version=4.1
 tarball_suffix=bz2
 build_dependencies=
-iscustombuild=1
 
 # make is definitely not going to call make, so it's a custom build
 # this is statically linked version

@@ -2,7 +2,9 @@ package_name=libpng
 package_version=1.6.21
 tarball_suffix=xz
 build_dependencies=
-iscustombuild=1   # because it's not using pkgconfig to find zlib
+
+
+# because it's not using pkgconfig to find zlib
 
 custombuild(){
 	rm -rf builddir

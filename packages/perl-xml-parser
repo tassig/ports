@@ -3,7 +3,6 @@ package_version=2.44
 tarball_suffix=gz
 rel_url=perl/$package_name-$package_version.tar.$tarball_suffix
 build_dependencies="expat perl"
-iscustombuild=1
 
 custombuild(){
 	rm -rf builddir

@@ -2,7 +2,6 @@ package_name=librsvg
 package_version=2.40.16
 tarball_suffix=xz
 build_dependencies="gdk-pixbuf libcroco"
-iscustombuild=1
 
 # custom build in order to disbale gobject-introspection
 # ivan: feel free to install gobject-introspection

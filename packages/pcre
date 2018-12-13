@@ -1,7 +1,6 @@
 package_name=pcre
 package_version=8.38
 tarball_suffix=gz
-iscustombuild=1
 
 custombuild(){
 	rm -rf builddir

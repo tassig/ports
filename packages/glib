@@ -2,7 +2,6 @@ package_name=glib
 package_version=2.48.1
 tarball_suffix=xz
 build_dependencies="python2 libffi pcre" # python is needed for proper installation
-iscustombuild=1
 no_check=1 # TODO: 14 tests failed
 
 
