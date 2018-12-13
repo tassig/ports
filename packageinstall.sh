@@ -17,10 +17,11 @@
 set -e
 
 packagedirectory="packages"   # the directory name where the packages definitions are located
-installdirectory="/opt"   # TODO: implement per user installs (with different --prefix)
+installdirectory="/opt"   # TODO: implement per user installs (with different --prefix), for example if the "user-only" argument is specified, installdirectory becomes ~/.opt
 mirror_prefix=http://mirrors.tassig.com # this is for relative URLs. If $url is empty, then url=$mirror_prefix/$rel_url
 
 # the function called by default to build a package
+# this can be overloaded by defining "custombuild()", which will be used instead
 defaultbuild(){
 	rm -rf builddir
 	mkdir -p builddir   # do everything in builddir for tidiness

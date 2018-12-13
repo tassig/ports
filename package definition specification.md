@@ -1,4 +1,6 @@
-# Packages management facilities specifications
+# Ports
+
+The ports system allows to install software. Below we explain how to define a package.
 
 ## Package identifiers
 
