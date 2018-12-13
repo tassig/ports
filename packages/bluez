@@ -68,7 +68,11 @@ custombuild(){
 	fi
 	make install
 	
+	# revert the patch
 	patch -p0 -R < ../../packages/bluez_kernel_headers.patch
+	
+	
+	
 	
 	
 	# copy configuration files

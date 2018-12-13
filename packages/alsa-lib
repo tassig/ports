@@ -9,11 +9,7 @@ custombuild(){
     rm -rf builddir
     mkdir -p builddir   # do everything in builddir for tidiness
     cd builddir
-    if [ "$url" == "" ]; then
-        # if no absolute $url defined, then assume, that we have relative url 
-        # $rel_url
-        url=$mirror_prefix/$rel_url
-    fi
+    
     wget -O archive $url
     tar xvf archive
     rm archive

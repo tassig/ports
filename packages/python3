@@ -1,7 +1,7 @@
 package_name=Python
 package_version=3.5.1
 tarball_suffix=xz
-rel_url=python/Python-$package_version.tar.$tarball_suffix
+rel_url=python/$package_name-$package_version.tar.$tarball_suffix  # TODO: normalize
 build_dependencies=
 no_check=1   # don't hesitate to fix it
 haspostinstall=1

@@ -1,5 +1,5 @@
 package_name=expect
 package_version=5.45
 tarball_suffix=gz
-rel_url=expect/expect5.45.tar.gz
+rel_url=expect/expect5.45.tar.gz # TODO: easy to normalize
 build_dependencies=tcl-core

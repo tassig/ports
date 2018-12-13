@@ -1,7 +1,7 @@
 package_name=Python
 package_version=2.7.11
 tarball_suffix=xz
-rel_url=python/Python-2.7.11.tar.xz # custom relative URL
+rel_url=python/$package_name-$package_version.tar.$tarball_suffix # custom relative URL
 build_dependencies=bzip2   # used by nothing but nacl of Chrome, which we should get rid of anyway TODO: bzip2 and this dependency can go away once we get rid of nacl
 iscustombuild=1
 no_check=1 # TODO: some test will fail
