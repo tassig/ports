@@ -1,0 +1,4 @@
+package_name=gsl
+package_version=2.4
+tarball_suffix=gz
+no_check=1 # doesn't seem to have issues, but takes too long

@@ -1,0 +1,4 @@
+package_name=cairomm
+package_version=1.12.2
+tarball_suffix=xz
+build_dependencies="libsigc++ cairo"

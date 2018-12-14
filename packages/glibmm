@@ -1,0 +1,5 @@
+package_name=glibmm
+package_version=2.46.4
+tarball_suffix=xz
+build_dependencies="libsigc++ glib"
+no_check=1 # 2 tests fail

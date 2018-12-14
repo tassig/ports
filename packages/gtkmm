@@ -1,0 +1,4 @@
+package_name=gtkmm
+package_version=2.24.5
+tarball_suffix=xz
+build_dependencies="atkmm gtk+2 pangomm"

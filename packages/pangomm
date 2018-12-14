@@ -1,0 +1,4 @@
+package_name=pangomm
+package_version=2.39.1
+tarball_suffix=xz
+build_dependencies="cairomm glibmm pango"

@@ -1,0 +1,4 @@
+package_name=popt
+package_version=1.16
+tarball_suffix=gz
+no_check=1
