@@ -265,8 +265,6 @@ custombuild(){
 	rm -r $installdirectory/$package_name/share/doc   # not useful
 	strip $installdirectory/$package_name/lib/dri/*.so*   # strip too big libraries
 	
-	exit 0
-	
 	
 	rm -r $BUILDDIR
 	
