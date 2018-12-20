@@ -1,3 +1,4 @@
 package_name=atkmm
 package_version=2.24.2
 tarball_suffix=xz
+build_dependencies=glibmm
