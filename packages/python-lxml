@@ -1,0 +1,9 @@
+package_name=lxml
+package_version=4.2.5
+build_dependencies=python
+
+
+custombuild(){
+	export LDFLAGS="-L/opt/libxslt/lib/ -L/opt/libxml2/lib/ -Wl,-rpath=/opt/libxslt/lib/ -Wl,-rpath=/opt/libxml2/lib/"
+	pip install lxml
+}
