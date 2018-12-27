@@ -22,9 +22,11 @@ custombuild() {
 	ln -sv $installdirectory/libressl/include/* /usr/local/include/
 	
 	export LDFLAGS="-Wl,-rpath=$installdirectory/libressl/lib -L $installdirectory/libressl/lib -Wl,-rpath=$installdirectory/zlib/lib -L $installdirectory/zlib/lib -Wl,-rpath=$installdirectory/bzip2/lib -L $installdirectory/bzip2/lib"
-	export LDFLAGS="$LDFLAGS -Wl,-rpath=$installdirectory/Python-2.7.11/lib"
-	./configure --prefix=$installdirectory/Python-2.7.11 --with-ensurepip --enable-shared   # shared libraries needed because other programs need them TODO: not completely sure about that, if i remember, mesa might need them, check if it's really the case
-	make -j8
+	export LDFLAGS="$LDFLAGS -Wl,-rpath=$installdirectory/Python-$package_version/lib"
+	./configure --prefix=$installdirectory/Python-$package_version --with-ensurepip --enable-shared   # shared libraries needed because other programs need them TODO: not completely sure about that, if i remember, mesa might need them, check if it's really the case
+	
+	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
+	make -j$ncpu
 	
 	rm -r /usr
 
@@ -33,11 +35,18 @@ custombuild() {
 	then make -j check || make -j test
 	fi
 	make install
-	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
-	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
-	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
-		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
-		$installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
+	
+	
+	# Python 2 and Python 3 are different, non-backward compatible versions of Python
+	# 
+	#ln -sv $installdirectory/$package_fullname $installdirectory/$package_name   # i'm commenting out this line, and as a result we don't have a default version of Python, versions 2 and 3 will coexist independently
+	
+	# we add the symlinks directly
+	ln -sv $installdirectory/$package_fullname/bin/* /bin/ || true   # don't crash if the links are already there
+	
+	
+	if [ -d "$installdirectory/$package_fullname/lib/pkgconfig" ]; then
+		ln -svf $installdirectory/$package_fullname/lib/pkgconfig/* $installdirectory/pkgconf/lib/pkgconfig/   # install pkg-config files
 	fi
 	cd ../..
 	rm -r builddir
