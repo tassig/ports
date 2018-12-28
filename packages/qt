@@ -1,7 +1,7 @@
 package_name=qt
 package_version=5.7.0
 rel_url=qt/qt-everywhere-opensource-src-5.7.0.tar.gz # custom relative url
-build_dependencies=   # there are many
+build_dependencies="python2"   # there are many
 
 
 # TODO:
@@ -39,12 +39,15 @@ custombuild(){
 	# -L/opt/fontconfig/lib -L/opt/freetype/lib : needed when linking libQt5XcbQpa.so.5.7.0 , TODO: find a way to circumvent that
 	# -R/opt/fontconfig/lib -R/opt/freetype/lib -R/opt/xorg-X11R7.7/lib -R/opt/mtdev/lib : to correctly link libraries such as libqxcb.so
 	# the following is enough to make it build, but then some runtime paths are missing in the libraries, which will prevent some software to run without LD_LIBRARY_PATH
-	./configure --prefix=$installdirectory/$package_fullname/ -skip qtwebengine -qt-xcb -no-dbus -opensource -confirm-license -I$installdirectory/xorg-X11R7.7/include -L$installdirectory/xorg-X11R7.7/lib -R $installdirectory/glib/lib -R $installdirectory/eudev/lib -L$installdirectory/fontconfig/lib -L$installdirectory/freetype/lib -R$installdirectory/fontconfig/lib -R$installdirectory/freetype/lib -R$installdirectory/xorg-X11R7.7/lib -R$installdirectory/mtdev/lib # -rpath
-	make -j8
+	./configure --prefix=$installdirectory/$package_fullname/ -skip qtwebengine -qt-xcb -no-dbus -opensource -confirm-license -I$installdirectory/xorg/include -L$installdirectory/xorg/lib -R $installdirectory/glib/lib -R $installdirectory/eudev/lib -L$installdirectory/fontconfig/lib -L$installdirectory/freetype/lib -R$installdirectory/fontconfig/lib -R$installdirectory/freetype/lib -R$installdirectory/xorg/lib -R$installdirectory/mtdev/lib # -rpath
+	
+	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
+	make -j$ncpu
 	if test -z $no_check   # run the make check, unless $no_check is set for
 						   # this package definition
-	then make -j4 check || make -j4 test
+	then make -j$ncpu check || make -j$ncpu test
 	fi
+	
 	make install
 	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
 	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
