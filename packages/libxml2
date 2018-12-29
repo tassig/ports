@@ -14,9 +14,10 @@ custombuild(){
 	cd *   # cd into the package directory
 
 	# LDFLAGS to go through libtool, necessary because no libtool support in Python2
-	# also adding  --without-lzma because some problems with the builds with xz
+	# --without-lzma because some problems with the builds with xz
 	# we have the following: libtool: warning: relinking 'libxml2mod.la'
-	LDFLAGS="-L/opt/Python/lib" ./configure --prefix=$installdirectory/$package_fullname --without-lzma
+	LDFLAGS=$(pkg-config python2 --libs-only-L) \
+	./configure --prefix=$installdirectory/$package_fullname --without-lzma
 	make -j
 	if test -z $no_check   # run the make check, unless $no_check is set for 
 						   # this package definition
