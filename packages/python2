@@ -42,7 +42,8 @@ custombuild() {
 	#ln -sv $installdirectory/$package_fullname $installdirectory/$package_name   # i'm commenting out this line, and as a result we don't have a default version of Python, versions 2 and 3 will coexist independently
 	
 	# we add the symlinks directly
-	ln -sv $installdirectory/$package_fullname/bin/* /bin/ || true   # don't crash if the links are already there
+	# we overwrite existing symlinks
+	ln -svf $installdirectory/$package_fullname/bin/* /bin/ || true   # don't crash if the links are already there
 	
 	
 	if [ -d "$installdirectory/$package_fullname/lib/pkgconfig" ]; then
