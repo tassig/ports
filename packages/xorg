@@ -88,12 +88,14 @@ custombuild(){
 	clone imake 4063190bf2fd7e3c61b80e98d72e134609612bf8   # is needed by autoconf, later TODO: see if we can remove
 	cd ..
 	cd xcb
+	clone util 0.4.0   # not useful for anything that i can think of
+	cd util && git submodule update --init && cd ..   # we need to initialize git submodules for util-wm TODO: this connects to freedesktop.org
 	clone util-wm 0.4.1   # xcb needs it for support of EWMH
-	cd util-wm && git submodule update --init && cd ..   # we need to initialize git submodules for util-wm TODO: this connects to freedesktop.org
-	#clone util-image 0.4.1   # Qt needs it
-	#cd util-image && git submodule update --init && cd ..
-	#clone util-keysyms 0.4.1   # Qt needs it
-	#cd util-keysyms && git submodule update --init && cd ..
+	cd util-wm && git submodule update --init && cd ..
+	clone util-image 0.4.0   # Qt needs it
+	cd util-image && git submodule update --init && cd ..
+	clone util-keysyms 0.4.0   # Qt needs it
+	cd util-keysyms && git submodule update --init && cd ..
 	cd ..
 	cp -v everything/xkeyboard-config-2.6.tar.gz .   # TODO: how come we can't find it on the filesystem? it seems it's not installed
 
@@ -213,6 +215,8 @@ custombuild(){
 	# running the main build and installation script
 	# --check is commented out: TODO: mesa check fails
 	./util/modular/build.sh --autoresume resumefile   # --check
+	
+	
 	
 	# symlinks
 	ln -sv $PREFIX $installdirectory/$package_name   # link for canonical name
