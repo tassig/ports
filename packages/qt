@@ -4,17 +4,9 @@ rel_url=qt/qt-everywhere-opensource-src-5.7.0.tar.gz # custom relative url
 build_dependencies="python2"   # there are many
 
 
-# TODO:
-# - getting this warning at configure time: WARNING: Could not find XKB config root, use -xkb-config-root to set a path to
-# XKB configuration data. This is required for keyboard input support.
-
 
 #
 # Requirements: http://doc.qt.io/qt-5/linux-requirements.html
-#
-# you need to use -qt-xcb to configure so qt uses its own xcb, or you would need to use Longhorn's xcb we would need to add 'xcb-image', 'xcb-keysyms', 'xcb-icccm' during the x.org build.
-# TODO: it's probably better to install these xcb packages and make Qt use Longhorn's xcb instead of its own xcb
-# TODO: yes, we should just install 'xcb-image' and 'xcb-keysyms' to xorg, and make qt use our xcb library
 #
 # -skip qtwebengine can be used to reduced the build size
 #
@@ -36,10 +28,12 @@ custombuild(){
 	# -R : add a runtime path to libraries. The -R option adds an explicit runtime path to all Qt libraries, it would be better if it was added selectively, because it will make loading of executable and libraries slow.
 	# -rpath : add qt path to libraries runtime paths TODO: check if needed
 	# -no-dbus : to disable dbus
+	# -xkb-config-root : to avoid this warning at configure time: WARNING: Could not find XKB config root, use -xkb-config-root to set a path to XKB configuration data. This is required for keyboard input support.
 	# -L/opt/fontconfig/lib -L/opt/freetype/lib : needed when linking libQt5XcbQpa.so.5.7.0 , TODO: find a way to circumvent that
 	# -R/opt/fontconfig/lib -R/opt/freetype/lib -R/opt/xorg-X11R7.7/lib -R/opt/mtdev/lib : to correctly link libraries such as libqxcb.so
 	# the following is enough to make it build, but then some runtime paths are missing in the libraries, which will prevent some software to run without LD_LIBRARY_PATH
-	./configure --prefix=$installdirectory/$package_fullname/ -skip qtwebengine -qt-xcb -no-dbus -opensource -confirm-license -I$installdirectory/xorg/include -L$installdirectory/xorg/lib -R $installdirectory/glib/lib -R $installdirectory/eudev/lib -L$installdirectory/fontconfig/lib -L$installdirectory/freetype/lib -R$installdirectory/fontconfig/lib -R$installdirectory/freetype/lib -R$installdirectory/xorg/lib -R$installdirectory/mtdev/lib # -rpath
+	
+	./configure --prefix=$installdirectory/$package_fullname/ -skip qtwebengine -no-dbus -opensource -confirm-license -xkb-config-root /opt/xorg/share/X11/xkb -I$installdirectory/xorg/include -L$installdirectory/xorg/lib -R $installdirectory/glib/lib -R $installdirectory/eudev/lib -L$installdirectory/fontconfig/lib -L$installdirectory/freetype/lib -R$installdirectory/fontconfig/lib -R$installdirectory/freetype/lib -R$installdirectory/xorg/lib -R$installdirectory/mtdev/lib
 	
 	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
 	make -j$ncpu
