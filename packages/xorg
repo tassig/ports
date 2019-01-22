@@ -265,6 +265,8 @@ custombuild(){
 	
 	# updating the pkgconfig files, in case something changed
 	ln -svf $PREFIX/lib/pkgconfig/*.pc $installdirectory/pkgconf/lib/pkgconfig/
+	# xorg has some pkgconfig files in the $PREFIX/share too:
+	ln -svf $PREFIX/share/pkgconfig/*.pc $installdirectory/pkgconf/lib/pkgconfig/
 	
 	
 	# remove non-useful stuff
