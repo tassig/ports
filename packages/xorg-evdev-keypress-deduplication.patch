@@ -1,0 +1,118 @@
+--- a/driver/xf86-input-evdev-2.7.0/src/evdev.c
++++ b/driver/xf86-input-evdev-2.7.0/src/evdev.c
+@@ -346,16 +346,115 @@
+     return &pEvdev->queue[pEvdev->num_queue - 1];
+ }
+ 
++
++
++
++/**
++ * implementation of duplicates filtering
++ * 
++ * some keyboards have duplicates because of poor hardware controllers, so we implement filtering of these spurious duplicates
++ * 
++ * Duplicate detection:
++ * -------------------
++ * 
++ * Here we only detect on duplicate at a time. We detect a duplicate when 2 key presses of the same key are detected within 30ms. As soon as we detect such event, we save the keystroke in currentfilteredkey. At this point we do not try to detect duplicates anymore, until this key has been released.
++ * 
++ * 
++ * 
++ * Duplicate filtering
++ * -------------------
++ * 
++ * Once we have detected a duplicate, we wait until the corresponding key release is detected
++ * 
++ * 
++ * 
++ * 
++ */
++
++#include <time.h> /* for timespec */
++
++
++struct keystroke {
++    int code;
++    struct timespec ts;
++};
++
++/* a static array of the 6 latest key presses */
++static struct keystroke arr[6] =
++    {
++        { -1, { 0, 0 } },
++        { -1, { 0, 0 } },
++        { -1, { 0, 0 } },
++        { -1, { 0, 0 } },
++        { -1, { 0, 0 } },
++        { -1, { 0, 0 } }
++    };
++static int currentpos = 0; /* the position in the array, viewed as a circular buffer */
++
++
++// TODO: we don't need to know the time when the key was pressed */
++static struct keystroke currentfilteredkey = { -1, { -1, -1 } }; /* if we are currently filtering a duplicate, this variable contains the code of the filtered key */
++
++
+ void
+ EvdevQueueKbdEvent(InputInfoPtr pInfo, struct input_event *ev, int value)
+ {
+     int code = ev->code + MIN_KEYCODE;
+     EventQueuePtr pQueue;
++    
+ 
+     /* Filter all repeated events from device.
+        We'll do softrepeat in the server, but only since 1.6 */
+     if (value == 2)
+         return;
++    
++    
++    
++        /*struct timespec ts;
++        clock_gettime( CLOCK_REALTIME, &ts);
++    xf86IDrvMsg(pInfo, X_INFO, "queuing kbd event with value %i and code %i and nsec %i\n", value, code, ts.tv_nsec);*/
++    
++    
++    
++    if (value == 1) { /* a key press */
++        unsigned int i;
++        struct timespec ts;
++        int previouspos = currentpos;
++        clock_gettime( CLOCK_REALTIME, &ts);
++        
++        arr[previouspos].code = code;
++        arr[previouspos].ts.tv_sec = ts.tv_sec;
++        arr[previouspos].ts.tv_nsec = ts.tv_nsec;
++        
++        
++        if (currentpos < 5) {
++            currentpos += 1;
++        } else {
++            currentpos = 0;
++        }
++        
++        for (i = 0; i < 6 && i != previouspos; i++) {
++            if (arr[i].code == code && 
++                  (  (arr[i].ts.tv_sec == ts.tv_sec && arr[i].ts.tv_nsec + 40000000 /* 40ms */ > ts.tv_nsec) 
++                  || (arr[i].ts.tv_sec + 1 == ts.tv_sec && (10000000000 - arr[i].ts.tv_nsec) + ts.tv_nsec < 40000000 /* 40ms */ ) ) /* duplicates across a second */) {
++                //xf86IDrvMsg(pInfo, X_INFO, "duplicate detected on code %i, filtering key\n", code);
++                currentfilteredkey.code = code;
++                currentfilteredkey.ts.tv_sec = ts.tv_sec;
++                currentfilteredkey.ts.tv_nsec = ts.tv_nsec;
++                return;
++            }
++        }
++    }
++    
++    if (value == 0) { /* a key release */
++        if (currentfilteredkey.code == code) { /* we filter this key release */
++            currentfilteredkey.code = -1;
++            return;
++        }
++    }
++    
++    
++    
+ 
+     if ((pQueue = EvdevNextInQueue(pInfo)))
+     {

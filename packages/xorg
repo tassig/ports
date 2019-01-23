@@ -181,7 +181,7 @@ custombuild(){
 	done
 	cd ..
 	
-	# apply patches (for musl compatibility)
+	# apply patches
 	for p in "$pwd"/packages/xorg-*.patch; do
 		patch -p1 < $p
 	done
