@@ -1,0 +1,5 @@
+package_name=gmp
+package_version=6.1.2
+tarball_suffix=xz
+
+# TODO: provide patches to the GMP project to include pkg-config support
