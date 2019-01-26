@@ -180,6 +180,9 @@ custombuild(){
 		tar xvf $f
 	done
 	cd ..
+	cd driver
+	tar xvf xf86-input-evdev-2.7.0.tar.gz
+	cd ..
 	
 	# apply patches
 	for p in "$pwd"/packages/xorg-*.patch; do
