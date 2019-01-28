@@ -1,6 +1,6 @@
-package_name=lxml
-package_version=4.2.5
-build_dependencies=python
+package_name=python2-lxml
+package_version=
+build_dependencies=python2
 
 
 custombuild(){

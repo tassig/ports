@@ -1,0 +1,12 @@
+package_name=python2-lxml
+package_version=
+build_dependencies=python2
+
+
+custombuild(){
+	# force libxml re-install, after python2 had been properly installed
+	# libxml2 installation will add libxml2 libraries into existing python2 installation
+	
+	rm -rf /opt/libxml2*
+	./packageinstall.sh libxml2
+}
