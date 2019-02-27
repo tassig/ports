@@ -4,6 +4,8 @@
 # usage: ./packageinstall.sh package_identifier
 # example: ./packageinstall.sh autoconf
 #
+# the second argument "foruser" can be given to perform a user-only installation
+#
 # the script is assuming you're running it in the ports directory (which is a 
 # bit stupid, need to be changed later) refer to "package definition 
 # specifications.md" for laws and regulations
@@ -18,6 +20,7 @@ set -ex
 
 packagedirectory="packages"   # the directory name where the packages definitions are located
 installdirectory="/opt"   # default value for global installs, if the "foruser" argument is specifiedin $2, installdirectory becomes ~/.opt
+bindirectory="/bin/"   # default value for global installs
 mirror_prefix=http://mirrors.tassig.com # this is for relative URLs. If $url is empty, then url=$mirror_prefix/$rel_url
 
 # the function called by default to build a package
@@ -38,7 +41,7 @@ defaultbuild(){
 	fi
 	make install
 	ln -snv $installdirectory/$package_fullname $installdirectory/$package_name || true
-	ln -sv $installdirectory/$package_name/bin/* /bin/ || true   # don't crash if the links are already there
+	ln -sv $installdirectory/$package_name/bin/* $bindirectory || true   # don't crash if the links are already there
 	if [ -d "$installdirectory/$package_fullname/lib/pkgconfig" ]; then
 		ln -svf $installdirectory/$package_fullname/lib/pkgconfig/* $installdirectory/pkgconf/lib/pkgconfig/   # symlink pkg-config files
 	fi
@@ -91,6 +94,7 @@ installpackage(){
 if [ "$2" = "foruser" ]
 then
 	installdirectory="$HOME/.opt"
+	bindirectory="$HOME/.opt/bin/"
 fi
 
 
