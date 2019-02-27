@@ -14,10 +14,10 @@
 #
 # TODO: remove support for custom relative urls
 
-set -e
+set -ex
 
 packagedirectory="packages"   # the directory name where the packages definitions are located
-installdirectory="/opt"   # TODO: implement per user installs (with different --prefix), for example if the "user-only" argument is specified, installdirectory becomes ~/.opt
+installdirectory="/opt"   # default value for global installs, if the "foruser" argument is specifiedin $2, installdirectory becomes ~/.opt
 mirror_prefix=http://mirrors.tassig.com # this is for relative URLs. If $url is empty, then url=$mirror_prefix/$rel_url
 
 # the function called by default to build a package
@@ -67,7 +67,7 @@ installpackage(){
 	# installing the package's dependencies recursively
 	for pkg_name in $build_dependencies
 	do
-		(./packageinstall.sh $pkg_name) || exit $?   # I initially used a recursive call to "installpackage" instead, but it was inheriting the shell variables
+		(./packageinstall.sh $pkg_name $2) || exit $?   # I initially used a recursive call to "installpackage" instead, but it was inheriting the shell local variables so this allows us to start from something cleaner
 	done
 	
 	# do a custom build if the package defines custombuild(), otherwise do a 
@@ -86,6 +86,12 @@ installpackage(){
 	# clean up by removing the build directory and the tarball
 	rm -rf $package_name*
 }
+
+
+if [ "$2" = "foruser" ]
+then
+	installdirectory="$HOME/.opt"
+fi
 
 
 installpackage $1
