@@ -21,14 +21,15 @@ set -ex
 packagedirectory="packages"   # the directory name where the packages definitions are located
 installdirectory="/opt"   # default value for global installs, if the "foruser" argument is specifiedin $2, installdirectory becomes ~/.opt
 bindirectory="/bin/"   # default value for global installs
-mirror_prefix=http://mirrors.tassig.com # this is for relative URLs. If $url is empty, then url=$mirror_prefix/$rel_url
+mirror_prefix=http://mirrors.tassig.com
 
 # the function called by default to build a package
 # this can be overloaded by defining "custombuild()", which will be used instead
 defaultbuild(){
-	rm -rf builddir
-	mkdir -p builddir   # do everything in builddir for tidiness
-	cd builddir
+	builddir="builddir-$1"  # build directory is "builddir" followed by the name of the package, which allows multiple builds of different software in parallel
+	rm -rf $builddir
+	mkdir -p $builddir   # do everything in builddir for tidiness
+	cd $builddir
 	wget -O archive $url
 	tar xvf archive
 	rm archive
@@ -46,7 +47,7 @@ defaultbuild(){
 		ln -svf $installdirectory/$package_fullname/lib/pkgconfig/* $installdirectory/pkgconf/lib/pkgconfig/   # symlink pkg-config files
 	fi
 	cd ../..
-	rm -r builddir
+	rm -r $builddir
 }
 
 installpackage(){
