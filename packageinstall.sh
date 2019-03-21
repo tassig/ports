@@ -55,13 +55,14 @@ installpackage(){
 
 	source $packagedirectory/$1
 	
-	if [ -d "$installdirectory/$package_name-$package_version" ]; then
+	# if the package has been installed for the user or globally, don't install again	
+	if [ -d "$installdirectory/$package_name-$package_version" ] || [ -d "/opt/$package_name-$package_version" ] ; then
 		echo "package $package_name is already installed, not reinstalling"
 		return 0
 	fi
 	package_fullname=$package_name-$package_version 
 	if [ "$rel_url" == "" ]; then
-		# if there is no defined rel_url, then define it by default
+		# if there is no defined rel_url, then define it by default TODO: remove that support
 		rel_url=$package_name/$package_fullname.tar.$tarball_suffix # default URL, relative to $mirror_prefix
 	fi
 	url=$mirror_prefix/$rel_url
