@@ -92,8 +92,9 @@ installpackage(){
 }
 
 
-if [ "$2" = "foruser" ]
+if [ "$2" = "user-only" ] || [ "$(id -u)" != "0" ]
 then
+	echo "Performing a user-only installation"
 	installdirectory="$HOME/.opt"
 	bindirectory="$HOME/.opt/bin/"
 fi
