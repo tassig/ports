@@ -43,7 +43,7 @@ defaultbuild(){
 	make install
 	ln -snv $installdirectory/$package_fullname $installdirectory/$package_name || true
 	ln -sv $installdirectory/$package_name/bin/* $bindirectory || true   # don't crash if the links are already there
-	if [ -d "$installdirectory/$package_fullname/lib/pkgconfig" ]; then
+	if [ -d "$installdirectory/$package_fullname/lib/pkgconfig" ] && [ -d $installdirectory/pkgconf/lib/pkgconfig ]; then
 		ln -svf $installdirectory/$package_fullname/lib/pkgconfig/* $installdirectory/pkgconf/lib/pkgconfig/   # symlink pkg-config files
 	fi
 	cd ../..
