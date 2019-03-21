@@ -4,7 +4,7 @@
 # usage: ./packageinstall.sh package_identifier
 # example: ./packageinstall.sh autoconf
 #
-# the second argument "foruser" can be given to perform a user-only installation
+# the second argument "user-only" can be given to perform a user-only installation
 #
 # the script is assuming you're running it in the ports directory (which is a 
 # bit stupid, need to be changed later) refer to "package definition 
@@ -74,6 +74,9 @@ installpackage(){
 	do
 		(./packageinstall.sh $pkg_name $2) || exit $?   # I initially used a recursive call to "installpackage" instead, but it was inheriting the shell local variables so this allows us to start from something cleaner
 	done
+
+
+	# TODO: check if the file system where we install the package is writable, otherwise the build will occur (and resources will be spent), but the installation will fail. This is especially important considering Axiom root file system is read-only
 	
 	# do a custom build if the package defines custombuild(), otherwise do a 
 	# default build
