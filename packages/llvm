@@ -25,7 +25,7 @@ custombuild(){
 	# ./configure is deprecated AND failes to compile after successfully configuring
 	#../$package_fullname.src/configure --prefix=/opt/$package_fullname/
 	# -DLLVM_INSTALL_UTILS=ON - enables building of llvm utils. Will be helpfull for building for example - Rust
-	cmake -DCMAKE_INSTALL_PREFIX=$installdirectory/$package_fullname/ -DBUILD_SHARED_LIBS=ON -DLLVM_INSTALL_UTILS=ON ../$package_fullname.src/   # shared libs needed by mesa
+	cmake -DCMAKE_INSTALL_PREFIX=$installdirectory/$package_fullname/ -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_INSTALL_UTILS=ON ../$package_fullname.src/   # shared libs needed by mesa
 	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
 	make -j$ncpu
 	if test -z $no_check   # run the make check, unless $no_check is set for 
