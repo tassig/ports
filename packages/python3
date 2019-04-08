@@ -10,3 +10,5 @@ postinstall() {
 	# Python 3 has binaries names that do not conflict with other versions of Python, so we can symlink them directly. This is necessary because Python 3 may not have the symlink /opt/Python, so the default build will not put its binaries into /bin
 	ln -s $installdirectory/$package_fullname/bin/* $bindirectory || true
 }
+
+# NOTE: python3 does not create a binary named "python", instead it is named "python3"
