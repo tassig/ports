@@ -16,6 +16,9 @@ custombuild(){
 
 	cp ../../../packages/wpa_supplicant_config .config
 
+	# apply axiom patch to add enable_all_networks_at_startup config file switch
+	patch < ../../../packages/wpa_supplicant_enable_all.patch
+
 	export CC=gcc
 	
 	LDFLAGS="-L/opt/libnl/lib -lnl-3 -Wl,-rpath=/opt/libnl/lib" make
