@@ -41,7 +41,6 @@ postinstall()
 ctrl_interface=/var/run/wpa_supplicant
 ctrl_interface_group=jerry
 update_config=1
-enable_all_networks_at_startup=1
 EOF
  
 }
