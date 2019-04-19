@@ -58,6 +58,7 @@ custombuild(){
 	# otherwise they would need to be passed by argument to qmake everytime:
 	# QMAKE_INCDIR=/opt/xorg/include
 	# i'm surprised this isn't done during build time, investigate more
+	# after investigation, maybe add a sed command here to modify this file
 
 
 	# TODO: go through all qt libraries and check if their linkage is correct (ldd %name_of_the_library%)
