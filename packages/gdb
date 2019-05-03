@@ -1,5 +1,25 @@
 package_name=gdb
 package_version=7.12.1
 tarball_suffix=xz
-build_dependencies=texinfo
+build_dependencies="python2 texinfo"
 no_check=1   # running this test suite involves the same thing as running the gcc tests suite; it's likely to fail and it needs a few additional dependencies
+
+
+custombuild(){
+	rm -rf builddir
+	mkdir -p builddir   # do everything in builddir for tidiness
+	cd builddir
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	cd *   # cd into the package directory
+	LDFLAGS="-L/opt/Python-2.7.11/lib -Wl,-rpath=/opt/Python-2.7.11/lib" ./configure --prefix=$installdirectory/$package_fullname --with-python
+	make -j
+	make install
+
+	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name || true
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true
+
+	cd ../..
+	rm -r builddir
+}
