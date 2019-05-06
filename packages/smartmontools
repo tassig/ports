@@ -1,0 +1,3 @@
+package_name=smartmontools
+package_version=7.0
+tarball_suffix=gz
