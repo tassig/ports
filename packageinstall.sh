@@ -26,7 +26,7 @@ mirror_prefix=http://mirrors.tassig.com
 # the function called by default to build a package
 # this can be overloaded by defining "custombuild()", which will be used instead
 defaultbuild(){
-	builddir="builddir-$1"  # build directory is "builddir" followed by the name of the package, which allows multiple builds of different software in parallel
+	builddir="builddir-$package_fullname"  # build directory is "builddir" followed by the name of the package, which allows multiple builds of different software in parallel
 	rm -rf $builddir
 	mkdir -p $builddir   # do everything in builddir for tidiness
 	cd $builddir
