@@ -17,11 +17,11 @@ custombuild() {
 
 	# hack to help python to find include files
 	mkdir -p /usr/local/include
-	ln -sv $installdirectory/zlib/include/* /usr/local/include/
-	ln -sv $installdirectory/bzip2/include/* /usr/local/include/
-	ln -sv $installdirectory/libressl/include/* /usr/local/include/
+	ln -sv /opt/zlib/include/* /usr/local/include/
+	ln -sv /opt/bzip2/include/* /usr/local/include/
+	ln -sv /opt/libressl/include/* /usr/local/include/
 	
-	export LDFLAGS="-Wl,-rpath=$installdirectory/libressl/lib -L $installdirectory/libressl/lib -Wl,-rpath=$installdirectory/zlib/lib -L $installdirectory/zlib/lib -Wl,-rpath=$installdirectory/bzip2/lib -L $installdirectory/bzip2/lib"
+	export LDFLAGS="-Wl,-rpath=/opt/libressl/lib -L /opt/libressl/lib -Wl,-rpath=/opt/zlib/lib -L /opt/zlib/lib -Wl,-rpath=/opt/bzip2/lib -L /opt/bzip2/lib"
 	export LDFLAGS="$LDFLAGS -Wl,-rpath=$installdirectory/Python-$package_version/lib"
 	./configure --prefix=$installdirectory/Python-$package_version --with-ensurepip --enable-shared   # shared libraries needed because other programs need them TODO: not completely sure about that, if i remember, mesa might need them, check if it's really the case
 	
