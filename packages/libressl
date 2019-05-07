@@ -13,6 +13,6 @@ postinstall(){
   ln -sv /opt/libressl/etc/ssl /etc/
   
   # strip debugging symbols to save space
-  strip /opt/libressl/lib/* TODO: check if it works
+  strip /opt/libressl/lib/*
 }
 
