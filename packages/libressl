@@ -1,6 +1,6 @@
 # WARNING: do not forget to update http://longhorn.tassig.com/downloads/ports.tar.xz after libressl port update
 package_name=libressl
-package_version=2.3.4    # TODO: move to 2.9.1
+package_version=2.3.4    # NOTE: can also build 2.9.1 by changing this string, especially for python3
 tarball_suffix=gz
 build_dependencies=
 
@@ -11,5 +11,8 @@ build_dependencies=
 postinstall(){
   rm -rvf /etc/ssl
   ln -sv /opt/libressl/etc/ssl /etc/
+  
+  # strip debugging symbols to save space
+  strip /opt/libressl/lib/* TODO: check if it works
 }
 
