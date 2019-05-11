@@ -29,4 +29,8 @@ custombuild(){
     fi
     cd ../..
     rm -r builddir
+
+
+    # alsa installs udev junk in /lib
+    rm -r /lib/udev*
 }
