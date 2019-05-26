@@ -23,7 +23,7 @@ custombuild(){
 	
 	# we tell the build to use the linux kernel headers, otherwise it would use the compiler headers, which are the musl headers, and this doesn't work because of redefinitions errors
 	# TODO: why does it work with linux headers but not musl headers?
-	../configure --prefix=$installdirectory/glibc-2.23 --enable-kernel=2.6.32 --with-headers=$installdirectory/linux/include
+	../configure --prefix=$installdirectory/glibc-2.23 --enable-kernel=2.6.32 --with-headers=$installdirectory/linux-kernel-headers/include
 	
 	make -j4
 	if test -z $no_check   # run the make check, unless $no_check is set for 
