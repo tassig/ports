@@ -1,0 +1,4 @@
+package_name=libseccomp
+package_version=2.4.1
+tarball_suffix=gz
+build_dependencies=

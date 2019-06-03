@@ -1,6 +1,7 @@
 package_name=nettle
 package_version=3.4.1
 tarball_suffix=gz
+build_dependencies="gmp"
 
 # TODO: temporary hack, use custombuild instead
 # gmp does not have pkg-config support
