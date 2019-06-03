@@ -1,3 +1,4 @@
 package_name=nasm
 package_version=2.12.02
 tarball_suffix=xz
+build_dependencies=perl
