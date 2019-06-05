@@ -110,7 +110,7 @@ for arg in $@  # process all arguments
 	do
 		if [ "$arg" = "reinstall" ]
 		then
-			rm -rf $package_name*
+			rm -rf $installdirectory/$package_name*
 		fi
 	done
 
