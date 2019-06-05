@@ -103,7 +103,8 @@ then
 	bindirectory="$HOME/.opt/bin/"
 fi
 
-# resintall switch will remove existing package installation, before fresh install
+
+# reintall switch will remove existing package installation, before fresh install
 # this is typically usefull when one or more package dependecies were removed, and package is left broken
 if [ $# -gt 1 ]
 then
@@ -112,20 +113,10 @@ then
 		do
 			if [ "$arg" = "reinstall" ]
 			then
-				# check if symlink and package folder exist, rm -rf as root is quite dangerous opeation
-				_pakckage_symlink=$installdirectory/$1
-				if [ -L $_pakckage_symlink ]
-				then
-					_package=$(readlink -f $_pakckage_symlink)
-					if [ -d $_package ]
-					then
-						echo "Removing existing $1 installation"
-						rm -f $_pakckage_symlink
-						rm -rf $_package
-					fi
-				fi
+				rm -rf $package_name*
 			fi
 		done
 fi
+
 
 installpackage $1
