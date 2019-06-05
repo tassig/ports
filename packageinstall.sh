@@ -104,19 +104,15 @@ then
 fi
 
 
-# reintall switch will remove existing package installation, before fresh install
-# this is typically usefull when one or more package dependecies were removed, and package is left broken
-if [ $# -gt 1 ]
-then
-	# process all arguments
-	for arg in $@
-		do
-			if [ "$arg" = "reinstall" ]
-			then
-				rm -rf $package_name*
-			fi
-		done
-fi
+# reinstall switch will remove existing package installation, before fresh install
+# this is typically useful when one or more package dependencies were removed, and package is left broken
+for arg in $@  # process all arguments
+	do
+		if [ "$arg" = "reinstall" ]
+		then
+			rm -rf $package_name*
+		fi
+	done
 
 
 installpackage $1
