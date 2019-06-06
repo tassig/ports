@@ -35,7 +35,8 @@ custombuild(){
 	
 	
 	
-	# do musl libc
+	# do musl libc in /lib
+	# TODO: musl could simply be installed from ports.git as part of the dependencies
 	
 	git clone http://mirrors.tassig.com/repos/musl.git musl && cd musl && git checkout tags/v$musl_version
 	tar xvf $musl_fullname.tar.gz
@@ -106,6 +107,7 @@ custombuild(){
 	
 	
 	# do musl libc again, this time it will use the new compiler
+	# TODO: same, can get it from ports.git
 	
 	git clone http://mirrors.tassig.com/repos/musl.git musl && cd musl && git checkout tags/v$musl_version
 	tar xvf $musl_fullname.tar.gz
