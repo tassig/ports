@@ -1,3 +1,7 @@
 package_name=musl
 package_version=1.1.22
 tarball_suffix=gz
+
+# NOTE: you might ruin quite a few programs if you update your version of musl (but probably not X.org and mainscreen, so the graphical system should still boot fine), be careful and have a backup
+
+
