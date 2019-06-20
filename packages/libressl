@@ -12,7 +12,7 @@ postinstall(){
   rm -rvf /etc/ssl
   ln -sv /opt/libressl/etc/ssl /etc/
   
-  # strip debugging symbols to save space
-  strip /opt/libressl/lib/*
+  # strip debugging symbols to save space TODO: but this will prevent static linking, so might as well simply delete the .a files, since we are not using them anyway
+  #strip /opt/libressl/lib/*
 }
 
