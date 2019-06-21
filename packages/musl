@@ -5,3 +5,6 @@ tarball_suffix=gz
 # NOTE: you might ruin quite a few programs if you update your version of musl (but probably not X.org and mainscreen, so the graphical system should still boot fine), be careful and have a backup
 
 
+# TODO: The correct way to package the header files for a distribution is to run 'make headers_install' from the kernel source directory to install the headers and then rebuild the C library package, with a dependency on the specific version of the just installed kernel headers.
+
+
