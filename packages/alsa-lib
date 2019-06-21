@@ -1,9 +1,10 @@
 package_name=alsa-lib
-package_version=1.1.2
+package_version=1.1.2   # TODO: with 1.1.9, a clean build works, probably only have to addgroup audio in the postinstall function
 tarball_suffix=bz2
 build_dependencies=python2
 
-# can using --disable-mixer since it builds programs for testing
+
+
 custombuild(){
     rm -rf builddir
     mkdir -p builddir   # do everything in builddir for tidiness
@@ -13,7 +14,7 @@ custombuild(){
     tar xvf archive
     rm archive
     cd *   # cd into the package directory
-    ./configure --prefix=$installdirectory/$package_fullname --with-pythonlibs=/opt/Python2/lib # --disable-mixer
+    ./configure --prefix=$installdirectory/$package_fullname --with-pythonlibs=DUMMY   # TODO: didn't investigate why we have to provide dummy pythonlibs
     make -j
     if test -z $no_check   # run the make check, unless $no_check is set for 
                            # this package definition
@@ -32,4 +33,9 @@ custombuild(){
     
     
     addgroup audio   # speaker-test needs group audio, see if we can remove later
+    
+    # config files that can be modified, we put them in /var/etc/alsa
+    # TODO: /opt/alsa-lib/share/alsa/alsa.conf.d/  doesn't exist in 1.1.9
+    mkdir -p /var/etc/alsa
+    ln -sv /var/etc/alsa/virtual_sound_card_config.conf /opt/alsa-lib/share/alsa/alsa.conf.d/
 }
