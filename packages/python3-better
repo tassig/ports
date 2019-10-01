@@ -1,5 +1,5 @@
 package_name=Python
-package_version=3.7.3
+package_version=3.7.4
 tarball_suffix=xz
 rel_url=python/$package_name-$package_version.tar.$tarball_suffix  # TODO: normalize
 build_dependencies="libressl libffi"
