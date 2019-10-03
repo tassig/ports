@@ -1,4 +1,4 @@
 package_name=libidn
 package_version=1.35
 tarball_suffix=gz
-
+no_check=1 # 1 test will fail due to expectations of version of 'diff' program
