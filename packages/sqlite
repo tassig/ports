@@ -1,0 +1,7 @@
+package_name=sqlite
+package_version=3290000
+tarball_suffix=gz
+ports_build_dependencies=""
+build_dependencies=""
+rel_url=$package_name/${package_name}-autoconf-${package_version}.tar.$tarball_suffix
+
