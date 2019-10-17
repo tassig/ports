@@ -89,6 +89,7 @@ custombuild(){
 	cd gccobjdir
 	
 	# --disable-gnu-indirect-function: indirect-function is used by some code that replaces C library functions like malloc(), for example gn of chromium, but this is not supported by musl
+	# TODO: --disable-multilib should be removed, if we can. Creating 32bits executables can be useful
 	../gcc-6.1.0/configure --prefix=$installdirectory/$packagename \
                            --enable-languages=c,c++ \
                            --with-native-system-header-dir=$installdirectory/$packagename/$target_triple/include \
