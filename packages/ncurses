@@ -22,13 +22,17 @@ custombuild(){
 	rm archive
 	cd *   # cd into the package directory
 	
+	# pc-files because we need pkgconfig support
+	# pkg-config-libdir: TODO: i don't know what happens when we don't provide that
 	./configure --prefix=$installdirectory/$package_name-$package_version \
 			--with-shared		   \
 			--enable-pc-files	   \
 			--enable-rpath \
 			--with-pkg-config-libdir=$installdirectory/$package_fullname/lib/pkgconfig
 
-	make -j
+	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
+	make -j$ncpu
+	
 	if test -z $no_check   # run the make check, unless $no_check is set for 
 						   # this package definition
 	then make -j check || make -j test
