@@ -1,15 +1,14 @@
 package_name=Python
-package_version=3.7.4
+package_version=3.8.0
 tarball_suffix=xz
-rel_url=python/$package_name-$package_version.tar.$tarball_suffix  # TODO: normalize
-build_dependencies="libressl libffi"
+build_dependencies="libressl libffi xz"
 no_check=1   # don't hesitate to fix it
 
 
-# NOTE: for ssl support, it is necessary to have the latest libressl from ports.git, the old one won't work for ssl support
+# NOTE: for ssl support, it is necessary to have the latest libressl 2.9.1 from ports.git, the old one won't work for ssl support
 
 # NOTE: a user-only build won't work out of the box, because the build has a hack and writes on /usr
-#       to do a user-only build, you need to do this hack as root, then do the build manually
+#       to do a user-only build, you need to do this hack as root, then do the build with the hack commented out (writing on /usr)
 
 # custom build because of rpath for libressl, zlib and libffi
 # also because of a hack to find zlib headers
@@ -28,8 +27,8 @@ custombuild() {
 	mkdir -p /usr/local/include
 	ln -sv /opt/zlib/include/* /usr/local/include/
 	
-	export CFLAGS="-I/opt/libffi/lib/libffi-3.2"
-	export LDFLAGS="-Wl,-rpath=/opt/libressl-2.9.1/lib -Wl,-rpath=/opt/zlib/lib -L /opt/zlib/lib -L/opt/libffi-3.2/lib64 -Wl,-rpath=/opt/libffi-3.2/lib64"
+	export CPPFLAGS="-I/opt/libffi/lib/libffi-3.2 -I/opt/xz/lib/"
+	export LDFLAGS="-Wl,-rpath=/opt/libressl-2.9.1/lib -Wl,-rpath=/opt/zlib/lib -L /opt/zlib/lib -L/opt/libffi-3.2/lib64 -Wl,-rpath=/opt/libffi-3.2/lib64 -L/opt/xz/lib -Wl,-rpath=/opt/xz/lib"
 	./configure --prefix=$installdirectory/Python-$package_version
 	
 	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
@@ -48,7 +47,7 @@ custombuild() {
 	
 	# we add the symlinks directly
 	# we overwrite existing symlinks
-	ln -svf $installdirectory/$package_fullname/bin/* /bin/ || true   # don't crash if the links are already there
+	ln -svf $installdirectory/$package_fullname/bin/* $installdirectory/bin/ || true   # don't crash if the links are already there
 	
 	
 	if [ -d "$installdirectory/$package_fullname/lib/pkgconfig" ]; then
