@@ -1,7 +1,6 @@
 package_name=tcl-core
 package_version=8.6.5
 tarball_suffix=gz
-rel_url=tcl/tcl-core8.6.5-src.tar.gz
 no_check=1 # check are passed, but takes over 7-10 minutes
 
 
@@ -9,7 +8,7 @@ custombuild(){
 	rm -rf builddir
 	mkdir -p builddir   # do everything in builddir for tidiness
 	cd builddir
-	wget -O archive $url
+	wget -O archive $mirror_prefix/tcl/tcl-core8.6.5-src.tar.gz   # unusual file naming
 	tar xvf archive
 	rm archive
 	cd *   # cd into the package directory

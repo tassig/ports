@@ -14,7 +14,6 @@
 #   packages and leftovers. ex: what do you do when "make install" returns an 
 #   error? right now, we do nothing, which is incorrect
 #
-# TODO: remove support for custom relative urls
 
 set -ex
 
@@ -61,11 +60,7 @@ installpackage(){
 		return 0
 	fi
 	package_fullname=$package_name-$package_version 
-	if [ "$rel_url" == "" ]; then
-		# if there is no defined rel_url, then define it by default TODO: remove that support
-		rel_url=$package_name/$package_fullname.tar.$tarball_suffix # default URL, relative to $mirror_prefix
-	fi
-	url=$mirror_prefix/$rel_url
+	url=$mirror_prefix/$package_name/$package_fullname.tar.$tarball_suffix # default URL, relative to $mirror_prefix
 
 	echo "build dependencies of $1: $build_dependencies"
 	

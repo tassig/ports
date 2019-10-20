@@ -10,7 +10,7 @@ custombuild(){
 	mkdir builddir
 	cd builddir
 	
-	wget -O archive $mirror_prefix/$rel_url # mirror_prefix and rel_url are generated in packageinstall
+	wget -O archive $url
 	tar xvf archive
 	rm archive
 	cd *
