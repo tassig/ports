@@ -23,7 +23,7 @@ bindirectory="/bin/"   # default value for global installs
 mirror_prefix=http://mirrors.tassig.com
 
 # the function called by default to build a package
-# this can be overloaded by defining "custombuild()", which will be used instead
+# if "custombuild()" is defined, it will be used instead of this function
 defaultbuild(){
 	builddir="builddir-$package_fullname"  # build directory is "builddir" followed by the name of the package, which allows multiple builds of different software in parallel
 	rm -rf $builddir
@@ -73,15 +73,13 @@ installpackage(){
 
 	# TODO: check if the file system where we install the package is writable, otherwise the build will occur (and resources will be spent), but the installation will fail. This is especially important considering Axiom root file system is read-only
 	
-	# do a custom build if the package defines custombuild(), otherwise do a 
-	# default build
+	# do a custom build if the package defines custombuild(), otherwise do a default build
 	if type 'custombuild' 2>/dev/null | grep -q 'function'
 	then custombuild
 	else defaultbuild
 	fi
 	
-	# call its postinstall() function if the package defines postinstall(), 
-	# otherwise do nothing
+	# call its postinstall() function if the package defines postinstall(), otherwise do nothing
 	if type 'postinstall' 2>/dev/null | grep -q 'function'
 	then postinstall
 	fi
