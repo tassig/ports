@@ -1,0 +1,12 @@
+--- a/tools/watchgnupg.c
++++ b/tools/watchgnupg.c
+@@ -28,6 +28,7 @@
+ #include <stdarg.h>
+ #include <assert.h>
+ #include <unistd.h>
++#include <sys/select.h>
+ #include <sys/socket.h>
+ #include <sys/un.h>
+ #include <netinet/in.h>
+-- 
+2.0.1
