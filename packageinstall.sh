@@ -53,10 +53,24 @@ defaultbuild(){
 installpackage(){
 	echo "installing package $1"
 
-	
-	source $packagedirectory/$1   # TODO: if the file doesn't exist, look into $packagedirectory/extended/$1
-	                              #       there can be a file and/or a directory with name $packagedirectory/extended/$1 , but we want it to be a *file*, so we can source it
-	
+	# sourcing package installer shell script, we have two groups of packages:
+	#
+	#   1. base packages in $packagedirectory, where each package is a single file - shell script with name $1, which most of the time uses defaultbuild(). here we don't use folders 
+	#   2. extended packages in $packagedirectory/extended, where package may be:
+	#     - single file, shell script with name $1.sh
+	#     - folder with name $1 wich contains shell script $1.sh and any other dirty patches or other files required for building
+	#
+	# in extended keep all stuff which we do not provide with base Axiom installation, and very dirty or non standard builds
+	if [ ! -f $packagedirectory/$1 ]; then
+		if [ -d $packagedirectory/extended/$1 ]; then
+			source $packagedirectory/extended/$1/$1.sh
+		else
+			source $packagedirectory/extended/$1.sh
+		fi
+	else
+		source $packagedirectory/$1
+	fi
+
 	# if the package has been installed for the user or globally, don't install again	
 	if [ -d "$installdirectory/$package_name-$package_version" ] || [ -d "/opt/$package_name-$package_version" ] ; then
 		echo "package $package_name is already installed, not reinstalling"
