@@ -18,9 +18,9 @@
 set -ex
 
 packagedirectory="packages"   # the directory name where the packages definitions are located
-installdirectory="/opt"   # default value for global installs, if the "foruser" argument is specifiedin $2, installdirectory becomes ~/.opt
-bindirectory="/bin/"   # default value for global installs
-mirror_prefix=http://mirrors.tassig.com
+installdirectory="/opt"   # default value for global installs, if the "user-only" argument is specified in $2, installdirectory becomes ~/.opt instead
+bindirectory="/bin/"   # default value for global installs, if the "user-only" argument is specified in $2, becomes ~/.opt/bin/ isntead
+mirror_prefix=http://mirrors.tassig.com   # a place to download tarballs
 
 # the function called by default to build a package
 # if "custombuild()" is defined, it will be used instead of this function
@@ -45,6 +45,7 @@ defaultbuild(){
 	if [ -d "$installdirectory/$package_fullname/lib/pkgconfig" ]; then
 		ln -svf $installdirectory/$package_fullname/lib/pkgconfig/* $installdirectory/pkgconf/lib/pkgconfig/   # symlink pkg-config files
 	fi
+	# NOTE: .m4 files should probably be installed as well by default, but i have no strong opinion on it, so for now we leave this to the postinstall() function
 	cd ../..
 	rm -r $builddir
 }
