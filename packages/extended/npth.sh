@@ -1,3 +1,5 @@
+package_name=npth
+package_version=1.6
+tarball_suffix=bz2
+build_dependencies=
 
-# from https://www.gnupg.org/ftp/gcrypt/npth/npth-1.6.tar.bz2
-# NOTE: build went smoothly, one executable symlinked
