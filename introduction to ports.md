@@ -26,9 +26,10 @@ In `packages/extended/` , it's the same, but we also accept directories. That wa
 
 ## Design decisions and limitations
 
-Ports is designed for easy maintenance. As a result, we do not allow developers to upload packages with "custombuild()" defined. The software should be smoothly on Axiom, with a default build. Some packages in Ports have custombuild() defined, because they are useful to build or to run Axiom, but we have them in Ports only as an exception.
-
-The "extended" directory contains all sorts of libraries. Everything is accepted in there and builds can be quite dirty.
+Ports is designed for easy maintenance. As a result, we generally not allow developers to upload packages in the `packages/` root directory with "custombuild()" defined. The software should build smoothly on Axiom, with a default build. Some packages in Ports have custombuild() defined, because they are useful to build or to run Axiom, but we have them in Ports only as an exception. For example, X.org is one such package. These packages are an essential part of Axiom, so we leave them in the `packages/` root directory
 
 As a result of having packages following a default build, verification and upgrade of packages is simplified and maintenance can be done easily.
+
+The `packages/extended/` directory contains all sorts of libraries. Everything is accepted in there and builds can be quite dirty. Such software is not usually part of default Axiom.
+
 
