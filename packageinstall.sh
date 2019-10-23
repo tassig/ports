@@ -99,15 +99,18 @@ then
 	bindirectory="$HOME/.opt/bin/"
 fi
 
-
-# reinstall switch will remove existing package installation, before fresh install
-# this is typically useful when one or more package dependencies were removed, and package is left broken
-for arg in $@  # process all arguments
+# process all arguments
+for arg in $@
 	do
+	
+		# reinstall switch will remove existing package installation, before fresh install
+		# this is typically useful when one or more package dependencies were removed, and package is left broken
 		if [ "$arg" = "reinstall" ]
 		then
+			echo "Removing previous installation"
 			rm -rf $installdirectory/$package_name*
 		fi
+		
 	done
 
 
