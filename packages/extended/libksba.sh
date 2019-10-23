@@ -1,3 +1,4 @@
-
-# using: https://www.gnupg.org/ftp/gcrypt/libksba/libksba-1.3.5.tar.bz2
-# NOTE: build went smoothly, only one binary should be installed
+package_name=libksba
+package_version=1.3.5
+tarball_suffix=bz2
+build_dependencies=

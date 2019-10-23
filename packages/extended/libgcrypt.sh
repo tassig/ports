@@ -1,3 +1,4 @@
-
-# using https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.8.5.tar.bz2
-# NOTE: build goes smoothly, pc files and binaries should be installed
+package_name=libgcrypt
+package_version=1.8.5
+tarball_suffix=bz2
+build_dependencies=
