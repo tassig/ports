@@ -52,7 +52,9 @@ defaultbuild(){
 installpackage(){
 	echo "installing package $1"
 
-	source $packagedirectory/$1
+	
+	source $packagedirectory/$1   # TODO: if the file doesn't exist, look into $packagedirectory/extended/$1
+	                              #       there can be a file and/or a directory with name $packagedirectory/extended/$1 , but we want it to be a *file*, so we can source it
 	
 	# if the package has been installed for the user or globally, don't install again	
 	if [ -d "$installdirectory/$package_name-$package_version" ] || [ -d "/opt/$package_name-$package_version" ] ; then
