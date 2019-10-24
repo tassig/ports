@@ -32,7 +32,7 @@ custombuild(){
 	make install
 
 	# NOTE: add the end, we also have to copy the directory ./libpam/include/security, which was not installed in the destination directory, but is needed by programs linking against pam. I don't know what's the reason.
-	cp -f ./libpam/include/security/* $installdirectory/$package_fullname/include
+	cp -r ./libpam/include/security  $installdirectory/$package_fullname/include/security
 
 	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
 	ln -sv $installdirectory/$package_name/bin/* /bin/ || true
