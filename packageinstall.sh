@@ -53,14 +53,10 @@ defaultbuild(){
 installpackage(){
 	echo "installing package $1"
 
-	# sourcing package installer shell script, we have two groups of packages:
-	#
-	#   1. base packages in $packagedirectory, where each package is a single file - shell script with name $1, which most of the time uses defaultbuild(). here we don't use folders 
-	#   2. extended packages in $packagedirectory/extended, where package may be:
-	#     - single file, shell script with name $1.sh
-	#     - folder with name $1 wich contains shell script $1.sh and any other dirty patches or other files required for building
-	#
-	# in extended keep all stuff which we do not provide with base Axiom installation, and very dirty or non standard builds
+	# sourcing package installer shell script, we have two types of packages:
+	# - base packages in $packagedirectory, where each package is a single file - shell script with name $1
+	# - extended packages in $packagedirectory/extended, where package is a shell script with name $1.sh
+	# See "introduction to ports.md", which is the documentation
 	if [ ! -f $packagedirectory/$1 ]; then
 		if [ -d $packagedirectory/extended/$1 ]; then
 			source $packagedirectory/extended/$1/$1.sh
