@@ -1,7 +1,7 @@
 package_name=libsoup
 package_version=2.51.92
 tarball_suffix=xz
-build_dependencies=sqlite
+build_dependencies="sqlite libxml2"
 no_check=1 
 
 custombuild(){
@@ -13,7 +13,7 @@ custombuild(){
 	rm archive
 	cd *   # cd into the package directory
 
-	./configure --prefix=$installdirectory/$package_fullname --enable-vala=no --disable-tls-check
+	LDFLAGS="-Wl,-rpath,/opt/glib/lib" ./configure --prefix=$installdirectory/$package_fullname --enable-vala=no --disable-tls-check
 
 	# workarounf wrong python presumption
 	sed -i 's|/usr/bin/env python|/bin/python|g' libsoup/tld-parser.py
