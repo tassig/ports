@@ -6,6 +6,7 @@ build_dependencies="sqlite libxml2 vala"
 no_check=1 
 
 custombuild(){
+  SRC_DIR=`pwd`
 	rm -rf builddir
 	mkdir -p builddir   # do everything in builddir for tidiness
 	cd builddir
@@ -14,7 +15,9 @@ custombuild(){
 	rm archive
 	cd *   # cd into the package directory
 
-	LDFLAGS="-Wl,-rpath,/opt/glib/lib" ./configure --prefix=$installdirectory/$package_fullname --disable-tls-check
+  patch -p1 < $SRC_DIR/packages/extended/libsoup.sh-configure.ac.patch
+  autoreconf
+	LDFLAGS="-Wl,-rpath,/opt/glib/lib" ./configure --prefix=$installdirectory/$package_fullname --disable-tls-check --enable-vala=no
 
 	# workarounf wrong python presumption
 	sed -i 's|/usr/bin/env python|/bin/python|g' libsoup/tld-parser.py
