@@ -1,7 +1,7 @@
 package_name=vala
 package_version=0.42.3
 tarball_suffix=xz
-build_dependencies="extended/vala-bootstrap.sh extended/graphviz.sh"
+build_dependencies="vala-bootstrap graphviz"   # TODO: vala-bootstrap should be part of vala
 no_check=1 # TODO: /bin/sh: ./testrunner.sh: not found
 
 function custombuild(){

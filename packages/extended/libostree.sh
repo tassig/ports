@@ -2,7 +2,7 @@
 package_name=libostree
 package_version=v2019.4
 tarball_suffix=gz
-build_dependencies="glib xz e2fsprogs git extended/libsoup.sh"
+build_dependencies="glib xz e2fsprogs git libsoup"
 
 function custombuild(){
 	builddir="builddir-$package_fullname"  # build directory is "builddir" followed by the name of the package, which allows multiple builds of different software in parallel

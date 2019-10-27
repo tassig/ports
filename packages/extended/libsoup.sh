@@ -1,7 +1,8 @@
+
 package_name=libsoup
 package_version=2.51.92
 tarball_suffix=xz
-build_dependencies="sqlite libxml2 extended/vala.sh"
+build_dependencies="sqlite libxml2 vala"
 no_check=1 
 
 custombuild(){

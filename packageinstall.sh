@@ -58,11 +58,7 @@ installpackage(){
 	# - extended packages in $packagedirectory/extended, where package is a shell script with name $1.sh
 	# See "introduction to ports.md", which is the documentation
 	if [ ! -f $packagedirectory/$1 ]; then
-		if [ -d $packagedirectory/extended/$1 ]; then
-			source $packagedirectory/extended/$1/$1.sh
-		else
-			source $packagedirectory/extended/$1.sh
-		fi
+		source $packagedirectory/extended/$1.sh
 	else
 		source $packagedirectory/$1
 	fi
