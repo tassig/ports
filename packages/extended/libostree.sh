@@ -15,7 +15,9 @@ function custombuild(){
 	tar xvf archive
 	rm archive
 	cd *   # cd into the package directory
-	patch -p1 < $SRC_DIR/packages/extended/libostree.sh-configure.ac.patch
+  # depend on gpgme instead of non-existent gpgme-pthread
+	patch -p1 < $SRC_DIR/packages/extended/libostree/configure.ac.patch
+  # provide missing macros from glibc
   patch -p1 < $SRC_DIR/packages/extended/libostree/musl.patch
 
   NOCONFIGURE=1 ./autogen.sh
