@@ -3,6 +3,7 @@ package_name=libostree
 package_version=v2019.4
 tarball_suffix=gz
 build_dependencies="glib xz e2fsprogs git libsoup gpgme fuse"
+no_check=1 # TODO: all tests will fail due to missing command
 
 function custombuild(){
 	SRC_DIR=`pwd`
@@ -26,8 +27,12 @@ function custombuild(){
            -L/opt/gpgme/lib -Wl,-rpath,/opt/gpgme/lib \
            -L/opt/libassuan/lib -Wl,-rpath,/opt/libassuan/lib \
           " \
-         ./configure --prefix=$installdirectory/$package_fullname/
-	make # -j will fail
+		./configure --prefix=$installdirectory/$package_fullname/ \
+                --enable-man=no
+
+	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
+	make -j$ncpu
+	make -j$ncpu
 	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
 	then make -j$ncpu check || make -j$ncpu test
 	fi
