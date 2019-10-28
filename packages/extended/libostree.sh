@@ -15,6 +15,8 @@ function custombuild(){
 	rm archive
 	cd *   # cd into the package directory
 	patch -p1 < $SRC_DIR/packages/extended/libostree.sh-configure.ac.patch
+  patch -p1 < $SRC_DIR/packages/extended/libostree/musl.patch
+
   NOCONFIGURE=1 ./autogen.sh
   CFLAGS="-I/opt/libgpg-error/include -I/opt/gpgme/include" \
 	LDFLAGS="-Wl,-rpath,/opt/glib/lib" \
