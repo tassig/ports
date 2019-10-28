@@ -16,7 +16,7 @@ function custombuild(){
 	cd *   # cd into the package directory
 	patch -p1 < $SRC_DIR/packages/extended/libostree.sh-configure.ac.patch
   NOCONFIGURE=1 ./autogen.sh
-  CFLAGS="-I/opt/libgpg-error/include" \
+  CFLAGS="-I/opt/libgpg-error/include -I/opt/gpgme/include" \
 	LDFLAGS="-Wl,-rpath,/opt/glib/lib" \
          ./configure --prefix=$installdirectory/$package_fullname/
 	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
