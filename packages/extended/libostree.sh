@@ -2,7 +2,7 @@
 package_name=libostree
 package_version=v2019.4
 tarball_suffix=gz
-build_dependencies="glib xz e2fsprogs git libsoup gpgme"
+build_dependencies="glib xz e2fsprogs git libsoup gpgme fuse"
 
 function custombuild(){
 	SRC_DIR=`pwd`
