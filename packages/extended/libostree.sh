@@ -5,6 +5,7 @@ tarball_suffix=gz
 build_dependencies="glib xz e2fsprogs git libsoup gpgme"
 
 function custombuild(){
+	SRC_DIR=`pwd`
 	builddir="builddir-$package_fullname"  # build directory is "builddir" followed by the name of the package, which allows multiple builds of different software in parallel
 	rm -rf $builddir
 	mkdir -p $builddir   # do everything in builddir for tidiness
@@ -13,6 +14,7 @@ function custombuild(){
 	tar xvf archive
 	rm archive
 	cd *   # cd into the package directory
+	patch -p1 < $SRC_DIR/packages/extended/libostree.sh-configure.ac.patch
   NOCONFIGURE=1 ./autogen.sh
 	LDFLAGS="-Wl,-rpath,/opt/glib/lib" \
          ./configure --prefix=$installdirectory/$package_fullname/
