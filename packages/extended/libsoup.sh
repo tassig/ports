@@ -14,7 +14,7 @@ custombuild(){
 	rm archive
 	cd *   # cd into the package directory
 
-	LDFLAGS="-Wl,-rpath,/opt/glib/lib" ./configure --prefix=$installdirectory/$package_fullname --disable-tls-check
+	LDFLAGS="-Wl,-rpath,/opt/glib/lib" ./configure --prefix=$installdirectory/$package_fullname --disable-tls-check --enable-vala=no
 
 	# workarounf wrong python presumption
 	sed -i 's|/usr/bin/env python|/bin/python|g' libsoup/tld-parser.py
