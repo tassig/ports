@@ -34,7 +34,6 @@ function custombuild(){
 
 	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
 	make -j$ncpu
-	make -j$ncpu
 	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
 	then make -j$ncpu check || make -j$ncpu test
 	fi
