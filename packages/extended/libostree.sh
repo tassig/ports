@@ -18,11 +18,16 @@ function custombuild(){
   patch -p1 < $SRC_DIR/packages/extended/libostree/musl.patch
 
   NOCONFIGURE=1 ./autogen.sh
-  CFLAGS="-I/opt/libgpg-error/include -I/opt/gpgme/include" \
-	LDFLAGS="-Wl,-rpath,/opt/glib/lib" \
+  CFLAGS="-I/opt/libgpg-error/include \
+          -I/opt/gpgme/include \
+          -I/opt/e2fsprogs/include \
+         " \
+	LDFLAGS="-Wl,-rpath,/opt/glib/lib \
+           -L/opt/gpgme/lib -Wl,-rpath,/opt/gpgme/lib \
+           -L/opt/libassuan/lib -Wl,-rpath,/opt/libassuan/lib \
+          " \
          ./configure --prefix=$installdirectory/$package_fullname/
-	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
-	make -j$ncpu
+	make # -j will fail
 	if test -z $no_check   # run the make check, unless $no_check is set for this package definition
 	then make -j$ncpu check || make -j$ncpu test
 	fi
