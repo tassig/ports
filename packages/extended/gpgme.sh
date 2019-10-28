@@ -1,7 +1,7 @@
 package_name=gpgme
 package_version=1.13.1
 tarball_suffix=bz2
-build_dependencies=gnupg/gnupg
+build_dependencies=gnupg
 no_check=1 
 
 custombuild(){
