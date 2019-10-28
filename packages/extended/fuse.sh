@@ -1,5 +1,5 @@
 
 package_name=fuse
-package_version=3.7.0
-tarball_suffix=xz
+package_version=2.9.8
+tarball_suffix=gz
 build_dependencies=""
