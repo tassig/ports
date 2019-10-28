@@ -1,7 +1,7 @@
 package_name=polkit
 package_version=0.98
 tarball_suffix=gz
-build_dependencies=expat
+build_dependencies="Linux-PAM gobject-introspection expat"
 no_check=1 
 
 custombuild(){
