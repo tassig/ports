@@ -1,7 +1,7 @@
 package_name=gobject-introspection
 package_version=1.46.0
 tarball_suffix=xz
-build_dependencies=
+build_dependencies="python2"
 no_check=1 
 
 # We use custombuild because we have to patch for wrong python path presumption
