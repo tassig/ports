@@ -36,7 +36,7 @@ custombuild(){
 		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
 		$installdirectory/pkgconf/lib/pkgconfig/
 	fi
-	cd ../..
+	cd ../../..
 	rm -r builddir
 
 }
