@@ -60,7 +60,7 @@ installpackage(){
 	if [ ! -f $packagedirectory/$1 ]; then
 		source $packagedirectory/extended/$1.sh
 	else
-		source $packagedirectory/$1
+		source $packagedirectory/$1   # TODO: this file might not exist, exit with an error message
 	fi
 
 	# if the package has been installed for the user or globally, don't install again	
