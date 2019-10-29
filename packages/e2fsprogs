@@ -29,6 +29,10 @@ function custombuild(){
 	# we need to perform install-libs in order to have libext2 libs and pkg-config files installed as well
 	make install-libs
 	ln -snv $installdirectory/$package_fullname $installdirectory/$package_name || true
+
+	# NOTE: we remove uuid.pc provided by e2fsprogs, to avoid clash with the same file provided by libuuid package
+	rm $installdirectory/$package_fullname/lib/pkgconfig/uuid.pc
+
 	ln -sv $installdirectory/$package_name/bin/* $bindirectory || true   # don't crash if the links are already there
 	if [ -d "$installdirectory/$package_fullname/lib/pkgconfig" ]; then
 		ln -svf $installdirectory/$package_fullname/lib/pkgconfig/* $installdirectory/pkgconf/lib/pkgconfig/   # symlink pkg-config files
