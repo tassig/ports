@@ -1,7 +1,7 @@
 package_name=ninja
 package_version=1.8.2
 tarball_suffix=gz
-build_dependencies="python"
+build_dependencies="python2"
 
 custombuild(){
 	rm -rf builddir
