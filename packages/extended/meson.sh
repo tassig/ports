@@ -1,7 +1,10 @@
+# IMPORTANT: at the moment it's better to install python3-better as normal user, and install meson as normal user too
 
-# TODO: depends on python3-better, so can't really include this package
+package_name=meson
+build_dependencies="python3" # or "python3-better"
 
-pip3 install meson
 
-# TODO: then need to symlink python bin directory again, that's where meson is
-
+custombuild(){
+	pip3 install meson
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true
+}

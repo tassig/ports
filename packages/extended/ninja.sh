@@ -1,10 +1,27 @@
+package_name=ninja
+package_version=1.8.2
+tarball_suffix=gz
+build_dependencies="python"
 
-# pre-requisites: 
-# - python (i'm using python3-better from ports.git)
-#
+custombuild(){
+	rm -rf builddir
+	mkdir -p builddir   # do everything in builddir for tidiness
+	cd builddir
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	cd *   # cd into the package directory
 
+	python configure.py --bootstrap
 
-# download: https://github.com/ninja-build/ninja/archive/v1.8.2/ninja-1.8.2.tar.gz
-# run: python configure.py --bootstrap
+	# we have to copy ninja executable somwhere, and make it availabe in the path
+	# mimic classic install procedure
+	mkdir -p $installdirectory/$package_fullname/bin
+	cp ninja $installdirectory/$package_fullname/bin/
 
-# then copy ninja somewhere so it's available in the path
+	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true
+
+	cd ../..
+	rm -r builddir
+}
