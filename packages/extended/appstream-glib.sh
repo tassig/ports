@@ -1,10 +1,12 @@
 package_name=appstream-glib
-package_version=0.1.7 
+package_version=0.7.16
 tarball_suffix=xz
 build_dependencies="glib gdk-pixbuf libarchive libsoup"
 no_check=1 
 
 # We use old version 0.1.7, the last one that builds with gtk2, all newer versions require gtk3
+# TODO: no, i tried latest versions and disabled a few things in meson_options.txt , and it doesn't require gtk3
+# TODO: error during linking, needs -PIC library from e2fsprogs
 
 # We use custom build just because --enable-introspection=no, with default build we get error:
 # Couldn't find include 'GdkPixbuf-2.0.gir'\
