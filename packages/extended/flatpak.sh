@@ -2,6 +2,7 @@ package_name=flatpak
 package_version=1.4.3
 tarball_suffix=xz
 build_dependencies= # TODO: add in proper order
+no_check=1
 
 # direct requirements: 
 #    glib  (ports)
@@ -33,20 +34,42 @@ build_dependencies= # TODO: add in proper order
 #       npth (ports)
 #    libarchive requres: attr (ports)
 #
-# TODO: bring other requirements, see https://git.alpinelinux.org/aports/tree/community/flatpak/APKBUILD as well
-#
 
+# TODO: build breaks at the point of missing libuuid.so.1 which we have on the system, in /opt/libuuid/lib
 
+custombuild(){
+	SRC_DIR=$(pwd)
+	rm -rf builddir
+	mkdir -p builddir
+	cd builddir
+	wget -O archive $url
+	tar xvf archive
+	rm archive
+	cd *   # cd into the package directory
 
+	export CPPFLAGS="-I/opt/libcap/include"
+	export LDFLAGS="-L/opt/libcap/lib"
 
-export CPPFLAGS="-I/opt/libcap/include"
-export LDFLAGS="-L/opt/libcap/lib"
+	./configure --prefix=/opt/flatpak-1.4.3 --disable-documentation --with-priv-mode=setuid
 
+	# Apply alpine patch, do it after configure, it will pach generated config.h for missing macros
+	patch -p1 < $SRC_DIR/packages/extended/flatpak/musl-fixes.patch
 
+	make -j
+	if test -z $no_check   # run the make check, unless $no_check is set for 
+						   # this package definition
+	then make -j check || make -j test
+	fi
 
+	make install
 
-#./autogen.sh   # this will start configure automatically as well, but we don't want that
-# NOTE: you only need to run the above if you get flatpak from git
+	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true
+	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+		$installdirectory/pkgconf/lib/pkgconfig/
+	fi
+	cd ../..
+	rm -r builddir
 
-./configure   --disable-xauth --disable-seccomp  --disable-maintainer-mode   # TODO: i'm starting by disabling non-necessary features, they can be enabled later
-
+}
