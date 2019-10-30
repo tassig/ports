@@ -1,7 +1,7 @@
 package_name=polkit
 package_version=0.116
 tarball_suffix=gz
-build_dependencies="Linux-PAM gobject-introspection expat"
+build_dependencies="glib intltool Linux-PAM gobject-introspection expat mozjs"
 no_check=1 
 
 custombuild(){
@@ -24,6 +24,8 @@ custombuild(){
 
 	export CPPFLAGS="-I/opt/expat/include -I/opt/Linux-PAM/include"
 	export LDFLAGS="-L/opt/expat/lib -L/opt/Linux-PAM/lib"
+
+	# TODO: IMPORTANT: check if polkit depend on mozjs in runtime, it's 1GB of full installation
 
 	# TODO: resolve issue with g-ir-scanner, we had to use --enable-introspection=no temporarly
 	./configure --prefix=$installdirectory/$package_fullname --disable-libelogind --enable-introspection=no --disable-man-pages
