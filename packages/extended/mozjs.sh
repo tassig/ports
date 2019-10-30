@@ -45,6 +45,13 @@ custombuild(){
 	# dist/bin/jsapi-tests  # use this instead of make check
 	make install
 
+	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true
+	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
+		ln -svf $installdirectory/$package_name/lib/pkgconfig/* \
+		$installdirectory/pkgconf/lib/pkgconfig/
+	fi
+
 	# remove autoconf-2.13
 	rm -rf /opt/autoconf-2.13-temp
 	rm -f /bin/autoconf-2.13
