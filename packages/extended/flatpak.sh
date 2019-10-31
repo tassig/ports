@@ -75,7 +75,7 @@ custombuild(){
 	
 	# TODO: /opt/flatpak/var needs to be redirected to a place with lots of space, i'm not sure at the moment if we can put it in ~/.opt/ , or something similar writable by jerry, or if flatpak needs root permissions
 	
-	# TODO: /tmp is not big enough (i've circumvented for testing purposes), and i don't know how to configure $TMP_DIR for ostree
+	# TODO: /tmp is not big enough (i've circumvented for testing purposes), and i don't know how to configure $TMP_DIR for ostree, also i was unable to reproduce this error
 	
 	
 # NOTE: need to set XDG_DATA_DIRS environment variable to /opt/gsettings-desktop-schemas-3.20.0/share before launching flatpak
@@ -89,5 +89,9 @@ custombuild(){
 #       i can imagine it's about dbus, or who knows
 #       if you run as root, it works, but ultimately fails with the following:
 # bwrap: Can't bind mount /oldroot/home/varflatpak/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/19.08/5a35247ad1c941455f2f9c4139d9136c6c0662e1b04e5b3c56121e7f67ba0100/files on /newroot/usr: No such file or directory
+# or similarly, for other apps: 
+# F: Running '/opt/flatpak/libexec/flatpak-bwrap --unshare-ipc --unshare-net --unshare-pid --ro-bind / / --proc /proc --dev /dev --bind /home/varflatpak/lib/flatpak /home/varflatpak/lib/flatpak /opt/flatpak/share/flatpak/triggers/desktop-database.trigger /home/varflatpak/lib/flatpak'
+#bwrap: Can't bind mount /oldroot/ on /newroot/: No such file or directory
+
 
 }
