@@ -39,7 +39,7 @@ no_check=1
 #       flatpak install /home/jerry/Downloads/com.spotify.Client.flatpakref 
 #       which return with error: error: Unable to connect to system bus
 #       i can imagine it's about dbus, or who knows
-#       if you run as root, it complains about TLS support (i don't know why we don't have TLS support)
+#       if you run as root, error is: (flatpak install:6598): GLib-GIO-ERROR **: No GSettings schemas are installed on the system
 
 custombuild(){
 	SRC_DIR=$(pwd)

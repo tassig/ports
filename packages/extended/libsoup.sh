@@ -1,8 +1,7 @@
-
 package_name=libsoup
 package_version=2.51.92
 tarball_suffix=xz
-build_dependencies="sqlite libxml2 gobject-introspection"
+build_dependencies="sqlite libxml2 gobject-introspection glib-networking"
 no_check=1 
 
 custombuild(){
@@ -14,9 +13,9 @@ custombuild(){
 	rm archive
 	cd *   # cd into the package directory
 
-	LDFLAGS="-Wl,-rpath,/opt/glib/lib" ./configure --prefix=$installdirectory/$package_fullname --disable-tls-check --enable-vala=no
+	LDFLAGS="-Wl,-rpath=/opt/glib/lib -Wl,-rpath=/opt/nettle/lib" ./configure --prefix=$installdirectory/$package_fullname --enable-vala=no
 
-	# workarounf wrong python presumption
+	# workaround wrong python assumption
 	sed -i 's|/usr/bin/env python|/bin/python|g' libsoup/tld-parser.py
 
 	make -j
