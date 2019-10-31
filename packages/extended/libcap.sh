@@ -36,6 +36,8 @@ custombuild(){
 	make
 	make install
 
+	mv /opt/libcap $installdirectory/$package_fullname
+
 	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
 	ln -sv $installdirectory/$package_name/bin/* /bin/ || true
 	if [ -d "$installdirectory/$package_name/lib/pkgconfig" ]; then
