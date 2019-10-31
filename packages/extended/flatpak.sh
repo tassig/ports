@@ -39,7 +39,9 @@ no_check=1
 #       flatpak install /home/jerry/Downloads/com.spotify.Client.flatpakref 
 #       which return with error: error: Unable to connect to system bus
 #       i can imagine it's about dbus, or who knows
-#       if you run as root, error is: (flatpak install:6598): GLib-GIO-ERROR **: No GSettings schemas are installed on the system
+#       if you run as root, it works but will fail when download stuff, and say there isn't enough space (which is not true)
+
+# NOTE: need to set XDG_DATA_DIRS environment variable to /opt/gsettings-desktop-schemas-3.20.0/share before launching flatpak
 
 custombuild(){
 	SRC_DIR=$(pwd)
