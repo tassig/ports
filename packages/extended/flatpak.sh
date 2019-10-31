@@ -35,7 +35,11 @@ no_check=1
 #    libarchive requres: attr (ports)
 #
 
-# TODO: build breaks at the point of missing libuuid.so.1 which we have on the system, in /opt/libuuid/lib
+# TODO: i then download a pakref file on flathub.org, and did:
+#       flatpak install /home/jerry/Downloads/com.spotify.Client.flatpakref 
+#       which return with error: error: Unable to connect to system bus
+#       i can imagine it's about dbus, or who knows
+#       if you run as root, it complains about TLS support (i don't know why we don't have TLS support)
 
 custombuild(){
 	SRC_DIR=$(pwd)
@@ -48,7 +52,7 @@ custombuild(){
 	cd *   # cd into the package directory
 
 	export CPPFLAGS="-I/opt/libcap/include"
-	export LDFLAGS="-L/opt/libcap/lib"
+	export LDFLAGS="-L/opt/libcap/lib -L/opt/libuuid/lib -Wl,-rpath=/opt/libuuid/lib -Wl,-rpath=/opt/appstream-glib/lib"
 
 	./configure --prefix=/opt/flatpak-1.4.3 --disable-documentation --with-priv-mode=setuid
 
