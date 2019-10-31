@@ -35,13 +35,7 @@ no_check=1
 #    libarchive requres: attr (ports)
 #
 
-# TODO: i then download a pakref file on flathub.org, and did:
-#       flatpak install /home/jerry/Downloads/com.spotify.Client.flatpakref 
-#       which return with error: error: Unable to connect to system bus
-#       i can imagine it's about dbus, or who knows
-#       if you run as root, it works but will fail when download stuff, and say there isn't enough space (which is not true)
 
-# NOTE: need to set XDG_DATA_DIRS environment variable to /opt/gsettings-desktop-schemas-3.20.0/share before launching flatpak
 
 custombuild(){
 	SRC_DIR=$(pwd)
@@ -77,5 +71,23 @@ custombuild(){
 	fi
 	cd ../..
 	rm -r builddir
+	
+	
+	# TODO: /opt/flatpak/var needs to be redirected to a place with lots of space, i'm not sure at the moment if we can put it in ~/.opt/ , or something similar writable by jerry, or if flatpak needs root permissions
+	
+	# TODO: /tmp is not big enough (i've circumvented for testing purposes), and i don't know how to configure $TMP_DIR for ostree
+	
+	
+# NOTE: need to set XDG_DATA_DIRS environment variable to /opt/gsettings-desktop-schemas-3.20.0/share before launching flatpak
+	
+	# TODO: i also did export LD_LIBRARY_PATH=/opt/libcap/lib:/opt/nettle/lib to solve the error: Error loading shared library libcap.so.2: No such file or directory (needed by /opt/flatpak/libexec/flatpak-bwrap)
+	# these should be temporary
+	
+	# TODO: i then download a pakref file on flathub.org, and did:
+#       flatpak -vv --ostree-verbose install /home/jerry/Downloads/com.spotify.Client.flatpakref 
+#       which return with error: error: Unable to connect to system bus
+#       i can imagine it's about dbus, or who knows
+#       if you run as root, it works, but ultimately fails with the following:
+# bwrap: Can't bind mount /oldroot/home/varflatpak/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/19.08/5a35247ad1c941455f2f9c4139d9136c6c0662e1b04e5b3c56121e7f67ba0100/files on /newroot/usr: No such file or directory
 
 }
