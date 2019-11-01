@@ -73,12 +73,12 @@ custombuild(){
 	rm -r builddir
 	
 	
-	# TODO: /opt/flatpak/var needs to be redirected to a place with lots of space, i'm not sure at the moment if we can put it in ~/.opt/ , or something similar writable by jerry, or if flatpak needs root permissions
+	# TODO: /opt/flatpak/var needs to be redirected to a place with lots of space, i'm not sure at the moment if we can put it in ~/.opt/ , or something similar writable by jerry, or if flatpak needs root permissions, i have currently put it in /home/varflatpak
 	
 	# TODO: /tmp is not big enough (i've circumvented for testing purposes), and i don't know how to configure $TMP_DIR for ostree, also i was unable to reproduce this error
 	
 	
-# NOTE: need to set XDG_DATA_DIRS environment variable to /opt/gsettings-desktop-schemas-3.20.0/share before launching flatpak
+# NOTE: for some apps (like spotify) need to set XDG_DATA_DIRS environment variable to /opt/gsettings-desktop-schemas-3.20.0/share before launching flatpak
 	
 	# TODO: i also did export LD_LIBRARY_PATH=/opt/libcap/lib:/opt/nettle/lib to solve the error: Error loading shared library libcap.so.2: No such file or directory (needed by /opt/flatpak/libexec/flatpak-bwrap)
 	# these should be temporary
@@ -91,7 +91,20 @@ custombuild(){
 # bwrap: Can't bind mount /oldroot/home/varflatpak/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/19.08/5a35247ad1c941455f2f9c4139d9136c6c0662e1b04e5b3c56121e7f67ba0100/files on /newroot/usr: No such file or directory
 # or similarly, for other apps: 
 # F: Running '/opt/flatpak/libexec/flatpak-bwrap --unshare-ipc --unshare-net --unshare-pid --ro-bind / / --proc /proc --dev /dev --bind /home/varflatpak/lib/flatpak /home/varflatpak/lib/flatpak /opt/flatpak/share/flatpak/triggers/desktop-database.trigger /home/varflatpak/lib/flatpak'
-#bwrap: Can't bind mount /oldroot/ on /newroot/: No such file or directory
+# bwrap: Can't bind mount /oldroot/ on /newroot/: No such file or directory
 
+# NOTE: bubblewrap issue is easily fixed by installing bubblewrap separately, and adding --with-system-bubblewrap  into configure call
 
+# UPDATE: now what works is to do:
+# flatpatk install telegram
+# which must be done as root
+# and then do:
+# flatpak run telegram
+# which can be done as jerry
+
+# Issue we are facing with normal user installation, for example org.gnome.Calculator, we get ostree error:
+# Error: Not enough disk space to complete this operation
+# error: Failed to install org.gnome.Platform: While pulling runtime/org.gnome.Platform/x86_64/3.34 from remote # flathub: Writing content object: min-free-space-size 500MB would be exceeded, at least 2.0 kB requeste
+
+# with root user this issue won't appear
 }
