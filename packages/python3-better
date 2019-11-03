@@ -7,7 +7,6 @@ no_check=1   # don't hesitate to fix it
 
 # The package python3-better is better than the normal python3, but comes with more dependencies and is dependent on incompatible version of other packages
 #
-# NOTE: for ssl support, it is necessary to have the latest libressl 2.9.1 from ports.git, the old one won't work for ssl support
 #
 # custom build because of rpath for libressl, zlib and libffi
 # also because of a hack to find zlib headers
@@ -16,14 +15,28 @@ custombuild() {
 	rm -rf $builddir
 	mkdir -p $builddir   # do everything in builddir for tidiness
 	cd $builddir
+
+	# NOTE: for ssl support, it is necessary to have the latest libressl 2.9.1 from ports.git, the old one won't work for ssl support
+	# install libressl-2.9.1, but don't symlink to it, leave default Axiom libressl
+	# we do it here (we also could make libressl-2.9.1.sh), to make clear we need id only for python3 pip3 purpose
+	rm -rf /opt/libressl-2.9.1
+	wget http://mirrors.tassig.com/libressl/libressl-2.9.1.tar.gz
+	tar xf libressl-2.9.1.tar.gz
+	cd libressl-2.9.1
+	./configure --prefix=/opt/libressl-2.9.1
+	make -j
+	make install
+	cd ../
+	rm -r libressl-2.9.1
+
 	wget -O archive $url
 	tar xvf archive
 	rm archive
 	cd *   # cd into the package directory
 	
 	
-	export CPPFLAGS="-I/opt/libffi/lib/libffi-3.2 -I/opt/xz/include/ -I/opt/zlib/include"
-	export LDFLAGS="-Wl,-rpath=/opt/libressl-2.9.1/lib -Wl,-rpath=/opt/zlib/lib -L /opt/zlib/lib -L/opt/libffi-3.2/lib64 -Wl,-rpath=/opt/libffi-3.2/lib64 -L/opt/xz/lib -Wl,-rpath=/opt/xz/lib"
+	export CPPFLAGS="-I/opt/libffi/lib/libffi-3.2 -I/opt/xz/include/ -I/opt/zlib/include -I/opt/libressl-2.9.1/include"
+	export LDFLAGS="-L/opt/libressl-2.9.1/lib -Wl,-rpath=/opt/libressl-2.9.1/lib -Wl,-rpath=/opt/zlib/lib -L /opt/zlib/lib -L/opt/libffi-3.2/lib64 -Wl,-rpath=/opt/libffi-3.2/lib64 -L/opt/xz/lib -Wl,-rpath=/opt/xz/lib"
 	./configure --prefix=$installdirectory/Python-$package_version
 	
 	ncpu=`cat /proc/cpuinfo | grep processor | wc -l`
