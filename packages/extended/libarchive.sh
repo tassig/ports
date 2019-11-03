@@ -1,7 +1,7 @@
 package_name=libarchive
 package_version=3.4.0
 tarball_suffix=gz
-build_dependencies=
+build_dependencies="zlib libressl"
 no_check=1 
 
 # We use custombuild because of --without-xml2, Alpine does it like that, so we don't investigate more

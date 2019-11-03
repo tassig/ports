@@ -1,8 +1,10 @@
 package_name=gobject-introspection
 package_version=1.46.0
 tarball_suffix=xz
-build_dependencies="python2"
+build_dependencies="glib flex bison python2"
 no_check=1 
+
+# TODO: build 1.62.0, with meson
 
 # We use custombuild because we have to patch for wrong python path presumption
 
