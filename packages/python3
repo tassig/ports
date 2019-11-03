@@ -11,3 +11,6 @@ postinstall() {
 }
 
 # NOTE: python3 does not create a binary named "python", instead it is named "python3"
+
+# NOTE: pip3 won't get installed, it requires libressl-2.9.1, whereas our system libressl is 2.3.4
+# TODO: we can use custom build here, or simply switch to python3-better
