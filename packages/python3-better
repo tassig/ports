@@ -34,7 +34,7 @@ custombuild() {
 	rm archive
 	cd *   # cd into the package directory
 	
-	
+	# NOTE: instead of messing with libressl.pc file, we simply navigate confiogure to libressl-2.9.1
 	export CPPFLAGS="-I/opt/libffi/lib/libffi-3.2 -I/opt/xz/include/ -I/opt/zlib/include -I/opt/libressl-2.9.1/include"
 	export LDFLAGS="-L/opt/libressl-2.9.1/lib -Wl,-rpath=/opt/libressl-2.9.1/lib -Wl,-rpath=/opt/zlib/lib -L /opt/zlib/lib -L/opt/libffi-3.2/lib64 -Wl,-rpath=/opt/libffi-3.2/lib64 -L/opt/xz/lib -Wl,-rpath=/opt/xz/lib"
 	./configure --prefix=$installdirectory/Python-$package_version
@@ -52,7 +52,7 @@ custombuild() {
 	
 	
 	# we add the symlinks directly
-	ln -svn $installdirectory/$package_fullname $installdirectory/$package_name
+	ln -svn $installdirectory/$package_fullname $installdirectory/$package_name || true
 	ln -svf $installdirectory/$package_name/bin/* $bindirectory || true   # don't crash if the links are already there
 	
 	# upgrade pip, necessary so that the pip binary is created
