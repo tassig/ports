@@ -1,7 +1,7 @@
 package_name=appstream-glib
 package_version=0.7.15
 tarball_suffix=xz
-build_dependencies="glib gdk-pixbuf libarchive libsoup libuuid meson ninja"
+build_dependencies="glib gdk-pixbuf libarchive libsoup libuuid meson ninja cmake json-glib"
 no_check=1 
 
 
