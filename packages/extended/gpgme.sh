@@ -1,7 +1,7 @@
 package_name=gpgme
 package_version=1.13.1
 tarball_suffix=bz2
-build_dependencies=gnupg
+build_dependencies="gnupg python3-better libgpg-error libassuan" 
 no_check=1 
 
 custombuild(){

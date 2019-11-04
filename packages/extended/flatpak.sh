@@ -1,41 +1,26 @@
 package_name=flatpak
 package_version=1.4.3
 tarball_suffix=xz
-build_dependencies= # TODO: add in proper order
+build_dependencies="glib libarchive libsoup libcap polkit glib-networking libostree fuse json-glib gcab appstream-glib dconf libseccomp libxslt gpgme bison"
 no_check=1
 
-# direct requirements: 
-#    glib  (ports)
-#    libarchive (ports)
-#    libsoup (ports)
-#    libcap (ports)
-#    polkit (ports)
-#    libxau ( we have it with X, but we can disable it )
-#    ostree  (ports)
-#    fuse  (ports)
-#    json-glib (ports)
-#    gcab (ports) 
-#    appstream-glib (ports)
-#    dconf (ports)
-#    libseccomp (ports, we can disaable it)
-#    libxslt (ports)
-#    gpgme (ports)
-#    bison (ports)
-#    gobject-introspection (ports)
-#    Linux-PAM (ports) - who depens on it?
-#
-# indirect requirements:
-#    gpgme requires: gnupg (ports)
-#    gnupg requires: 
-#       libgpg-error (ports)
-#       libassuan (ports) 
-#       libgcrypt (ports) 
-#       libksba (ports)
-#       npth (ports)
-#    libarchive requres: attr (ports)
-#
-
-
+# dependences (all in ports): 
+#    glib
+#    libarchive "zlib libressl"
+#    libsoup "sqlite libxml2 gobject-introspection glib-networking"
+#    libcap 
+#    poklit "glib intltool Linux-PAM gobject-introspection expat mozjs"
+#    glib-networking "glib gnutls intltool gsettings-desktop-schemas" NOTE: production image needs perl
+#    libostree "glib bison xz e2fsprogs libarchive libsoup gpgme fuse libxslt"
+#    fuse 
+#    json-glib 
+#    gcab
+#    appstream-glib "glib gdk-pixbuf libarchive libsoup libuuid meson ninja cmake json-glib"
+#    dconf "dbus glib gtk+2 libxml2"
+#    libseccomp
+#    libxslt
+#    gpgme "gnupg"
+#    bison
 
 custombuild(){
 	SRC_DIR=$(pwd)

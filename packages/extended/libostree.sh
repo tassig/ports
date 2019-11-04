@@ -2,7 +2,7 @@
 package_name=libostree
 package_version=v2019.4
 tarball_suffix=gz
-build_dependencies="glib xz e2fsprogs git libsoup gpgme fuse"
+build_dependencies="glib bison xz e2fsprogs libarchive libsoup gpgme fuse libxslt"
 no_check=1 # TODO: all tests will fail due to missing command
 
 function custombuild(){
