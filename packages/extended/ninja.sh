@@ -20,7 +20,7 @@ custombuild(){
 	cp ninja $installdirectory/$package_fullname/bin/
 
 	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
-	ln -sv $installdirectory/$package_name/bin/* /bin/ || true
+	ln -sv $installdirectory/$package_name/bin/* $bindirectory || true
 
 	cd ../..
 	rm -r builddir
