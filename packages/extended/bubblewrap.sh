@@ -20,7 +20,7 @@ custombuild(){
 	patch -p1 < $SRC_DIR/packages/extended/bubblewrap/musl-fixes.patch
 	patch < $SRC_DIR/packages/extended/bubblewrap/realpath-workaround.patch
 
-	CFLAGS="-I/opt/libcap/include" LDFLAGS="-L/opt/libcap/lib" ./configure --prefix=/opt/bubblewrap-0.3.3 --with-priv-mode=setuid --enable-man=no
+	CFLAGS="-I/opt/libcap/include" LDFLAGS="-L/opt/libcap/lib -Wl,-rpath=/opt/libcap/lib" ./configure --prefix=/opt/$package_fullname --with-priv-mode=setuid --enable-man=no
 
 	make -j
 	if test -z $no_check   # run the make check, unless $no_check is set for 
