@@ -1,0 +1,11 @@
+--- a/build/soong/ui/build/paths/config.go
++++ b/build/soong/ui/build/paths/config.go
+@@ -74,6 +74,8 @@
+ }
+ 
+ var Configuration = map[string]PathConfig{
++	"touch":    Allowed,
++	"mkdir":    Allowed,
+ 	"bash":     Allowed,
+ 	"bc":       Allowed,
+ 	"dd":       Allowed,

@@ -1,0 +1,17 @@
+--- a/build/blueprint/bootstrap.bash
++++ b/build/blueprint/bootstrap.bash
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ 
+ # This script serves two purposes.  First, it can bootstrap the standalone
+ # Blueprint to generate the minibp binary.  To do this simply run the script
+@@ -28,7 +28,7 @@
+ # either an absolute path or one relative to the build directory (which of
+ # these is used should probably match what's used for SRCDIR).
+ if [ -z "$BOOTSTRAP" ]; then
+-    BOOTSTRAP="${BASH_SOURCE[0]}"
++    BOOTSTRAP=$0
+ 
+     # WRAPPER should only be set if you want a ninja wrapper script to be
+     # installed into the builddir. It is set to blueprint's blueprint.bash

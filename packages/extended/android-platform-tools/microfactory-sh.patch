@@ -1,0 +1,11 @@
+--- a/build/soong/scripts/microfactory.bash
++++ b/build/soong/scripts/microfactory.bash
+@@ -42,7 +42,7 @@
+             out_dir="out"
+         fi
+     fi
+-    if [[ "${out_dir}" != /* ]]; then
++    if [[ "$(dirname ${out_dir})" != "/" ]]; then
+         out_dir="${TOP}/${out_dir}"
+     fi
+     echo "${out_dir}"
