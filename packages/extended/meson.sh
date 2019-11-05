@@ -6,5 +6,5 @@ build_dependencies="python3-better"
 
 custombuild(){
 	pip3 install meson
-	ln -sv /opt/Python/bin/meson /bin/ || true
+	ln -svf /opt/Python-3.8.0/bin/meson /bin/ || true
 }
