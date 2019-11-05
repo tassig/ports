@@ -53,7 +53,7 @@ custombuild() {
 	
 	# we add the symlinks directly
 	ln -svn $installdirectory/$package_fullname $installdirectory/$package_name || true
-	ln -svf $installdirectory/$package_name/bin/* $bindirectory || true   # don't crash if the links are already there
+	ln -svf $installdirectory/$package_fullname/bin/* $bindirectory || true   # don't crash if the links are already there
 	
 	# upgrade pip, necessary so that the pip binary is created
 	pip3 install --upgrade pip
