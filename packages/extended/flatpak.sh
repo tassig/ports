@@ -61,14 +61,6 @@ custombuild(){
 	# /opt/flatpak/var needs to be redirected to a place with lots of space, i'm not sure at the moment if we can put it in ~/.opt/ , or something similar writable by jerry, or if flatpak needs root permissions, i have currently put it in /home/varflatpak
 	mkdir -p /home/varflatpak
 	ln -sv /home/varflatpak /opt/flatpak/var
-
-	# TODO: /tmp is not big enough (i've circumvented for testing purposes), and i don't know how to configure $TMP_DIR for ostree, also i was unable to reproduce this error
-
-	# Issue we are facing with normal user installation, for example org.gnome.Calculator, we get ostree error:
-	# Error: Not enough disk space to complete this operation
-	# error: Failed to install org.gnome.Platform: While pulling runtime/org.gnome.Platform/x86_64/3.34 from remote # flathub: Writing content object: min-free-space-size 500MB would be exceeded, at least 2.0 kB reques
-
-	# with root user this issue won't appear
 	
 	# Very basic usage:
 	# (as root)
