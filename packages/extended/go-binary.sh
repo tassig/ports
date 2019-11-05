@@ -4,6 +4,8 @@ package_version=1.13.4.linux-amd
 tarball_suffix=gz
 build_dependencies="patchelf"
 
+# TODO: this should not be its own package, the sole purpose of this is to build go (bootstrap it), so it's always deleted after go install. This should be part of Go script.
+
 function custombuild(){
 	  builddir="builddir-$package_fullname"  # build directory is "builddir" followed by the name of the package, which allows multiple builds of different software in parallel
 	  rm -rf $builddir
