@@ -11,6 +11,7 @@
 
 * needs export XDG_DATA_DIRS=/opt/gsettings-desktop-schemas-3.20.0/share . I guess it's fine, and not really an issue.
 
+* error while adding new repo: "GLib-GIO-Message: Using the 'memory' GSettings backend.  Your settings will not be saved or shared with other applications.  For now I can guess it's related to missing dbus, which is required by dconf (default backend for gsettings)
 
 ## Issues with apps
 
