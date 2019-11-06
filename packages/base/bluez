@@ -1,5 +1,5 @@
 package_name=bluez
-package_version=5.44
+package_version=5.50
 tarball_suffix=xz
 build_dependencies="libical dbus readline glib"
 
@@ -36,6 +36,7 @@ custombuild(){
 			--disable-systemd \
 			--with-dbusconfdir=$installdirectory/$package_fullname/etc/ \
 			--with-dbussystembusdir=/var/run/$package_name \
+			--with-dbussessionbusdir=/var/run/$package_name \
 			--localstatedir=/var/
 			
 	

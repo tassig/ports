@@ -54,13 +54,13 @@ installpackage(){
 	echo "installing package $1"
 
 	# sourcing package installer shell script, we have two types of packages:
-	# - base packages in $packagedirectory, where each package is a single file - shell script with name $1
-	# - extended packages in $packagedirectory/extended, where package is a shell script with name $1.sh
+	# - base packages in "base", where each package is a single file - shell script with name $1
+	# - extended packages in "extended", where package is a shell script with name $1.sh
 	# See "introduction to ports.md", which is the documentation
-	if [ ! -f $packagedirectory/$1 ]; then
-		source $packagedirectory/extended/$1.sh
+	if [ ! -f $packagedirectory/base/$1 ]; then
+		source $packagedirectory/extended/$1.sh   # TODO: this file might not exist, exit with an error message, and do a search for packages with similar names
 	else
-		source $packagedirectory/$1   # TODO: this file might not exist, exit with an error message
+		source $packagedirectory/base/$1
 	fi
 
 	# if the package has been installed for the user or globally, don't install again	
