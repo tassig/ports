@@ -22,7 +22,9 @@
   - [1105/102624.534867:ERROR:sandbox_linux.cc(369)] InitializeSandbox() called with multiple threads in process gpu-process. => same kind of error as chrome, they use the same component
   - Fatal : VkResult is "ERROR_INITIALIZATION_FAILED" in /home/pgriffais/src/Vulkan/base/vulkanexamplebase.cpp at line 823
 vulkandriverquery: /home/pgriffais/src/Vulkan/base/vulkanexamplebase.cpp:823: void VulkanExampleBase::initVulkan()
-  - steam will not allow account creation, it doesn't work
+  - game could not be stopped form stram, STOP button won't work
+  - steam uses systray for game icons, we don't have it, so once we quit game window, we can't re-enter, so game needs to be killed manually, before we can log off and quit steam
+  - known steam issues with flatpak: `https://wiki.archlinux.org/index.php/Steam`
 
 * spotify: cannot connect to pulseaudio
 
