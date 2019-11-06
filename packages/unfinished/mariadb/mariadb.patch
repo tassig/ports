@@ -1,0 +1,25 @@
+--- a/client/mysql.cc
++++ b/client/mysql.cc
+@@ -59,9 +59,9 @@
+ #include "sql_string.h"
+ 
+ extern "C" {
+-#if defined(HAVE_CURSES_H) && defined(HAVE_TERM_H)
+-#include <curses.h>
+-#include <term.h>
++#if 1
++#include <ncurses/curses.h>
++#include <ncurses/term.h>
+ #else
+ #if defined(HAVE_TERMIOS_H)
+ #include <termios.h>
+--- a/client/CMakeLists.txt
++++ b/client/CMakeLists.txt
+@@ -23,6 +23,7 @@
+   ${CMAKE_SOURCE_DIR}/strings
+   ${MY_READLINE_INCLUDE_DIR}
+   ${CMAKE_CURRENT_BINARY_DIR}
++  ${CURSES_INCLUDE_DIRS}
+ )
+ 
+ INCLUDE_DIRECTORIES(BEFORE

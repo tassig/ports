@@ -1,0 +1,23 @@
+--- /opt/linux-kernel-headers/include/linux/if_tunnel.h.orig
++++ /opt/linux-kernel-headers/include/linux/if_tunnel.h
+@@ -3,7 +3,7 @@
+ #define _IF_TUNNEL_H_
+ 
+ #include <linux/types.h>
+-#include <linux/if.h>
++//#include <linux/if.h>
+ #include <linux/ip.h>
+ #include <linux/in6.h>
+ #include <asm/byteorder.h>
+ 
+--- /opt/linux-kernel-headers/include/linux/ip6_tunnel.h.orig
++++ /opt/linux-kernel-headers/include/linux/ip6_tunnel.h
+@@ -3,7 +3,7 @@
+ #define _IP6_TUNNEL_H
+ 
+ #include <linux/types.h>
+-#include <linux/if.h>		/* For IFNAMSIZ. */
++//#include <linux/if.h>		/* For IFNAMSIZ. */
+ #include <linux/in6.h>		/* For struct in6_addr. */
+ 
+ #define IPV6_TLV_TNL_ENCAP_LIMIT 4

@@ -1,0 +1,11 @@
+# 05.02.2019
+
+Build fails due to poppler error:
+
+[CXX] workdir/UnpackedTarball/poppler/poppler/Hints.cc
+/home/builddir/libreoffice-6.1.4.2/workdir/UnpackedTarball/poppler/poppler/GlobalParams.cc:85:35: fatal error: fontconfig/fontconfig.h: No such file or directory
+ #include <fontconfig/fontconfig.h>
+ 
+This build is using cmake. I don't know how to patch or to provide correct environment variables to cmake builds.
+
+

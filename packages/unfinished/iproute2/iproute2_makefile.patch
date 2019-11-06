@@ -1,0 +1,20 @@
+--- Makefile.orig
++++ Makefile
+@@ -46,7 +46,7 @@
+ CFLAGS := $(WFLAGS) $(CCOPTS) -I../include $(DEFINES) $(CFLAGS)
+ YACCFLAGS = -d -t -v
+ 
+-SUBDIRS=lib ip tc bridge misc netem genl tipc devlink man
++SUBDIRS=lib ip tc bridge misc netem genl
+ 
+ LIBNETLINK=../lib/libnetlink.a ../lib/libutil.a
+ LDLIBS += $(LIBNETLINK)
+@@ -69,7 +69,7 @@
+ 		$(DESTDIR)$(DOCDIR)/examples
+ 	install -m 0644 $(shell find examples/diffserv -maxdepth 1 -type f) \
+ 		$(DESTDIR)$(DOCDIR)/examples/diffserv
+-	@for i in $(SUBDIRS) doc; do $(MAKE) -C $$i install; done
++	@for i in $(SUBDIRS) ; do $(MAKE) -C $$i install; done
+ 	install -m 0644 $(shell find etc/iproute2 -maxdepth 1 -type f) $(DESTDIR)$(CONFDIR)
+ 	install -m 0755 -d $(DESTDIR)$(BASH_COMPDIR)
+ 	install -m 0644 bash-completion/tc $(DESTDIR)$(BASH_COMPDIR)

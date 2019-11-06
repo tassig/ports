@@ -1,0 +1,20 @@
+--- a/solenv/gbuild/platform/com_GCC_defs.mk
++++ b/solenv/gbuild/platform/com_GCC_defs.mk
+@@ -115,14 +115,14 @@
+ 
+ # If CC or CXX already include -fvisibility=hidden, don't duplicate it
+ ifeq (,$(filter -fvisibility=hidden,$(CC)))
+-gb_VISIBILITY_FLAGS := -fvisibility=hidden
++gb_VISIBILITY_FLAGS := -fvisibility=default
+ ifeq ($(COM_IS_CLANG),TRUE)
+ ifneq ($(filter -fsanitize=%,$(CC)),)
+ gb_VISIBILITY_FLAGS := -fvisibility-ms-compat
+ endif
+ endif
+ endif
+-gb_VISIBILITY_FLAGS_CXX := -fvisibility-inlines-hidden
++gb_VISIBILITY_FLAGS_CXX := -fvisibility=default
+ gb_CXXFLAGS_COMMON += $(gb_VISIBILITY_FLAGS_CXX)
+ 
+ ifeq ($(HAVE_GCC_STACK_PROTECTOR_STRONG),TRUE)
+

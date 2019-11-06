@@ -1,0 +1,8 @@
+--- hpijs-drv.orig
++++ hpijs-drv
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl
++#!/bin/perl
+ #
+ # hpijs-drv - Create hp device include file for Makefile.am.
+ #

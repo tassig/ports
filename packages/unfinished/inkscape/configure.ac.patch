@@ -1,0 +1,50 @@
+--- configure.ac.old
++++ configure.ac
+@@ -374,9 +374,10 @@
+ 
+     if test "x${have_lcms2}" = "xyes"; then
+         LIBS="$LIBS $LCMS2_LIBS"
++        CXXFLAGS="$CXXFLAGS $LCMS2_CFLAGS"
+         AC_DEFINE(HAVE_LIBLCMS2, 1, [define to 1 if you have lcms version 2.x])
+-	AC_SUBST(LCMS2_CFLAGS)
+-	AC_SUBST(LCMS2_LIBS)
++        AC_SUBST(LCMS2_CFLAGS)
++        AC_SUBST(LCMS2_LIBS)
+     else
+         PKG_CHECK_MODULES(LCMS, lcms >= 1.13, lcms=yes, lcms=no)
+         if test "x$lcms" = "xyes"; then
+@@ -923,15 +924,29 @@
+   AC_DEFINE(HAVE_CAIRO_PDF, 1, [Whether the Cairo PDF backend is available])
+ fi
+ 
+-dnl Shouldn't we test for libz?
+-INKSCAPE_LIBS="$INKSCAPE_LIBS -lz"
++dnl test for libz, also via pkgconfig
++PKG_CHECK_MODULES(ZLIB, zlib, zlib=yes, zlib=no)
++if test "x$zlib" = "xyes"; then
++  INKSCAPE_LIBS="$INKSCAPE_LIBS $ZLIB_LIBS"
++  INKSCAPE_CFLAGS="$INKSCAPE_CFLAGS $ZLIB_CFLAGS"
++  INKSCAPE_CXX_DEPS_CFLAGS="$INKSCAPE_CXX_DEPS_CFLAGS $ZLIB_CFLAGS"
++else
++  AC_MSG_ERROR([zlib is required])
++fi
++
++
+ if test "x$openmp_ok" = "xyes"; then
+ 	INKSCAPE_LIBS="$INKSCAPE_LIBS -lgomp"
+ fi
+ 
+-AC_CHECK_HEADER(popt.h,
+-		[INKSCAPE_LIBS="$INKSCAPE_LIBS -lpopt"],
+-		AC_MSG_ERROR([libpopt is required]))
++PKG_CHECK_MODULES(POPT, popt, popt=yes, popt=no)
++if test "x$popt" = "xyes"; then
++  INKSCAPE_LIBS="$INKSCAPE_LIBS $POPT_LIBS"
++  INKSCAPE_CFLAGS="$INKSCAPE_CFLAGS $POPT_CFLAGS"
++else
++  AC_MSG_ERROR([libpopt is required])
++fi
++
+ 
+ dnl **************************
+ dnl Check for aspell 
