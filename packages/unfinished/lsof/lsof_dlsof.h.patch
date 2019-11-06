@@ -1,0 +1,16 @@
+--- dlsof.h.orig
++++ dlsof.h
+@@ -50,11 +50,9 @@
+ #include <unistd.h>
+ #include <netinet/in.h>
+ 
+-# if	defined(GLIBCV) || defined(__UCLIBC__) || defined(NEEDS_NETINET_TCPH)
++
+ #include <netinet/tcp.h>
+-# else	/* !defined(GLIBCV) && !defined(__UCLIBC__) && !defined(NEEDS_NETINET_TCPH) */
+-#include <linux/tcp.h>
+-# endif	/* defined(GLIBCV) || defined(__UCLIBC__) || defined(NEEDS_NETINET_TCPH) */
++
+ 
+ # if	!defined(HASNORPC_H)
+ #include <rpc/rpc.h>
