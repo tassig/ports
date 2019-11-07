@@ -13,12 +13,12 @@ custombuild(){
 	tar xvf archive
 	rm archive
 	cd *
-	
-	echo "edit this packaged!!"
-	exit 1
 
-	make 
-	cp -f unrar /bin
+	make
+	make install DESTDIR=/opt/unrar-5.5.8/
+
+	ln -sv $installdirectory/$package_fullname $installdirectory/$package_name
+	ln -sv $installdirectory/$package_name/bin/* /bin/ || true
 
 	cd ../../
 	rm -r builddir
