@@ -1,5 +1,5 @@
---- a/build/soong/scripts/microfactory.bash
-+++ b/build/soong/scripts/microfactory.bash
+--- a/scripts/microfactory.bash
++++ b/scripts/microfactory.bash
 @@ -42,7 +42,7 @@
              out_dir="out"
          fi

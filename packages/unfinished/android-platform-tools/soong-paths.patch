@@ -1,5 +1,5 @@
---- a/build/soong/ui/build/paths/config.go
-+++ b/build/soong/ui/build/paths/config.go
+--- a/ui/build/paths/config.go
++++ b/ui/build/paths/config.go
 @@ -74,6 +74,8 @@
  }
  

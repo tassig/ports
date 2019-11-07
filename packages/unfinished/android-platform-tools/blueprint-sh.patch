@@ -1,5 +1,5 @@
---- a/build/blueprint/bootstrap.bash
-+++ b/build/blueprint/bootstrap.bash
+--- a/bootstrap.bash
++++ b/bootstrap.bash
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!/bin/sh

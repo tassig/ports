@@ -1,5 +1,5 @@
---- b/external/ninja/src/disk_interface.cc
-+++ b/external/ninja/src/disk_interface.cc
+--- b/src/disk_interface.cc
++++ b/src/disk_interface.cc
 @@ -208,7 +208,7 @@
    return ((int64_t)st.st_mtimespec.tv_sec * 1000000000LL +
            st.st_mtimespec.tv_nsec);
