@@ -13,6 +13,9 @@ custombuild(){
 	tar xvf archive
 	rm archive
 	cd *
+	
+	echo "edit this packaged!!"
+	exit 1
 
 	make 
 	cp -f unrar /bin
